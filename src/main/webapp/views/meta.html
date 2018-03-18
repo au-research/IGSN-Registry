@@ -1,0 +1,251 @@
+
+   <div class="section section-lg section-bottom container" ng-controller="metaCtrl">
+      <div>                    
+        <div class="row">        
+          <div class="col-md-12">
+	       	 <div class="row">
+	            <h3 class="title-md hr-left text-theme">{{resource.resourceIdentifier}}<span class="pull-right"><qrcode  version="5" error-correction-level="L" data="http://hdl.handle.net/10273/{{resource.resourceIdentifier}}" download size="62"></qrcode></span></h3>	      
+	            <div class="panel-primary text-theme content-box col-md-6" >
+	              <div class="panel-heading" style='position: relative; z-index: -1;'>
+	                <h3 class="panel-title">Metadata</h3>
+	              </div>
+	              <div class="panel-body">
+	                <form>	                  
+	                  <div class="form-group form-group-sm">
+	                    <label>Landing Page</label>
+	                    <div class="form-control well"><label><u><i class="fa fa-external-link"></i> <a ng-href="{{resource.landingPage}}">{{resource.landingPage}}</a></u></label></div>                   
+	                  </div>
+	                  <div class="form-group form-group-sm">
+	                    <label>IGSN Handle</label>					                  
+	                    <div class="form-control well"><label><u><i class="fa fa-external-link"></i> <a ng-href="http://hdl.handle.net/10273/{{resource.resourceIdentifier}}">http://hdl.handle.net/10273/{{resource.resourceIdentifier}}</a></u></label></div>                   
+	                  </div>
+	                  <div class="form-group form-group-sm">
+	                  	<div class="row">
+						  <div class="col-sm-6 col-xs-12">		
+						  	 <div class="input-group width-100">
+						  	     <label>Public Data</label>
+			                    <div class="form-control well"><label>{{resource.isPublic}}</label></div>
+						      </div>				   					      							      				   
+						  </div>
+						  <div class="col-sm-6 col-xs-12" ng-show="resource.embargoEnd">									  	  				   				      
+						      <div class="input-group width-100">
+							  	  <label>Embargo end date</label>
+			                  	  <div class="form-control well"><label>{{resource.embargoEnd | date:'yyyy-MM-dd'}}</label></div>							  
+						      </div>						    
+						  </div>
+						</div>    
+	                  </div>	
+	                  <div class="form-group form-group-sm">
+	                    <label>Sample or Item Title</label>	                   
+	                    <div class="form-control well"><label>{{resource.resourceTitle}}</label></div>
+	                  </div>	     	                 	                 
+	                  <div class="form-group form-group-sm">
+	                    <label>Sample or Item Type</label>
+	                    <div class="well well-sm mb-0"> <ul class="list-group mb-0">
+					      <li class="list-group-item form-control" ng-repeat="resourceType in resource.resourceTypeses"><u><i class="fa fa-external-link"></i> <a ng-href="{{resourceType.cvResourceType.resourceType}}">{{resourceType.cvResourceType.resourceType}}</a></u></li> 
+					    </ul></div>	                   
+	                  </div>
+	                  <div class="form-group form-group-sm">
+	                    <label>Material Type</label>
+	                    <div class="well well-sm mb-0"> <ul class="list-group mb-0">
+					      <li class="list-group-item form-control" ng-repeat="materialType in resource.materialTypeses"><u><i class="fa fa-external-link"></i> <a ng-href="{{materialType.cvMaterialTypes.materialType}}">{{materialType.cvMaterialTypes.materialType}}</a></u></li> 
+					    </ul></div>	                   
+	                  </div>	                          
+	                </form>	               
+	              </div>
+	            </div>
+	            <div class="panel-primary text-theme content-box col-md-6">
+	            	<!-- div id="igsn-map"></div-->	
+	            	<leaflet defaults="defaults" lf-center="center" height="480px" width="100%"></leaflet>            	
+	            </div>	            
+	          </div>
+	          <div class="row">
+	        	<button ng-show="resource.inputMethod=='form'" class="btn btn-blue  pull-right" type="button" ng-click="edit()">Edit</button>
+	         </div> 
+	          <div class="row mt-20 mb-30">
+			      <div class="col-sm-12">
+			        <!-- Nav tabs -->
+			        <ul class="nav nav-tabs nav-tabs-shop" role="tablist">
+			          <li class="active">
+			           <a data-target="#meta-location" role="tab" data-toggle="tab">Location</a>           
+			          </li>
+			          <li>
+			           <a data-target="#meta-curation" role="tab" data-toggle="tab">Curation</a>
+			          </li>
+			          <li>
+			           <a data-target="#meta-related-resource" role="tab" data-toggle="tab">Related Resource</a>
+			          </li>
+			          <li>
+			           <a data-target="#meta-contributors" role="tab" data-toggle="tab">Contributors</a>
+			          </li>
+			          <li>			           
+			           <a data-target="#meta-other-information" role="tab" data-toggle="tab">Other Information</a>
+			          </li>
+			        </ul>
+			        <!-- Tab panes -->
+			        <div class="tab-content tab-content-shop">
+			          <div class="tab-pane fade active in" id="meta-location">		
+				          <div class="row">	          
+				          	<div class="col-md-4 mt-20">				                    
+					            <div class="icon-box bordered">							
+								  <h3 class="title-sm text-theme">geometryUri</h3>
+								  <p class="text-theme">{{resource.location.geometryUri}}</p>							 
+								</div>				                                
+				            </div>	
+				            <div class="col-md-4 mt-20">				                    
+					            <div class="icon-box bordered">
+								 <h3 class="title-sm text-theme">locality</h3>
+								 <p class="text-theme">{{resource.location.locality}}</p>									
+								</div>				                                
+				            </div>
+				            <div class="col-md-4 mt-20">				                    
+					            <div class="icon-box bordered">
+								 <h3 class="title-sm text-theme">Locality Uri</h3>
+								  <p class="text-theme">{{resource.location.localityUri}}</p>								 
+								</div>				                               
+				            </div>			              
+					      </div>
+					      <div class="row">	       
+				          	<div class="col-md-4 mt-20">				                    
+					            <div class="icon-box bordered">							
+								  <h3 class="title-sm text-theme">SRID</h3>
+								  <p class="text-theme">{{resource.location.srid}}</p>							 
+								</div>				                                
+				            </div>	
+				            <div class="col-md-4 mt-20">				                    
+					            <div class="icon-box bordered">
+								 <h3 class="title-sm text-theme">Vertical Datum</h3>
+								 <p class="text-theme">{{resource.location.verticalDatum}}</p>									 
+								</div>				                                
+				            </div>
+				           </div>		              					      
+				      </div>
+			          <div class="tab-pane fade in tab-shop-item" id="meta-curation">
+			          	 <div class="row">	          
+				          	<div class="col-md-6 mt-20" ng-repeat="curationDetail in resource.curationDetailses">				                    
+					            <div>							
+								  <h3 class="title-md text-theme">Curator: {{curationDetail.curator}}</h3>
+						            <ul class="list-unstyled list-md text-theme">
+						              <li><i class="fa fa-user fa-box"></i>Curator: <b>{{curationDetail.curator}}</b></li>
+						              <li><i class="fa fa-calendar fa-box"></i>Curation Date: <b>{{curationDetail.curationDate}}</b></li>	              
+						              <li><i class="fa fa-map-marker fa-box"></i>Curation Location: <b>{{curationDetail.curationLocation}}</b></li>
+						              <li><i class="fa fa-building-o fa-box"></i>Curating Institution: <b>{{curationDetail.curatingInstitution}}</b></li>
+						              <li><i class="fa fa-external-link fa-box"></i>Institution URI: <b>{{curationDetail.institutionUri}}</b></li>
+						            </ul>								 
+								</div>				                                
+				            </div>					                       
+					      </div>
+			          </div>
+			          
+			          <div class="tab-pane fade in tab-shop-item" id="meta-contributors">
+			          	 <div class="row">	          
+				          	<div class="col-md-12 mt-20" ng-repeat="contributor in resource.contributorses">				                    
+					             <fieldset class="form-group form-group-sm show-fieldset-borders">
+								    <legend>Name:{{contributor.contributorName}}</legend>
+								     <ul class="list-unstyled list-md text-theme" ng-show="contributor.contributorIdentifier">
+						              <li><i class="fa fa-user fa-box"></i>Identifier: {{contributor.contributorIdentifier}}</li>						             
+						            </ul>	
+						            <div class="form-group form-group-sm mt-16">
+					                    <h3 class="title-xs text-theme hr-before mb-10">Contributor Type</h3>	                   
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="contributor.contributorType">{{contributor.contributorType}}</a></u></label></div>
+					                  </div>	     	                 	                 
+					               
+					                  <div ng-show="contributor.cvIdentifierType.identifierType" class="form-group form-group-sm">
+					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="contributor.cvIdentifierType.identifierType">{{contributor.cvIdentifierType.identifierType}}</a></u></label></div>
+					                  </div>													            								    	                 				                    
+								  </fieldset> 			                                
+				            </div>					                       
+					      </div>
+			          </div>
+			          <div class="tab-pane fade in tab-shop-item" id="meta-related-resource">
+			          	 <div class="row">	          
+				          	<div class="col-md-12 mt-20" ng-repeat="relatedResource in resource.relatedResourceses">				                    
+					             <fieldset class="form-group form-group-sm show-fieldset-borders">
+								    <legend>Related Resource:{{relatedResource.relatedResource}}</legend>
+								    <form>					              					                  
+					                  <div class="form-group form-group-sm">
+					                    <h3 class="title-xs text-theme hr-before mb-10">Relation Type</h3>	                   
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="relatedResource.relationType">{{relatedResource.relationType}}</a></u></label></div>
+					                  </div>	     	                 	                 
+					               
+					                  <div class="form-group form-group-sm">
+					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="relatedResource.cvIdentifierType.identifierType">{{relatedResource.cvIdentifierType.identifierType}}</a></u></label></div>
+					                  </div>	          	                
+					                </form>										    													            								    	                 				                   
+								  </fieldset> 			                                
+				            </div>			                       
+					      </div>
+			          </div>
+			          <div class="tab-pane fade in tab-shop-item" id="meta-other-information">
+			          	 <div class="row">	          
+				          	<div class="col-md-6 mt-20">				                    
+					            <form>
+					              <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Alternate Identifier</h3>
+				                    <div ng-show="resource.alternateIdentifierses.length > 0" class="well well-sm mb-0"> <ul class="list-group mb-0">
+								      <li class="list-group-item form-control" ng-repeat="alternateIdentifier in resource.alternateIdentifierses">{{alternateIdentifier.alternateIdentifier}}</li> 
+								    </ul></div>	                   
+				                  </div>
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Classification</h3>
+				                    <div class="well well-sm mb-10" ng-repeat="classification in resource.classificationses"> <ul class="list-group mb-0">
+								      <li class="list-group-item form-control" ng-show="classification.classification">{{classification.classification}}</li> 
+								      <li class="list-group-item form-control" ng-show="classification.classificationUri" >{{classification.classificationUri}}</li>
+								    </ul></div>	                   
+				                  </div>	                  
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Purpose</h3>
+				                    <div ng-show="resource.purpose" class="form-control well"><label>{{resource.purpose}}</label></div>                   
+				                  </div>
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Resource Date</h3>
+				                    <div ng-show="resource.resourceDate.timeInstant" class="form-control well"><label><i class="fa fa-calendar"></i> {{resource.resourceDate.timeInstant}}</label></div> 
+				                    <div ng-show="resource.resourceDate.timePeriodStart" class="form-control well"><label>Start: {{resource.resourceDate.timePeriodStart}}</label></div>
+				                    <div ng-show="resource.resourceDate.timePeriodEnd" class="form-control well"><label>End: {{resource.resourceDate.timePeriodEnd}}</label></div>                   
+				                  </div>				                     	                
+				                </form>			                                
+				            </div>	
+				            <div class="col-md-6 mt-20">				                    
+					            <form>					              
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Sampled Feature</h3>
+				                    <div class="well well-sm mb-10" ng-repeat="sampledFeature in resource.sampledFeatureses"> <ul class="list-group mb-0">
+								      <li class="list-group-item form-control" >{{sampledFeature.sampledFeature}}</li> 
+								      <li class="list-group-item form-control" >{{sampledFeature.sampledFeatureUri}}</li>
+								    </ul></div>	                   
+				                  </div>
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Log Info</h3>	                   
+				                    <div class="form-control well"><label><i class="fa fa-calendar"></i> {{resource.logDate.eventType}}: {{resource.logDate.logDate}}</label></div>
+				                  </div>	     	                 	                 
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Method</h3>	
+				                    <div ng-show="resource.method.method || resource.method.methodUri" class="well well-sm mb-0"> <ul class="list-group mb-0">
+								      <li ng-show="resource.method.method" class="list-group-item form-control" >{{resource.method.method}}</li> 
+								      <li ng-show="resource.method.methodUri" class="list-group-item form-control" >{{resource.method.methodUri}}</li>
+								    </ul></div>	                    				                    
+				                  </div>
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Campaign</h3>	                   
+				                    <div ng-show="resource.campaign" class="form-control well"><label>{{resource.campaign}}</label></div>
+				                  </div>
+				                  <div class="form-group form-group-sm">
+				                    <h3 class="title-xs text-theme hr-before mb-10">Comments</h3>	                   
+				                    <div ng-show="resource.campaign" class="well small padding-5"><label>{{resource.comments}}</label></div>
+				                  </div>	          	                
+				                </form>			                                
+				            </div>				                       
+					      </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+          </div>         
+        </div>
+      </div>
+    </div>
+  
+   
+				

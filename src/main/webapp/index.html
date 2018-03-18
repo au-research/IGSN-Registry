@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IGSN 30</title>
+
+  <link href="js/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700,800,300' rel='stylesheet' type='text/css'>
+  <link href="css/lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="js/lib/ng-animate/animate.css">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  <link rel="stylesheet" type="text/css" href="css/igsn30.css">
+
+  
+ 	<!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  
+  
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
+  
+ 
+  
+    <!-- angular-UI -->
+  	<link rel="styleSheet" href="js/lib/angular-ui/ui-grid/ui-grid-stable.css"/>
+	
+	<script src="js/lib/angular/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>	
+	<script src="js/lib/angular-ui/ui-grid/ui-grid-stable.js"></script>
+	<script src="js/lib/angular-ui/ui-bootstrap/ui-bootstrap-tpls-2.0.1.min.js"></script>
+	<script src="js/lib/angular-ui/angular-map/angular-google-maps.min.js"></script>
+	<script src="js/lib/angular-ui/angular-map/lodash.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>	
+	<script src="js/lib/ng-file-upload/ng-file-upload-all.min.js"></script>
+	<script src="js/lib/angular-qrcode/angular-qrcode.js"></script>
+	<script src="js/lib/angular-qrcode/qrcode.js"></script>
+	
+	
+   <!-- Map -->
+  
+	<link rel="stylesheet" href="js/lib/leaflet/leaflet.css" />
+	<script src="js/lib/leaflet/leaflet.js"></script>
+	<script src="js/lib/leaflet/wicket.js"></script>
+	<script src="js/lib/leaflet/wicket-leaflet.js"></script>
+	<script src="js/lib/angular-ui/ui-leaflet/angular-simple-logger.min.js"></script>	
+	<script src="js/lib/angular-ui/ui-leaflet/ui-leaflet.min.js"></script>
+	
+	
+  <!-- Angular Controllers  -->	
+  <script src="js/igsn/modules/app.js"></script>
+  <script src="js/igsn/controllers/controllers.js"></script>
+  <script src="js/igsn/controllers/loginStatusCtrl.js"></script>
+  <script src="js/igsn/controllers/loginCtrl.js"></script>
+  <script src="js/igsn/controllers/addResourceCtrl.js"></script>
+  <script src="js/igsn/controllers/registrant.js"></script>
+  <script src="js/igsn/controllers/metaCtrl.js"></script>
+  
+
+  
+
+  <!-- Angular Services  -->	
+  <script src="js/igsn/services/currentAuthService.js"></script>
+  <script src="js/igsn/services/modalDialogService.js"></script>
+  <script src="js/igsn/services/selectListService.js"></script>
+  
+  <!-- Modals -->
+  <script src="js/igsn/modals/modalCtrl.js"></script>
+  <script src="js/igsn/modals/ModalService.js"></script>
+  
+  
+ 
+
+  
+</head>
+
+<body class="body-nav-fixed-menu-top" ng-app="app">
+  <div class="wrapper-body">
+    <div id="nav" class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="LoginStatusCtrl" style="z-index:1001">
+      <div class="menu-top menu-top-inverse">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-5 hidden-xs">
+              <a class="title-menu-top display-inline-block" href="mailto:cg-admin@csiro.au">cg-admin@csiro.au</a>
+            </div>
+            <div class="col-sm-7 col-xs-12">
+			  <div class="pull-right">
+                <div class="dropdown dropdown-login pull-left">
+                  <a href="logout"><button class="btn-menu-top" ng-show="status.authenticated"><i class="fa fa-user"></i> Log out ,<span ng-bind="status.name"></span> </button></a>
+                  <a href="#/login"><button class="btn-menu-top" ng-show="!status.authenticated"><i class="fa fa-user"></i> Log in </button></a>                  
+                </div>
+			  </div>                           
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#/">
+            <img class="brand-img-2" src="img/logo.png" alt="logo">
+            <img class="brand-img-1" src="img/logo.png" alt="logo">
+          </a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+           <li ng-show="status.authenticated">
+            	<a href="#/addSample"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
+            </li> 
+            <li ng-show="status.isAllocator">
+            	<a href="#/registrant"><i class="fa fa-user-plus"></i> Registrant</a>
+            </li>                         
+                      
+          </ul>
+        </div>
+      </div>
+    </div>
+   </div>
+
+   <!-- CONTENT STARTS HERE -->
+   <div ng-view></div>
+   
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

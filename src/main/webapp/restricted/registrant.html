@@ -1,0 +1,112 @@
+
+<div class="section section-lg section-bottom container" ng-controller="registrantCtrl">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- SLIDER -->
+            <div>
+             	<img src="img/adduser.png" alt="theme-img">
+            </div>            
+          </div>
+        </div>
+      </div>
+      <!-- CONTENT -->
+      <!--===============================================================-->
+      <div class="col-md-7">
+      	  <div>
+      	  	<h3 class="title-md hr-left text-theme">Registrants</h3>	 
+            <table class="table table-striped table-hover" id="registrant-list-table">
+            	<thead>
+			      <tr>
+			        <th>&nbsp;</th>
+			        <th>Name</th>
+			        <th>Email</th>
+			        <th>Active</th>
+			      </tr>
+			    </thead>
+	            <tbody>
+	              <tr ng-repeat="registrant in registrantList" ng-click="setSelected(registrant)" ng-class="{'table-row-selected': registrant==selectedRegistrant}">
+	              	<td ng-click="removeRegistrant(registrant.username)"><i class="fa fa-minus-circle" style="color:red"></i></td>
+	                <td>{{registrant.registrantname}}</td>
+	                <td>{{registrant.registrantemail}}</td>
+	                <td><input type="checkbox" name="active" ng-model="registrant.isactive" ng-change="changeActive(registrant.username,registrant.isactive)"></td>
+	              </tr>	                           
+	            </tbody>
+            </table>
+            <button class="btn btn-blue btn-sm" type="button" ng-click="addRegistrant()">Add Registrant</button>
+          </div>        
+      </div>
+    </div>
+    <div class="row mt-20 mb-30">
+      <div class="col-sm-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-tabs-shop" role="tablist">
+          <li class="active">
+           <a data-target="#registrant-user-prefix" role="tab" data-toggle="tab">Prefixes</a>           
+          </li>
+          <li>
+           <a data-target="#registrant-user-info" role="tab" data-toggle="tab">More Info</a>
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content tab-content-shop">
+          <div class="tab-pane fade in  row" id="registrant-user-info">
+          
+          	<div class="col-md-5 col-md-offset-1 mt-20">
+	                     
+	            <h3 class="title-md text-theme">{{selectedRegistrant.registrantname}}</h3>
+	            <ul class="list-unstyled list-md text-theme">
+	              <li><i class="fa fa-user fa-box"></i>Username: {{selectedRegistrant.username}}</li>
+	              <li><i class="fa fa-calendar fa-box"></i>Created: {{selectedRegistrant.created | date:'dd-MM-yyyy'}}</li>	              
+	              <li><i class="fa fa-send fa-box"></i>Active: {{selectedRegistrant.isactive}}</li>
+	              <li><i class="fa fa-envelope fa-box"></i>{{selectedRegistrant.registrantemail}}</li>
+	            </ul>	                     
+            </div>	
+            <div class="col-md-5 mt-20">
+	            <h3 class="title-md text-theme">Allocator</h3>
+	            <ul class="list-unstyled list-md text-theme">
+	              <li><i class="fa fa-user fa-box"></i>Allocator: {{selectedRegistrant.allocator.contactname}}</li>
+	              <li><i class="fa fa-envelope fa-box"></i>{{selectedRegistrant.allocator.contactemail}}</li>
+	            </ul>	            
+            </div>       
+	      </div>
+          <div class="tab-pane fade active in tab-shop-item" id="registrant-user-prefix">
+            <table class="table table-striped">
+              <tbody>
+                <tr ng-repeat="prefix in prefixList">
+                  <td class="text-center">
+                    <div class="wrapper-item-comments">                      
+                      <h3 class="text-theme-sm title-xs">{{prefix.prefix}}</h3>
+                      <p><small>{{prefix.created | date:'dd-MM-yyyy'}}</small>
+                      </p>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="wrapper-item-comments">
+                      <h3 class="title-xs text-theme-sm">Status: 
+                      				<span ng-if="prefix.isAssignedToSelectedRegistrant" class="badge badge-success">Assigned</span>
+                      				<span ng-if="!prefix.isAssignedToSelectedRegistrant" class="badge badge-error">Not Assigned</span></h3>
+                      <p class="text-theme-sm">{{prefix.description}}</p>                     
+                    </div>
+                  </td>
+                  <td>
+                    <div class="wrapper-item-comments">
+                     	<div ng-if="prefix.isAssignedToSelectedRegistrant"><button  ng-click="unAllocate(prefix.prefix,selectedRegistrant.username)" class="btn btn-red btn-xs" type="button"><i class="fa fa-minus-square"></i>UNALLOCATE PREFIX</button></div>
+                     	<div ng-if="!prefix.isAssignedToSelectedRegistrant"><button  ng-click="allocate(prefix.prefix,selectedRegistrant.username)" class="btn btn-primary btn-xs" type="button"><i class="fa fa-plus-square"></i>ALLOCATE PREFIX</button></div>
+                    </div>
+                  </td>
+                </tr>                
+              </tbody>
+            </table>
+            <button class="btn btn-blue btn-sm" type="button" ng-click="addPrefix()">Add Prefix</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+  
+   
+				
