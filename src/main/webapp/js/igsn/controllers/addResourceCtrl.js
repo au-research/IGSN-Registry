@@ -153,14 +153,14 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  
 	 
 	  
-	  if($scope.resource.locationInputType=="geographic" && $scope.useDegree && !isUndefinedOrNull($scope.longitude.degree) && !isUndefinedOrNull($scope.latitude.degree)){
+	  if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "minutes" && !isUndefinedOrNull($scope.longitude.degree) && !isUndefinedOrNull($scope.latitude.degree)){
 		  var lng = (($scope.longitude.seconds?$scope.longitude.seconds/60:0) + ($scope.longitude.minutes?$scope.longitude.minutes:0))/60 + $scope.longitude.degree;
 		  var lat = (($scope.latitude.seconds?$scope.latitude.seconds/60:0) + ($scope.latitude.minutes?$scope.latitude.minutes:0))/60 + $scope.latitude.degree;
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
 		  $scope.resource.location.wkt = $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
-	  }else if($scope.resource.locationInputType=="geographic" && !$scope.useDegree && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){	
+	  }else if($scope.resource.locationInputType=="geographic" && !$scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
