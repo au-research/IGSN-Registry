@@ -8,31 +8,33 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.Allocator;
 import org.csiro.igsn.entity.postgres.Prefix;
 import org.csiro.igsn.entity.postgres.Registrant;
+import org.csiro.igsn.web.controllers.RegistrantCtrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RegistrantEntityService {
-	
+
 	PrefixEntityService prefixEntityService;
 	AllocatorEntityService allocatorEntityService;
-	
-	@Autowired	
+	static final Logger log = Logger.getLogger(RegistrantEntityService.class);
+	@Autowired
 	public RegistrantEntityService(PrefixEntityService prefixEntityService,AllocatorEntityService allocatorEntityService){
 		this.prefixEntityService = prefixEntityService;
 		this.allocatorEntityService = allocatorEntityService;
 	}
-	
-	
+
+
 	public Registrant searchRegistrantAndPrefix(String user){
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{			
+		try{
 			Registrant registrant = em.createNamedQuery("Registrant.searchByUsernameJoinPrefix",Registrant.class)
-				.setParameter("username", user)
-				.getSingleResult();				
+					.setParameter("username", user)
+					.getSingleResult();
 			return registrant;
 		}catch(NoResultException e){
 			return null;
@@ -42,13 +44,14 @@ public class RegistrantEntityService {
 			em.close();
 		}
 	}
-	
+
 	public Registrant searchActiveRegistrantAndPrefix(String user){
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{			
+		try{
+			log.debug("IsearchActiveRegistrantAndPrefix:" + user.toString());
 			Registrant registrant = em.createNamedQuery("Registrant.searchActiveByUsernameJoinPrefix",Registrant.class)
-				.setParameter("username", user)
-				.getSingleResult();				
+					.setParameter("username", user)
+					.getSingleResult();
 			return registrant;
 		}catch(NoResultException e){
 			return null;
@@ -58,13 +61,13 @@ public class RegistrantEntityService {
 			em.close();
 		}
 	}
-	
+
 	public Registrant searchRegistrant(String user){
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{			
+		try{
 			Registrant registrant = em.createNamedQuery("Registrant.searchByUsername",Registrant.class)
-				.setParameter("username", user)
-				.getSingleResult();				
+					.setParameter("username", user)
+					.getSingleResult();
 			return registrant;
 		}catch(NoResultException e){
 			return null;
@@ -74,13 +77,13 @@ public class RegistrantEntityService {
 			em.close();
 		}
 	}
-	
+
 	public List<Registrant> listRegistrant(){
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{			
+		try{
 			List<Registrant> registrant = em.createNamedQuery("Registrant.getAllRegistrant",Registrant.class)
-					.getResultList();	 		 
-			 return registrant;
+					.getResultList();
+			return registrant;
 		}catch(NoResultException e){
 			return null;
 		}catch(Exception e){
@@ -92,8 +95,8 @@ public class RegistrantEntityService {
 
 	public boolean allocatePrefix(String prefix, String username) throws Exception {
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{	
-			
+		try{
+
 			boolean allowed = false;
 			Registrant registrantEntity = searchRegistrant(username);
 			for(Prefix allocatorPrefix:registrantEntity.getAllocator().getPrefixes()){
@@ -101,8 +104,8 @@ public class RegistrantEntityService {
 					allowed = true;
 				}
 			}
-			em.getTransaction().begin();	
-			if(allowed){	
+			em.getTransaction().begin();
+			if(allowed){
 				Prefix prefixEntity = this.prefixEntityService.searchJoinRegistrant(prefix);
 				prefixEntity.getRegistrants().add(registrantEntity);
 				em.merge(prefixEntity);
@@ -111,7 +114,7 @@ public class RegistrantEntityService {
 				return true;
 			}else{
 				throw new Exception("Prefix is not allowed as it does not match allocator's prefixes.");
-				
+
 			}
 		}catch(Exception e){
 			em.getTransaction().rollback();
@@ -119,14 +122,14 @@ public class RegistrantEntityService {
 		}finally{
 			em.close();
 		}
-		
+
 	}
 
 
 	public boolean unAllocatePrefix(String prefix, String username) throws Exception {
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{	
-			
+		try{
+
 			boolean allowed = false;
 			Registrant registrantEntity = searchRegistrant(username);
 			for(Prefix allocatorPrefix:registrantEntity.getAllocator().getPrefixes()){
@@ -134,10 +137,10 @@ public class RegistrantEntityService {
 					allowed = true;
 				}
 			}
-			em.getTransaction().begin();	
-			if(allowed){	
+			em.getTransaction().begin();
+			if(allowed){
 				Prefix prefixEntity = this.prefixEntityService.searchJoinRegistrant(prefix);
-				
+
 				for(Registrant r:prefixEntity.getRegistrants()){
 					if(r.getRegistrantid()==registrantEntity.getRegistrantid()){
 						prefixEntity.getRegistrants().remove(r);
@@ -149,7 +152,7 @@ public class RegistrantEntityService {
 				em.getTransaction().commit();
 				return true;
 			}else{
-				throw new Exception("Prefix is not allowed as it does not match allocator's prefixes.");				
+				throw new Exception("Prefix is not allowed as it does not match allocator's prefixes.");
 			}
 		}catch(Exception e){
 			em.getTransaction().rollback();
@@ -157,15 +160,15 @@ public class RegistrantEntityService {
 		}finally{
 			em.close();
 		}
-		
+
 	}
 
 
 	public void removeRegistrant(String username) throws Exception {
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{	
+		try{
 			em.getTransaction().begin();
-		
+
 			Registrant registrantEntity = searchRegistrantAndPrefix(username);
 			if(registrantEntity.getPrefixes()==null || registrantEntity.getPrefixes().isEmpty()){
 				em.remove(em.contains(registrantEntity) ? registrantEntity : em.merge(registrantEntity));
@@ -173,21 +176,21 @@ public class RegistrantEntityService {
 			}else{
 				throw new Exception("Registrant cannot be deleted as it has prefixes assigned to it.");
 			}
-			
-		
+
+
 		}catch(Exception e){
 			em.getTransaction().rollback();
 			throw e;
 		}finally{
 			em.close();
 		}
-		
+
 	}
-	
+
 	public boolean setActiveRegistrant(String username,boolean active) throws Exception {
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{	
-			em.getTransaction().begin();		
+		try{
+			em.getTransaction().begin();
 			Registrant registrantEntity = searchRegistrantAndPrefix(username);
 			registrantEntity.setIsactive(active);
 			em.merge(registrantEntity);
@@ -200,16 +203,16 @@ public class RegistrantEntityService {
 		}finally{
 			em.close();
 		}
-		
+
 	}
-	
+
 	public boolean addRegistrant(Principal user,String email,String name,String username) throws Exception {
 		EntityManager em = JPAEntityManager.createEntityManager();
-		try{	
+		try{
 			em.getTransaction().begin();
-			
+
 			Allocator allocator = this.allocatorEntityService.searchAllocator(user.getName());
-			
+
 			Registrant registrant = new Registrant();
 			registrant.setAllocator(allocator);
 			registrant.setCreated(new Date());
@@ -229,11 +232,11 @@ public class RegistrantEntityService {
 		}finally{
 			em.close();
 		}
-		
+
 	}
 
-	
-	
 
-	
+
+
+
 }

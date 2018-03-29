@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings/
+.idea
 target/
 src/main/webapp/META-INF/MANIFEST.MF
 src/main/resources/META-INF/persistence.xml

@@ -1,13 +1,38 @@
 package org.csiro.igsn.server;
 
+import org.csiro.igsn.security.MultiHttpSecurityConfig;
+import org.csiro.igsn.security.RegistryUserAuthenticationProvider;
+import org.csiro.igsn.security.RegistryUserAuthenticationService;
+import org.csiro.igsn.utilities.ShaPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 @ImportResource(value = {"/WEB-INF/applicationContext.xml"})
 @Configuration
-public class AppConfig {
-	
+public class AppConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    public void configure(AuthenticationManagerBuilder builder)
+            throws Exception {
+        builder.authenticationProvider(new RegistryUserAuthenticationProvider());
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new RegistryUserAuthenticationService();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+        auth.userDetailsService(userDetailsService()).passwordEncoder(encoder);
+    }
+
 //	 /**
 //	  * Useless unless remove  <mvc:annotation-driven /> 
 //      * @return MarshallingHttpMessageConverter object which is responsible for
