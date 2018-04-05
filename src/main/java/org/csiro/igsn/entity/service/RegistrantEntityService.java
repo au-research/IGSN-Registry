@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.Allocator;
 import org.csiro.igsn.entity.postgres.Prefix;
+import org.csiro.igsn.entity.postgres.RefererUrls;
 import org.csiro.igsn.entity.postgres.Registrant;
 import org.csiro.igsn.web.controllers.RegistrantCtrl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,43 @@ public class RegistrantEntityService {
 			em.close();
 		}
 	}
+
+	public Registrant searchRegistrantByRefererUrls(String url){
+		EntityManager em = JPAEntityManager.createEntityManager();
+		try{
+			log.debug("searchRegistrantByRefererUrls:" + url);
+			RefererUrls refererUrls = em.createNamedQuery("RefererUrls.searchByRefererUrl",RefererUrls.class)
+					.setParameter("referer_url", url)
+					.getSingleResult();
+			Registrant registrant = this.getRegistrantbyID(refererUrls.getRegistrantid());
+			return registrant;
+		}catch(NoResultException e){
+			return null;
+		}catch(Exception e){
+			throw e;
+		}finally{
+			em.close();
+		}
+	}
+
+
+	public Registrant getRegistrantbyID(int id){
+		EntityManager em = JPAEntityManager.createEntityManager();
+		try{
+			log.debug("searchRegistrantByRefererUrls:" + id);
+			Registrant registrant = em.createNamedQuery("Registrant.getRegistrantById",Registrant.class)
+					.setParameter("id", id)
+					.getSingleResult();
+			return registrant;
+		}catch(NoResultException e){
+			return null;
+		}catch(Exception e){
+			throw e;
+		}finally{
+			em.close();
+		}
+	}
+
 
 	public List<Registrant> listRegistrant(){
 		EntityManager em = JPAEntityManager.createEntityManager();

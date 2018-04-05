@@ -46,7 +46,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	@NamedQuery(
 			name="Registrant.getAllRegistrant",
 		    query="SELECT r FROM Registrant r"
-	)
+	),
+    @NamedQuery(
+                name="Registrant.getRegistrantById",
+                query="SELECT r FROM Registrant r where r.registrantid = :id"
+        )
 })
 public class Registrant implements java.io.Serializable {
 
@@ -60,6 +64,10 @@ public class Registrant implements java.io.Serializable {
 	private Allocator allocator;
 	private Boolean isactive;
 	private Set<Prefix> prefixes = new HashSet<Prefix>(0);
+	private String shared_secret;
+	private String app_id;
+	private Set<RefererUrls> referer_urls = new HashSet<RefererUrls>(0);
+
 
 	public Registrant() {
 	}
@@ -87,6 +95,24 @@ public class Registrant implements java.io.Serializable {
 		this.allocator = allocator;
 		this.isactive = isactive;
 		this.prefixes = prefixes;
+	}
+
+	public Registrant(String registrantname,
+					  String registrantemail, Date created, String username,
+					  String password, Date updated, Allocator allocator, Boolean isactive,
+					  Set<Prefix> prefixes, String appId, String sharedSecret, Set<RefererUrls> urls) {
+		this.registrantname = registrantname;
+		this.registrantemail = registrantemail;
+		this.created = created;
+		this.username = username;
+		this.password = password;
+		this.updated = updated;
+		this.allocator = allocator;
+		this.isactive = isactive;
+		this.prefixes = prefixes;
+		this.shared_secret = sharedSecret;
+		this.app_id = appId;
+		this.referer_urls = urls;
 	}
 
 	@Id
@@ -148,6 +174,26 @@ public class Registrant implements java.io.Serializable {
 		this.password = password;
 	}
 
+	@Column(name = "shared_secret")
+	@JsonIgnore
+	public String getSharedSecret() {
+		return this.shared_secret;
+	}
+
+	public void setSharedSecret(String sharedSecret) {
+		this.shared_secret = sharedSecret;
+	}
+
+	@Column(name = "app_id")
+	@JsonIgnore
+	public String getAppId() {
+		return this.app_id;
+	}
+
+	public void setAppId(String appId) {
+		this.app_id= appId;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated", length = 29)
 	public Date getUpdated() {
@@ -187,6 +233,17 @@ public class Registrant implements java.io.Serializable {
 
 	public void setPrefixes(Set<Prefix> prefixes) {
 		this.prefixes = prefixes;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "registrant_refere_urls", joinColumns = { @JoinColumn(name = "registrantid", nullable = false, updatable = false) })
+	@JsonIgnore
+	public Set<RefererUrls> getRefererUrls() {
+		return this.referer_urls;
+	}
+
+	public void setRefererUrls(Set<RefererUrls> urls) {
+		this.referer_urls = urls;
 	}
 
 }

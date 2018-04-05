@@ -27,8 +27,8 @@ public class  RegistryUserAuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("USERNAME BEFORE" + username);
         RegistryUser userInfo = userDAO.getUserInfo(username);
-        log.info("USERINFO USERBNAME" + userInfo.getUsername());
-        GrantedAuthority authority = new SimpleGrantedAuthority(userInfo.getRole("ROLE_REGISTRANT"));
+        log.info("USERINFO USERNAME" + userInfo.getUsername());
+        GrantedAuthority authority = new SimpleGrantedAuthority(userInfo.getRole("ROLE_ADMIN"));
         UserDetails userDetails = new User(userInfo.getUsername(),
                 userInfo.getPassword(), Arrays.asList(authority));
         return userDetails;

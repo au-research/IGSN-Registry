@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.csiro.igsn.utilities.Config;
+import org.csiro.igsn.utilities.SharedSecretEcoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -45,7 +46,7 @@ import com.google.gson.Gson;
 public class MultiHttpSecurityConfig {
 
 	@Configuration
-	@Order(2)
+    @Order(1)
 	public static class ReferrerSecurityConfig extends
 			WebSecurityConfigurerAdapter {
 
@@ -65,23 +66,27 @@ public class MultiHttpSecurityConfig {
 		}
 
 		@Bean
-		public RequestBodyReaderAuthenticationFilter authenticationFilter() throws Exception {
-			RequestBodyReaderAuthenticationFilter authenticationFilter
-					= new RequestBodyReaderAuthenticationFilter();
+		public RequestHeaderReaderAuthenticationFilter
+            authenticationFilter() throws Exception {
+            RequestHeaderReaderAuthenticationFilter authenticationFilter
+					= new RequestHeaderReaderAuthenticationFilter();
 			authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
 			authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
-			authenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/referer_login.html", "GET"));
+			authenticationFilter.setRequiresAuthenticationRequestMatcher(
+					new AntPathRequestMatcher("/referer_login.html", "GET"));
 			authenticationFilter.setAuthenticationManager(authenticationManagerBean());
 			return authenticationFilter;
 		}
 
 		@Bean
 		public UserDetailsService userDetailsService() {
-			return new RegistryUserAuthenticationService();
+			return new RegistrantAuthenticationService();
 		};
+
+
 		@Autowired
 		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-			ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+			SharedSecretEcoder encoder = new SharedSecretEcoder();
 			auth.userDetailsService(userDetailsService()).passwordEncoder(encoder);
 		}
 
@@ -92,7 +97,6 @@ public class MultiHttpSecurityConfig {
 												HttpServletResponse httpServletResponse,
 												Authentication authentication)
 					throws IOException, ServletException {
-
 				HttpSession session = httpServletRequest.getSession();
 				UserDetails authUser = (UserDetails) SecurityContextHolder.getContext()
 						.getAuthentication().getPrincipal();
@@ -101,10 +105,10 @@ public class MultiHttpSecurityConfig {
 				session.setAttribute("authorities", authentication.getAuthorities());
 				redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "/#/addresource");
 				// set our response to OK status
-//				httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-//				httpServletResponse.setContentType("text/html; charset=UTF-8");
-//				Gson gson = new Gson();
-//				httpServletResponse.getWriter().write(gson.toJson(authUser));
+				//httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+				//httpServletResponse.setContentType("text/html; charset=UTF-8");
+				//Gson gson = new Gson();
+				//httpServletResponse.getWriter().write(gson.toJson(authUser));
 			}
 		}
 
@@ -174,12 +178,13 @@ public class MultiHttpSecurityConfig {
 */
 
 	@Configuration
-	@Order(3)
+	@Order(2)
 	public static  class RDASecurityConfig extends
 			WebSecurityConfigurerAdapter {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
+					.antMatchers("/restricted/**").authenticated()
 					.antMatchers("/restricted/**").authenticated()
 					.antMatchers("/web/**").authenticated()
 					.and()

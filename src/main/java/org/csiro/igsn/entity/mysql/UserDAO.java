@@ -34,7 +34,7 @@ public class UserDAO {
 
     public RegistryUser getUserInfo(String username){
         RegistryUser userInfo = null;
-        String UserSql = "select r.role_id, r.name, ab.passphrase_sha1, 'ROLE_REGISTRANT' as role "+
+        String UserSql = "select r.role_id, r.name, ab.passphrase_sha1, 'ROLE_ADMIN' as role "+
                 "FROM roles r INNER JOIN authentication_built_in ab ON r.role_id = ab.role_id "+
                 "WHERE enabled = 1 and r.role_id =?";
         try {

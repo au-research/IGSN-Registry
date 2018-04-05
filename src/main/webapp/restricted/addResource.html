@@ -14,7 +14,7 @@
 	                <form name="mandatoryleft">	              
 	                  <div class="form-group form-group-sm">
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceIdentifierPopover">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.prefix}}{{resource.resourceIdentifier}}</label>
+	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample:{{resource.resourceIdentifier}}</label>
 	                      <div class="form-inline">
 		                      <div ng-show="mode=='register'" class="form-group" ng-class="{ 'has-error' : mandatoryleft.prefix.$invalid}">
 			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>	
