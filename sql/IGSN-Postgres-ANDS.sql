@@ -515,6 +515,36 @@ CREATE TABLE registrant_referer_urls
 );
 
 
+CREATE TABLE prefix_sequence_data (
+    prefix varchar(4) NOT NULL,
+    sequence_max_value bigint NOT NULL DEFAULT 999999,
+    sequence_cur_value bigint DEFAULT 1,
+    CONSTRAINT "prefix_sequence_data_PK" PRIMARY KEY (prefix)
+);
+
+
+CREATE OR REPLACE FUNCTION nextPrefixSuffix(aPrefix TEXT)
+RETURNS TEXT AS $$
+DECLARE cur_val bigint;
+BEGIN
+    cur_val := (SELECT sequence_cur_value FROM prefix_sequence_data WHERE prefix = aPrefix);
+
+    IF cur_val IS NULL THEN
+        INSERT INTO prefix_sequence_data (prefix) VALUES (aPrefix);
+        cur_val := (SELECT sequence_cur_value FROM prefix_sequence_data WHERE prefix = aPrefix);
+    END IF;
+
+    IF cur_val IS NOT NULL THEN
+        UPDATE
+            prefix_sequence_data
+        SET
+            sequence_cur_value = sequence_cur_value + 1
+        WHERE
+            prefix = aPrefix;
+    END IF;
+    RETURN lpad(cast (cur_val AS TEXT), 6, '0');
+END;
+$$  LANGUAGE plpgsql;
 
 
 
