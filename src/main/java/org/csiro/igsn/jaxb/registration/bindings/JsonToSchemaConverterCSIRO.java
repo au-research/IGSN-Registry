@@ -64,8 +64,7 @@ public class JsonToSchemaConverterCSIRO {
 		Resource resourceXML = this.objectFactory.createResourcesResource();
 
 		ResourceIdentifier resourceIdentifier = this.objectFactory.createResourcesResourceResourceIdentifier();
-		if(!isNull(resourceJO.get("randomIds")) && EventType.fromValue(resourceJO.get("logDate").getAsJsonObject()
-				.get("eventType").getAsString())==EventType.REGISTERED && resourceJO.get("randomIds").getAsBoolean()){
+		if(!isNull(resourceJO.get("randomIds")) && resourceJO.get("randomIds").getAsBoolean()){
 			String randomId = "";
 			do{
 				randomId = resourceJO.get("resourceIdentifier").getAsString() + RandomStringUtils.randomAlphanumeric(9).toUpperCase();
