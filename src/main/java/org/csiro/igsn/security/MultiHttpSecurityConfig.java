@@ -52,17 +52,16 @@ public class MultiHttpSecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http
-					.antMatcher("/referer_login.html/**")
-					.csrf().disable()
-					.authorizeRequests()
-					.anyRequest().hasAnyRole("ADMIN", "REGISTRANT", "ALLOCATOR")
-					.and()
-					.addFilterBefore(
-							authenticationFilter(),
-							UsernamePasswordAuthenticationFilter.class)
-					.logout()
-					.logoutUrl("/logout");
+			http.antMatcher("/add_igsn_resource.html/**")
+                .csrf().disable()
+                .authorizeRequests()
+                .anyRequest().hasAnyRole("ADMIN", "REGISTRANT", "ALLOCATOR")
+                .and()
+                .addFilterBefore(
+                        authenticationFilter(),
+                        UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/logout");
 		}
 
 		@Bean
@@ -73,21 +72,21 @@ public class MultiHttpSecurityConfig {
 			authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
 			authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
 			authenticationFilter.setRequiresAuthenticationRequestMatcher(
-					new AntPathRequestMatcher("/referer_login.html", "GET"));
+					new AntPathRequestMatcher("/add_igsn_resource.html", "GET"));
 			authenticationFilter.setAuthenticationManager(authenticationManagerBean());
 			return authenticationFilter;
 		}
 
 		@Bean
-		public UserDetailsService userDetailsService() {
+		public UserDetailsService registrantUserDetailsService() {
 			return new RegistrantAuthenticationService();
 		};
 
 
 		@Autowired
-		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		public void configure(AuthenticationManagerBuilder auth) throws Exception {
 			SharedSecretEcoder encoder = new SharedSecretEcoder();
-			auth.userDetailsService(userDetailsService()).passwordEncoder(encoder);
+			auth.userDetailsService(registrantUserDetailsService()).passwordEncoder(encoder);
 		}
 
 		private class CustomSuccessHandler implements AuthenticationSuccessHandler{
@@ -119,7 +118,7 @@ public class MultiHttpSecurityConfig {
 
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.writeValue(response.getWriter(), "Nopity nop!");
+			objectMapper.writeValue(response.getWriter(), "Unauthorised!");
 		}
 	}
 
@@ -179,13 +178,13 @@ public class MultiHttpSecurityConfig {
 
 	@Configuration
 	@Order(2)
-	public static  class RDASecurityConfig extends
+	public static  class BuiltInSecurityConfig extends
 			WebSecurityConfigurerAdapter {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-					.antMatchers("/restricted/**").authenticated()
-					.antMatchers("/restricted/**").authenticated()
+                    .antMatchers("/restricted/registrant.html").hasAnyRole("ALLOCATOR", "ADMIN")
+					.antMatchers("/restricted/addResource.html").hasAnyRole("ALLOCATOR", "REGISTRANT")
 					.antMatchers("/web/**").authenticated()
 					.and()
 					.formLogin()
@@ -205,14 +204,16 @@ public class MultiHttpSecurityConfig {
 			repository.setHeaderName("X-XSRF-TOKEN");
 			return repository;
 		}
+
 		@Bean
-		public UserDetailsService userDetailsService() {
-			return new RegistryUserAuthenticationService();
+		public UserDetailsService builtInUserUserDetailsService() {
+		    return new BuiltInUserAuthenticationService();
 		};
+
 		@Autowired
-		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		public void configure(AuthenticationManagerBuilder auth) throws Exception {
 			ShaPasswordEncoder encoder = new ShaPasswordEncoder();
-			auth.userDetailsService(userDetailsService()).passwordEncoder(encoder);
+			auth.userDetailsService(builtInUserUserDetailsService()).passwordEncoder(encoder);
 		}
 
 		protected class CustomSuccessHandler implements AuthenticationSuccessHandler{

@@ -15,6 +15,7 @@ import org.csiro.igsn.entity.postgres.RefererUrls;
 import org.csiro.igsn.entity.postgres.Registrant;
 import org.csiro.igsn.web.controllers.RegistrantCtrl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,11 +23,15 @@ public class RegistrantEntityService {
 
 	PrefixEntityService prefixEntityService;
 	AllocatorEntityService allocatorEntityService;
+    @Value("#{configProperties['IGSN_NEW_REGISTRANT_DEFAULT_PASSWORD']}")
+    private String IGSN_NEW_REGISTRANT_DEFAULT_PASSWORD;
+
 	static final Logger log = Logger.getLogger(RegistrantEntityService.class);
 	@Autowired
 	public RegistrantEntityService(PrefixEntityService prefixEntityService,AllocatorEntityService allocatorEntityService){
 		this.prefixEntityService = prefixEntityService;
 		this.allocatorEntityService = allocatorEntityService;
+
 	}
 
 
@@ -255,7 +260,7 @@ public class RegistrantEntityService {
 			registrant.setAllocator(allocator);
 			registrant.setCreated(new Date());
 			registrant.setIsactive(true);
-			registrant.setPassword("Not used");
+			registrant.setPassword(IGSN_NEW_REGISTRANT_DEFAULT_PASSWORD);
 			registrant.setRegistrantemail(email);
 			registrant.setRegistrantname(name);
 			registrant.setUpdated(new Date());

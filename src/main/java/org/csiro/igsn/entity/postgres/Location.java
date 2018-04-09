@@ -38,7 +38,7 @@ public class Location implements java.io.Serializable {
 	
 	public Location(String locality, String localityUri,
 			String srid, String verticalDatum, String geometryUri,
-			Geometry geometry) {		
+			Geometry geometry) {
 		this.locality = locality;
 		this.localityUri = localityUri;
 		this.srid = srid;
@@ -110,17 +110,17 @@ public class Location implements java.io.Serializable {
 	public Geometry getGeometry() {
 		return this.geometry;
 	}
-	
+
 	@Transient
 	public String getWkt() {
 		if(this.getGeometry()!=null){
 			return this.getGeometry().toText();
 		}else{
 			return null;
-		}		
+		}
 	}
-	
-	
+
+
 
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;

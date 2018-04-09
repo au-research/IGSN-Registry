@@ -159,8 +159,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
-		  $scope.resource.location.wkt = $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
-	  }else if($scope.resource.locationInputType=="geographic" && !$scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){
+		  $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
+	  }else if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
