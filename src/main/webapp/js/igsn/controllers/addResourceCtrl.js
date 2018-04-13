@@ -1,5 +1,5 @@
-allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthService','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce',
-                                                    function ($scope,$http,currentAuthService,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce) {
+allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','currentAuthService','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce',
+                                                    function ($scope,$rootScope, $http,currentAuthService,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce) {
 	
   $scope.getResourceType = selectListService.getResourceType();
   $scope.getMaterialType = selectListService.getMaterialType();
@@ -11,7 +11,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   $scope.getTrueFalse = selectListService.getTrueFalse();
   $scope.getMGAZone = selectListService.getMGAZone();
   $scope.loading=false;
-  
+
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
   }
@@ -74,8 +74,10 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  if($scope.resource.logDate==null){
 		  $scope.resource.logDate={};
 		  $scope.resource.logDate.eventType="registered";
-	  }	  
-	  
+	  }
+      $scope.resource.randomIds = true;
+      $scope.resource.defaultLandingPage = true;
+      $scope.resource.sendEmail = true;
 	  $scope.resource.locationInputType = "wkt";
 	  $scope.useDegree = 'degrees';
 	  $scope.resource.registeredObjectType = 'http://pid.geoscience.gov.au/def/voc/igsn-codelists/PhysicalSample';
@@ -234,7 +236,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  }
 	  
   }
-  
+
    
   var getAllocatedPrefix = function(){
       $http.get('web/getAllocatedPrefix.do', {}).success(function(response) {
@@ -296,6 +298,12 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
     	
      });	  
    }
+
+  $scope.showUserEmailForm = false;
+  $rootScope.$on('setUserName', function() {
+  	$scope.showUserEmailForm = currentAuthService.getUsername() == 'AUSCOPE';
+  });
+
 	 
   
   if($routeParams.igsn){	  

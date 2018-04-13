@@ -29,4 +29,21 @@
   <property name="dataSource" ref="postgresDataSource"/>
  </bean>
 
+
+ <bean id="MyMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+  <property name="host" value="${spring.mail.host}" />
+  <property name="port" value="${spring.mail.port}" />
+  <property name="username" value="${spring.mail.username}" />
+  <property name="password" value="${spring.mail.password}" />
+
+  <property name="javaMailProperties">
+   <props>
+    <prop key="mail.smtp.auth">${spring.mail.properties.mail.smtp.auth}</prop>
+    <prop key="mail.smtp.starttls.enable">${spring.mail.properties.mail.smtp.starttls.enable}</prop>
+   </props>
+  </property>
+ </bean>
+
+
+
 </beans>

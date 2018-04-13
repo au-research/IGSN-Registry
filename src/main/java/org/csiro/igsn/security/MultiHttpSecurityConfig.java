@@ -42,7 +42,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class MultiHttpSecurityConfig {
 
 	@Configuration

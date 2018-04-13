@@ -1,5 +1,7 @@
 package org.csiro.igsn.web.controllers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
@@ -37,6 +39,7 @@ import org.csiro.igsn.jaxb.registration.bindings.Resources.Resource.ResourceType
 import org.csiro.igsn.service.MintService;
 import org.csiro.igsn.utilities.IGSNDateUtil;
 import org.csiro.igsn.utilities.IGSNUtil;
+import org.csiro.igsn.utilities.MailUtils;
 import org.csiro.igsn.utilities.SpatialUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,6 +77,9 @@ public class WebFormIGSNMintCtrl {
 	@Value("#{configProperties['IGSN_CSIRO_XSD_URL']}")
 	private String IGSN_CSIRO_XSD_URL;
 
+	@Value("#{configProperties['DEFAULT_LANDINGPAGE_BASE_URL']}")
+	private String DEFAULT_LANDINGPAGE_BASE_URL;
+
 	@Value("#{configProperties['IGSN_PREFIX']}")
 	private String IGSN_PREFIX;
 	
@@ -95,7 +101,6 @@ public class WebFormIGSNMintCtrl {
 
 	/**
 	 * Parse in json string, convert to Resources and mint it.
-	 * @param resources
 	 * @param user
 	 * @return
 	 */
@@ -103,14 +108,28 @@ public class WebFormIGSNMintCtrl {
 	public  ResponseEntity<?> mint(@RequestBody(required = true) String resourcesjson,
 			 HttpServletRequest request,
 			Principal user) {
-		
+		String userEmail = "";
+		boolean sendEmail = false;
+
 		try{
-			JsonElement resourceElement = new JsonParser().parse(resourcesjson);	        
-			String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" +request.getServerPort() + request.getContextPath(); 
+			JsonElement resourceElement = new JsonParser().parse(resourcesjson);
+			JsonObject jsonObject = resourceElement.getAsJsonObject();
 			Resources resourcesXML = this.objectFactory.createResources();
-			resourcesXML.getResource().add(this.jsonToSchemaConverterCSIRO.convert(resourceElement,baseUrl));
-			return this.mint(resourcesXML,false,user);
+			resourcesXML.getResource().add(this.jsonToSchemaConverterCSIRO.convert(resourceElement,DEFAULT_LANDINGPAGE_BASE_URL));
+
+			if(jsonObject.has("userEmail")){
+				userEmail = jsonObject.get("userEmail").getAsString();
+				sendEmail = jsonObject.get("sendEmail").getAsBoolean();
+			}
+			return this.mint(resourcesXML,false, user, userEmail, sendEmail);
 		}catch(Exception e){
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter );
+			printWriter.flush();
+
+			String stackTrace = writer.toString();
+			log.error(stackTrace);
 			e.printStackTrace();
 			return new ResponseEntity<Object>(new ExceptionWrapper("Fail to mint resource",e.getMessage()==null?"There are error in the form. Correct them before submitting":e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
@@ -144,10 +163,10 @@ public class WebFormIGSNMintCtrl {
 	 * @param user
 	 * @return
 	 */
-	public ResponseEntity<?> mint(Resources resources, boolean test,Principal user){
+	public ResponseEntity<?> mint(Resources resources, boolean test, Principal user, String userEmail, boolean sendEmail){
 		
 		boolean isXMLValid = true;
-		
+		log.info("USER EMAIL:" + userEmail + " do send?" + sendEmail);
 		Schema schema = null;
 
 		// 2. VALIDATE XML ====================================================
@@ -190,11 +209,11 @@ public class WebFormIGSNMintCtrl {
 			for (Resource r : resources.getResource()) {
 				MintEventLog mintEventLog= new MintEventLog(r.getResourceIdentifier().getValue());
 				
-				if(IGSNUtil.resourceStartsWithAllowedPrefix(registrant.getPrefixes(),r)){		
-					
+				if(IGSNUtil.resourceStartsWithAllowedPrefix(registrant.getPrefixes(),r)){
+					String igsn = "";
 					try{
 						SimpleDateFormat metadataDateFormat = IGSNDateUtil.getISODateFormatter();
-						String igsn=this.mintService.createRegistryXML(r.getResourceIdentifier().getValue(), r.getLandingPage(), metadataDateFormat.format(new Date()), test, r.getLogDate().getEventType().value());							
+						igsn=this.mintService.createRegistryXML(r.getResourceIdentifier().getValue(), r.getLandingPage(), metadataDateFormat.format(new Date()), test, r.getLogDate().getEventType().value());
 						mintEventLog.setMintLog(MintErrorCode.MINT_SUCCESS, null);
 						mintEventLog.setHandle("http://hdl.handle.net/"+igsn);							
 					}catch(Exception e){
@@ -204,7 +223,7 @@ public class WebFormIGSNMintCtrl {
 						continue;
 					}
 					
-					
+					//TODO email minting user
 					try{
 						if(test){
 							resourceEntityService.testInsertResource(r,registrant);
@@ -216,6 +235,11 @@ public class WebFormIGSNMintCtrl {
 							resourceEntityService.deprecateResource(r,true);
 						}else if(r.getLogDate().getEventType().equals(EventType.UPDATED)){
 							resourceEntityService.updateResource(r,registrant,true);
+						}
+						// String userEmail, boolean sendEmail
+						if(sendEmail){
+							MailUtils mailUtil = new MailUtils();
+							mailUtil.sendSuccessEmail(userEmail, "http://hdl.handle.net/"+igsn);
 						}
 						mintEventLog.setDatabaseLog(DatabaseErrorCode.UPDATE_SUCCESS, null);
 						mintEventLogs.add(mintEventLog);

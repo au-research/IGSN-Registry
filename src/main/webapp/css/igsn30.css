@@ -2,7 +2,7 @@ fieldset.show-fieldset-borders{
 	border: 1px solid #c4c4c4;
     padding: 0 1.4em 1.4em 1.4em;
     margin: 1em 0em 0em 0em;
-    background-color: #f9fcff
+    background-color: #F7F7F7
 }
 
 .show-fieldset-borders legend{
@@ -14,7 +14,7 @@ fieldset.show-fieldset-borders{
 
 
 #registrant-list-table .table-row-selected{
-    background-color: #1e8bc3;
+    background-color: #638363;
     color: #ffffff;
 }
 

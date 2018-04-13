@@ -22,7 +22,6 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).success(function(data,status) {
-
                 if(data.name || data.username) {
                     currentAuthService.setAuthenticated(true);
                     if(data.username && !data.name){

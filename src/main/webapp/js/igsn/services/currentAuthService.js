@@ -1,4 +1,4 @@
-app.service('currentAuthService', function() {
+app.service('currentAuthService', function($rootScope) {
 	
 	 var status = {};	
 
@@ -11,6 +11,7 @@ app.service('currentAuthService', function() {
         },
         setUsername : function(name){
         	status.username=name;
+        	$rootScope.$emit("setUserName", status.username);
         },
         getUsername : function(){
         	return status.username;

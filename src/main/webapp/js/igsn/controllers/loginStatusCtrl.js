@@ -6,21 +6,19 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$http','currentAuthServi
 
         if(!$scope.status.authenticated){
             $http.get('getUser.do', {}).success(function(response) {
-                if(response.name || response.username){
-                    if(response.username && !response.name){
-                        currentAuthService.setUsername(response.username);
-                        currentAuthService.setName(response.username);
+                if(response.username){
+                    currentAuthService.setUsername(response.username);
+                    currentAuthService.setIsAllocator(response.allocatorid);
+                    if(response.registrantname){
+                        currentAuthService.setName(response.registrantname);
                     }
-                    else if(!response.username && response.name){
-                        currentAuthService.setUsername(response.name);
-                        currentAuthService.setName(response.name);
+                    else if(response.contactname){
+                        currentAuthService.setName(response.registrantname);
                     }
                     else{
-                        currentAuthService.setUsername(response.username);
-                        currentAuthService.setName(response.name);
+                        currentAuthService.setname(response.username);
                     }
                     currentAuthService.setAuthenticated(true);
-                    currentAuthService.setIsAllocator(response.allocator);
                 }else{
                     currentAuthService.setAuthenticated(false);
                 }
@@ -28,6 +26,4 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$http','currentAuthServi
                 currentAuthService.setAuthenticated(false);
             });
         }
-
-
     }]);

@@ -14,7 +14,7 @@
 	                <form name="mandatoryleft">	              
 	                  <div class="form-group form-group-sm">
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceIdentifierPopover">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample:{{resource.resourceIdentifier}}</label>
+	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.prefix}}{{resource.resourceIdentifier}}</label>
 	                      <div class="form-inline">
 		                      <div ng-show="mode=='register'" class="form-group" ng-class="{ 'has-error' : mandatoryleft.prefix.$invalid}">
 			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>	
@@ -24,7 +24,7 @@
 						            <input id="form-resource-identifier" ng-disabled="mode!='register' || resource.randomIds" type="text" class="form-control" placeholder="Tick Auto-gen to randomly generate ids"  capitalize name="resourceIdentifier" ng-model="resource.resourceIdentifier" pattern="^{{resource.prefix}}.*"/>						            
 						          </div>
 						          <div class="checkbox" ng-hide="mode !='register'">
-							        <label><input type="checkbox"  ng-model="resource.randomIds" ng-change="changePrefix()"> <small><b>Use default</b></small></label>
+							        <label><input type="checkbox" ng-model="resource.randomIds" ng-change="changePrefix()"> <small><b>Use default</b></small></label>
 							      </div>
 					          </div>
 				          </div>
@@ -87,13 +87,12 @@
 	                    <select  ng-repeat="types in resource.resourceTypeses" class="form-control" ng-model="types.cvResourceType.resourceType"  name="resourcetype" ng-options="type as type for type in getResourceType" required></select>	 
 	                    <p ng-show="mandatoryleft.resourcetype.$invalid" class="small help-block">Select a sample or item type</p>                  
 	                  </div>
-	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">
-	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlMaterialType">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Material Type</label>
-	                    <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type as type for type in getMaterialType" required></select>	
-	                     <p ng-show="mandatoryleft.materialtype.$invalid" class="small help-block">Select a material type</p>                   
-	                  </div>
-	                                   
+                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">
+                        <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlMaterialType">
+                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Material Type</label>
+                        <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type as type for type in getMaterialType" required></select>
+                        <p ng-show="mandatoryleft.materialtype.$invalid" class="small help-block">Select a material type</p>
+                    </div>
 	                </form>	               
 	              </div>
 	            </div>
@@ -137,7 +136,7 @@
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The URL of the institution where the sample or item is stored.">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Institution URL</label>
 		                    <input type="text" class="form-control" placeholder="http://www.dmp.wa.gov.au" ng-model="resource.curationDetailses[0].institutionUri"/>		                    
-	                    </div>		                 
+	                    </div>
 					  </fieldset>			                       
 	                </form>	
 	                              
@@ -146,22 +145,6 @@
 	          </div>
           </div>         
         </div>
-        <div class="row">
-        	<p ng-show="callback" class="pull-right small help-block">You will be re-routed when you successfully mint the resource</p>
-        </div>
-        <div class="row">        	
-        	<div class="pull-right" ng-show="mode=='update' || mode=='register'">          		
-        		<label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="deprecated">Deprecate</label>
-				<label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="destroyed" >Destroy</label>
-				<label ng-show="mode=='update'" class="radio-inline mr-8"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="updated">Update</label>
-		        <button class="btn btn-blue  pull-right" type="button" ng-click="mintResource()">{{mode=='update'? "Update Resource" : "Register"}}</button>		       
-			</div>
-			<div class="pull-right" ng-show="mode=='unavailable'"> 
-				<label class="mr-12">Resource is {{resource.logDate.eventType}}</label>         		
-		        <button class="btn btn-blue  pull-right" type="button" ng-click="resource.logDate.eventType='updated';mode='update'">Reactivate</button>		       
-			</div>        
-        </div> 
-       
         <div class="row mt-20 mb-30">
 	      <div class="col-sm-12">
 	        <!-- Nav tabs -->
@@ -396,7 +379,7 @@
 	          </div>	
 	          
 	          
-	         
+
 	          <div class="tab-pane fade in tab-shop-item" id="addresource-contributors">
 	          	 <div class="row">	
 	          	 	<div class="col-md-12">          
@@ -424,7 +407,7 @@
 		                    <p ng-show="contributor.contributorIdentifier && !contributor.cvIdentifierType.identifierType" class="small help-block">Identifier type cannot be empty if specifying identifier</p>                
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.contributorses.length ==1" ng-click="removeContributor($index)">Remove Contributor</button>
-					     <button class="btn btn-blue btn-sm" type="button" ng-click="addContributor()">Add More Contributor</button>
+					     <button class="btn btn-orange btn-sm" type="button" ng-click="addContributor()">Add More Contributor</button>
 					    </fieldset>  
 					    
 					  </div>				                       
@@ -452,7 +435,7 @@
 		                    <p ng-show="(relatedResource.cvIdentifierType.identifierType || relatedResource.relatedResource) && !relatedResource.relationType" class="small help-block">Relation type must not be empty if specifying a related identifier type or related resource</p>                   
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.relatedResourceses.length ==1" ng-click="removeRelatedResource($index)">Remove Related Resource</button>
-					     <button class="btn btn-blue btn-sm" type="button" ng-click="addRelatedResource()">Add More Related Resource</button>
+					     <button class="btn btn-orange btn-sm" type="button" ng-click="addRelatedResource()">Add More Related Resource</button>
 					  </fieldset> 
 					 </div>	                       
 			      </div>
@@ -460,7 +443,44 @@
 	        </div>
 	      </div>
 	    </div>
-      </div>
+	  <div class="row">
+		  <div class="panel-primary text-theme content-box col-md-6" ng-show="showUserEmailForm">
+			  <div class="panel-heading">
+				  <h3 class="panel-title">User Info</h3>
+			  </div>
+			  <div class="panel-body">
+				  <form name="userInfo">
+					  <fieldset class="form-group form-group-sm show-fieldset-borders">
+						  <div class="form-group form-group-sm" ng-class="{ 'has-error' : userInfo.userEmail.$invalid}">
+							  <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Please provide an email address to link your IGSN to.
+ Note that your email will not be part of the IGSN metadata and will not be visible to others.
+ Upon registering the IGSN you will be sent a confirmation email with a link to the IGSN metadata description.">
+							<i class="fa fa-question-circle" aria-hidden="true"></i></span> Your Email Address</label>
+							  <input type="text" class="form-control" name="userEmail" placeholder="userEmail" ng-model="resource.userEmail" required/>
+							  <p ng-show="userInfo.userEmail.$invalid" class="small help-block">Enter Your email address</p>
+						  </div>
+                          <div class="checkbox">
+                              <label><input type="checkbox" name="sendEmail" placeholder="sendEmail" ng-model="resource.sendEmail"> <small><b>Email metadata link</b></small></label>
+                          </div>
+					  </fieldset>
+				  </form>
+
+			  </div>
+		  </div>
+		  <div class="pull-right" ng-show="mode=='update' || mode=='register'">
+			  <label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="deprecated">Deprecate</label>
+			  <label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="destroyed" >Destroy</label>
+			  <label ng-show="mode=='update'" class="radio-inline mr-8"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="updated">Update</label>
+			  <button class="btn btn-orange  pull-right" type="button" ng-click="mintResource()">{{mode=='update'? "Update Resource" : "Register"}}</button>
+		  </div>
+		  <div class="pull-right" ng-show="mode=='unavailable'">
+			  <label class="mr-12">Resource is {{resource.logDate.eventType}}</label>
+			  <button class="btn btn-orange  pull-right" type="button" ng-click="resource.logDate.eventType='updated';mode='update'">Reactivate</button>
+		  </div>
+	  </div>
+
+
+	  </div>
     </div>
   
    
