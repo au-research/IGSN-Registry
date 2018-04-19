@@ -1,5 +1,6 @@
 package org.csiro.igsn.web.controllers;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.util.List;
 
@@ -62,8 +63,14 @@ public class RegistrantCtrl {
 	}
 	
 	@RequestMapping("getAllocatedPrefix.do")
-	public ResponseEntity<Object> getAllocatedPrefix(Principal user) {		
-		return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+	public ResponseEntity<Object> getAllocatedPrefix(Principal user) {
+		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
+		if(r != null){
+			return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<Object>(new String[0],HttpStatus.OK);
+		}
 		
 	}
 	

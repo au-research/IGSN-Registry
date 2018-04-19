@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.csiro.igsn.security.aaf.AAFAuthenticationFilter;
+import org.csiro.igsn.security.aaf.AAFAuthenticationProvider;
+import org.csiro.igsn.security.aaf.JWTManagement;
 import org.csiro.igsn.utilities.Config;
 import org.csiro.igsn.utilities.SharedSecretEcoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,8 +49,96 @@ import com.google.gson.Gson;
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
 
-	@Configuration
+
+    @Configuration
     @Order(1)
+    public static class AAFSecurityConfig extends
+            WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.antMatcher("/aaf_uth")
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .anyRequest().hasAnyRole("ADMIN", "REGISTRANT", "ALLOCATOR")
+                    .and()
+                    .addFilterBefore(
+                            getAAFauthenticationFilter(),
+                            UsernamePasswordAuthenticationFilter.class)
+                    .logout()
+                    .logoutUrl("/logout");
+        }
+
+        @Bean
+        public UserDetailsService registrantUserDetailsService() {
+            return new RegistrantAuthenticationService();
+        };
+
+
+        @Autowired
+        public void configure(AuthenticationManagerBuilder auth) throws Exception {
+            SharedSecretEcoder encoder = new SharedSecretEcoder();
+            AAFAuthenticationProvider ap = new AAFAuthenticationProvider();
+            ap.setJwtManagement(new JWTManagement());
+            auth.authenticationProvider(ap);
+            auth.userDetailsService(registrantUserDetailsService()).passwordEncoder(encoder);
+        }
+
+
+        @Bean
+        public AAFAuthenticationFilter
+        getAAFauthenticationFilter() throws Exception {
+            AAFAuthenticationFilter authenticationFilter
+                    = new AAFAuthenticationFilter();
+            authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
+            authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
+            authenticationFilter.setRequiresAuthenticationRequestMatcher(
+                    new AntPathRequestMatcher("/aaf_uth", "POST"));
+            authenticationFilter.setAuthenticationManager(authenticationManagerBean());
+            return authenticationFilter;
+        }
+
+
+
+        private class CustomSuccessHandler implements AuthenticationSuccessHandler{
+            private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                                HttpServletResponse httpServletResponse,
+                                                Authentication authentication)
+                    throws IOException, ServletException {
+                HttpSession session = httpServletRequest.getSession();
+                UserDetails authUser = (UserDetails) SecurityContextHolder.getContext()
+                        .getAuthentication().getPrincipal();
+                session.setAttribute("username", authUser.getUsername());
+                session.setAttribute("name", authUser.getUsername());
+                session.setAttribute("authorities", authentication.getAuthorities());
+                redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "/#/addresource");
+                // set our response to OK status
+                //httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                //httpServletResponse.setContentType("text/html; charset=UTF-8");
+                //Gson gson = new Gson();
+                //httpServletResponse.getWriter().write(gson.toJson(authUser));
+            }
+        }
+
+        private void loginFailureHandler(
+                HttpServletRequest request,
+                HttpServletResponse response,
+                AuthenticationException e) throws IOException {
+
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(response.getWriter(), "Unauthorised!");
+        }
+    }
+
+
+
+
+
+	@Configuration
+    @Order(2)
 	public static class ReferrerSecurityConfig extends
 			WebSecurityConfigurerAdapter {
 
@@ -177,7 +269,7 @@ public class MultiHttpSecurityConfig {
 */
 
 	@Configuration
-	@Order(2)
+	@Order(3)
 	public static  class BuiltInSecurityConfig extends
 			WebSecurityConfigurerAdapter {
 		@Override
@@ -230,12 +322,13 @@ public class MultiHttpSecurityConfig {
 				session.setAttribute("username", authUser.getUsername());
 				session.setAttribute("name", authUser.getUsername());
 				session.setAttribute("authorities", authentication.getAuthorities());
-
+                RegistryUser r = new RegistryUser(authUser);
+                r.setPassword("HIDDEN");
 				// set our response to OK status
 				httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 				httpServletResponse.setContentType("text/html; charset=UTF-8");
 				Gson gson = new Gson();
-				httpServletResponse.getWriter().write(gson.toJson(authUser));
+				httpServletResponse.getWriter().write(gson.toJson(r));
 			}
 		}
 	}

@@ -1,35 +1,93 @@
 package org.csiro.igsn.security;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.csiro.igsn.entity.postgres.Allocator;
+import org.csiro.igsn.entity.postgres.Registrant;
 import org.csiro.igsn.entity.service.AllocatorEntityService;
+import org.csiro.igsn.entity.service.RegistrantEntityService;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.ldap.userdetails.LdapUserDetails;
 
 
 public class RegistryUser implements UserDetails {
 
     private static final long serialVersionUID = 1L;
-
-    private UserDetails details;
     private String name;
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private boolean isAllocator;
     private ArrayList<String> roles;
 
+    public  RegistryUser(UserDetails details) {
+        this.username = details.getUsername();
+        this.roles = new ArrayList<String>();
+        RegistrantEntityService registrantEntityService = new RegistrantEntityService(null, null);
+        AllocatorEntityService allocatorService = new AllocatorEntityService();
+        Registrant r = registrantEntityService.searchRegistrant(this.username);
+        if(r != null){
+            this.name = r.getRegistrantname();
+            this.email = r.getRegistrantemail();
+            this.addRole("ROLE_REGISTRANT");
+            if(allocatorService.searchAllocator(this.username)!=null){
+                this.setAllocator(true);
+                this.addRole("ROLE_ALLOCATOR");
+            }else{
+                this.setAllocator(false);
+            }
+        }else{
+            Allocator a = allocatorService.searchAllocator(this.username);
+            this.name = a.getContactname();
+            this.email = a.getContactemail();
+            this.addRole("ROLE_ALLOCATOR");
+            this.setAllocator(true);
+        }
+    }
+
+    public  RegistryUser(String userName) {
+        this.username = userName;
+        this.roles = new ArrayList<String>();
+        RegistrantEntityService registrantEntityService = new RegistrantEntityService(null, null);
+        AllocatorEntityService allocatorService = new AllocatorEntityService();
+        Registrant r = registrantEntityService.searchRegistrant(this.username);
+        if(r != null){
+            this.name = r.getRegistrantname();
+            this.email = r.getRegistrantemail();
+            this.password = r.getPassword();
+            this.addRole("ROLE_REGISTRANT");
+            if(allocatorService.searchAllocator(this.username)!=null){
+                this.setAllocator(true);
+                this.addRole("ROLE_ALLOCATOR");
+            }else{
+                this.setAllocator(false);
+            }
+        }else{
+            Allocator a = allocatorService.searchAllocator(this.username);
+            this.name = a.getContactname();
+            this.email = a.getContactemail();
+            this.password = a.getPassword();
+            this.addRole("ROLE_ALLOCATOR");
+            this.setAllocator(true);
+        }
+    }
+
+
+
     public RegistryUser() {
-        this.details = null;
         this.name = "";
         this.email = "";
-        this.userName = "";
+        this.username = "";
         this.roles = new ArrayList<String>();
+
     }
 
     public boolean isEnabled() {
-        return details.isEnabled();
+        return true;
     }
 
     public void setName(String name){
@@ -43,7 +101,7 @@ public class RegistryUser implements UserDetails {
 
     public String getUserName(){
 
-        return this.userName;
+        return this.username;
     }
 
     public String getEmail(){
@@ -52,7 +110,11 @@ public class RegistryUser implements UserDetails {
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.details.getAuthorities();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        for (String role : this.getRoles()){
+            grantedAuthorities.add(new SimpleGrantedAuthority(role));
+        } return grantedAuthorities;
+
     }
 
     public void setPassword(String password) {
@@ -80,10 +142,10 @@ public class RegistryUser implements UserDetails {
     }
 
     public void setUsername(String username) {
-        this.userName = username;
+        this.username = username;
 
         AllocatorEntityService allocatorService = new AllocatorEntityService();
-        if(allocatorService.searchAllocator(this.userName)!=null){
+        if(allocatorService.searchAllocator(this.username)!=null){
             this.setAllocator(true);
         }else{
             this.setAllocator(false);
@@ -91,23 +153,21 @@ public class RegistryUser implements UserDetails {
     }
 
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     public boolean isAccountNonExpired() {
-        //return details.isAccountNonExpired();
         return true;
     }
 
     public boolean isAccountNonLocked() {
-        //return details.isAccountNonLocked();
         return true;
     }
 
     public boolean isCredentialsNonExpired() {
-        // return details.isCredentialsNonExpired();
         return true;
     }
+
 
     public boolean isAllocator() {
         return isAllocator;

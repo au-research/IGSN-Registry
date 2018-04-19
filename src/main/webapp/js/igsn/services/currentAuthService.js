@@ -19,8 +19,14 @@ app.service('currentAuthService', function($rootScope) {
         setName : function(name){
         	status.name=name;
         },
+        setEmail : function(email){
+            status.email=email;
+        },
         getName : function(){
         	return status.name;
+        },
+        getEmail : function(){
+            return status.email;
         },
         setPermissions : function(permissions){
         	status.permissions=permissions;

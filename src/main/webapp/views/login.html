@@ -24,10 +24,11 @@
 		                    <input type="password" class="form-control" placeholder="Password" ng-model="credentials.password">
 		                  </div>		                 
 		                  <button type="submit" class="btn btn-orange text-theme-xs">Login</button>
-		                  <div ng-show="error" class="text-theme-xs pull-right a-red">Error login in</div>		                 
+		                  <div ng-show="error" class="text-theme-xs pull-right a-red">Error login in</div>
 		                </form>
-		               
-		              </div>
+						  <br/>
+						  <a href="https://rapid.test.aaf.edu.au/jwt/authnrequest/research/4U6DK8TN9SszjGm9URIjZw"><button class="btn btn-orange text-theme-xs" ng-show="!status.authenticated"><i class="fa fa-user"></i>AAF Login</button></a>
+					  </div>
 		            </div>
 		          </div>
 		        </div>

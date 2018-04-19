@@ -8,15 +8,12 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$http','currentAuthServi
             $http.get('getUser.do', {}).success(function(response) {
                 if(response.username){
                     currentAuthService.setUsername(response.username);
-                    currentAuthService.setIsAllocator(response.allocatorid);
-                    if(response.registrantname){
-                        currentAuthService.setName(response.registrantname);
+                    currentAuthService.setIsAllocator(response.allocator);
+                    if(response.name){
+                        currentAuthService.setName(response.name);
                     }
-                    else if(response.contactname){
-                        currentAuthService.setName(response.registrantname);
-                    }
-                    else{
-                        currentAuthService.setname(response.username);
+                    if(response.email){
+                        currentAuthService.setEmail(response.email);
                     }
                     currentAuthService.setAuthenticated(true);
                 }else{

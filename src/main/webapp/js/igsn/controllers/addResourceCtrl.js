@@ -299,9 +299,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
      });	  
    }
 
-  $scope.showUserEmailForm = false;
+  $scope.showUserEmailForm = true;
   $rootScope.$on('setUserName', function() {
-  	$scope.showUserEmailForm = currentAuthService.getUsername() == 'AUSCOPE';
+      $scope.resource.userEmail = currentAuthService.getEmail();
   });
 
 	 

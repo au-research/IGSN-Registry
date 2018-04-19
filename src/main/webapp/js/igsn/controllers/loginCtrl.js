@@ -22,22 +22,15 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).success(function(data,status) {
-                if(data.name || data.username) {
-                    currentAuthService.setAuthenticated(true);
-                    if(data.username && !data.name){
-                        currentAuthService.setUsername(data.username);
-                        currentAuthService.setName(data.username);
-                    }
-                    else if(!data.username && data.name){
-                        currentAuthService.setUsername(data.name);
+                if(data.username){
+                    currentAuthService.setUsername(data.username);
+                    currentAuthService.setIsAllocator(data.allocator);
+                    if(data.name){
                         currentAuthService.setName(data.name);
                     }
-                    else{
-                        currentAuthService.setUsername(data.username);
-                        currentAuthService.setName(data.name);
+                    if(data.email){
+                        currentAuthService.setEmail(data.email);
                     }
-                    currentAuthService.setPermissions(data.userPermission);
-                    currentAuthService.setIsAllocator(data.isAllocator);
                     if($routeParams.path && $routeParams.igsn){
                         $timeout(function(){
                             $location.path("/" + $routeParams.path + "/" + $routeParams.igsn);

@@ -1,5 +1,7 @@
 package org.csiro.igsn.entity.service;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashSet;
@@ -250,33 +252,64 @@ public class RegistrantEntityService {
 	}
 
 	public boolean addRegistrant(Principal user,String email,String name,String username) throws Exception {
-		EntityManager em = JPAEntityManager.createEntityManager();
-		try{
-			em.getTransaction().begin();
+        EntityManager em = JPAEntityManager.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Allocator allocator = null;
+            Registrant registrant = new Registrant();
+            allocator = this.allocatorEntityService.searchAllocator(user.getName());
+            registrant.setPassword(IGSN_NEW_REGISTRANT_DEFAULT_PASSWORD);
+            registrant.setAllocator(allocator);
+            registrant.setCreated(new Date());
+            registrant.setIsactive(true);
+            registrant.setRegistrantemail(email);
+            registrant.setRegistrantname(name);
+            registrant.setUpdated(new Date());
+            registrant.setUsername(username);
+            em.merge(registrant);
+            em.flush();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            log.error("AddRegistrant error:" + errors);
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 
-			Allocator allocator = this.allocatorEntityService.searchAllocator(user.getName());
-
-			Registrant registrant = new Registrant();
-			registrant.setAllocator(allocator);
-			registrant.setCreated(new Date());
-			registrant.setIsactive(true);
-			registrant.setPassword(IGSN_NEW_REGISTRANT_DEFAULT_PASSWORD);
-			registrant.setRegistrantemail(email);
-			registrant.setRegistrantname(name);
-			registrant.setUpdated(new Date());
-			registrant.setUsername(username);
-			em.merge(registrant);
-			em.flush();
-			em.getTransaction().commit();
-			return true;
-		}catch(Exception e){
-			em.getTransaction().rollback();
-			throw e;
-		}finally{
-			em.close();
-		}
-
-	}
+    public boolean addRegistrant(String AllocatorName,  String email,String name,String username) throws Exception {
+        EntityManager em = JPAEntityManager.createEntityManager();
+        try{
+            em.getTransaction().begin();
+            Allocator allocator = null;
+            Registrant registrant = new Registrant();
+            allocator = this.allocatorEntityService.searchAllocator(AllocatorName);
+            registrant.setPassword("NOT USED");
+            registrant.setAllocator(allocator);
+            registrant.setCreated(new Date());
+            registrant.setIsactive(true);
+            registrant.setRegistrantemail(email);
+            registrant.setRegistrantname(name);
+            registrant.setUpdated(new Date());
+            registrant.setUsername(username);
+            em.merge(registrant);
+            em.flush();
+            em.getTransaction().commit();
+            return true;
+        }catch(Exception e){
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            log.error("AddRegistrant error:" + errors);
+            em.getTransaction().rollback();
+            throw e;
+        }finally{
+            em.close();
+        }
+    }
 
 
 
