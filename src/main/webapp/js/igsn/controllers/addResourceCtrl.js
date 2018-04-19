@@ -300,7 +300,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
    }
 
   $scope.showUserEmailForm = true;
-  $rootScope.$on('setUserName', function() {
+  $rootScope.$on('setEmail', function() {
       $scope.resource.userEmail = currentAuthService.getEmail();
   });
 

@@ -322,7 +322,7 @@ public class MultiHttpSecurityConfig {
 				session.setAttribute("username", authUser.getUsername());
 				session.setAttribute("name", authUser.getUsername());
 				session.setAttribute("authorities", authentication.getAuthorities());
-                RegistryUser r = new RegistryUser(authUser);
+                RegistryUser r = new RegistryUser(authUser.getUsername());
                 r.setPassword("HIDDEN");
 				// set our response to OK status
 				httpServletResponse.setStatus(HttpServletResponse.SC_OK);

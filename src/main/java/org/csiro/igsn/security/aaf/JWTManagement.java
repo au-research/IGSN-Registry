@@ -124,7 +124,7 @@ public class JWTManagement {
                 userAttributes.put("name", attributes.displayName);
 
             try {
-                this.registerantEntityService.addRegistrant("AUSCOPE", attributes.email, attributes.displayName, attributes.email);
+                this.registerantEntityService.addRegistrant("AUSCOPE", attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
                 this.registerantEntityService.allocatePrefix("XXAA", attributes.email);
 
             } catch (Exception e) {

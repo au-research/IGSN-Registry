@@ -40,7 +40,10 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                             $route.reload();
                         },0);
                     }else if($location.path()=='/login'){
-                        $location.path("/");
+                        if(data.allocator)
+                            $locationpath("/#registrant");
+                        else
+                            $location.path("/");
                     }else{
                         var currentPageTemplate = $route.current.templateUrl;
                         $templateCache.remove(currentPageTemplate);

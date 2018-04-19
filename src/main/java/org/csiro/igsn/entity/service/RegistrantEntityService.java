@@ -281,14 +281,14 @@ public class RegistrantEntityService {
         }
     }
 
-    public boolean addRegistrant(String AllocatorName,  String email,String name,String username) throws Exception {
+    public boolean addRegistrant(String AllocatorName,  String email,String name,String username, String password) throws Exception {
         EntityManager em = JPAEntityManager.createEntityManager();
         try{
             em.getTransaction().begin();
             Allocator allocator = null;
             Registrant registrant = new Registrant();
             allocator = this.allocatorEntityService.searchAllocator(AllocatorName);
-            registrant.setPassword("NOT USED");
+            registrant.setPassword(password);
             registrant.setAllocator(allocator);
             registrant.setCreated(new Date());
             registrant.setIsactive(true);

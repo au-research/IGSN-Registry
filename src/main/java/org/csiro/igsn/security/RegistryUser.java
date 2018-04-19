@@ -22,6 +22,13 @@ public class RegistryUser implements UserDetails {
     private String email;
     private String password;
     private boolean isAllocator;
+    private boolean enabled;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+
+
+
     private ArrayList<String> roles;
 
     public  RegistryUser(UserDetails details) {
@@ -47,6 +54,10 @@ public class RegistryUser implements UserDetails {
             this.addRole("ROLE_ALLOCATOR");
             this.setAllocator(true);
         }
+        this.enabled = true;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
     }
 
     public  RegistryUser(String userName) {
@@ -74,6 +85,10 @@ public class RegistryUser implements UserDetails {
             this.addRole("ROLE_ALLOCATOR");
             this.setAllocator(true);
         }
+        this.enabled = true;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
     }
 
 
@@ -83,11 +98,15 @@ public class RegistryUser implements UserDetails {
         this.email = "";
         this.username = "";
         this.roles = new ArrayList<String>();
+        this.enabled = false;
+        this.accountNonExpired = false;
+        this.accountNonLocked = false;
+        this.credentialsNonExpired = false;
 
     }
 
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
     public void setName(String name){
@@ -157,15 +176,15 @@ public class RegistryUser implements UserDetails {
     }
 
     public boolean isAccountNonExpired() {
-        return true;
+        return this.accountNonExpired;
     }
 
     public boolean isAccountNonLocked() {
-        return true;
+        return this.accountNonLocked;
     }
 
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.credentialsNonExpired;
     }
 
 

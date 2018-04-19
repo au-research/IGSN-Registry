@@ -11,7 +11,6 @@ app.service('currentAuthService', function($rootScope) {
         },
         setUsername : function(name){
         	status.username=name;
-        	$rootScope.$emit("setUserName", status.username);
         },
         getUsername : function(){
         	return status.username;
@@ -21,6 +20,7 @@ app.service('currentAuthService', function($rootScope) {
         },
         setEmail : function(email){
             status.email=email;
+            $rootScope.$emit("setEmail", email);
         },
         getName : function(){
         	return status.name;
