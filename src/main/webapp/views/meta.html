@@ -4,7 +4,7 @@
         <div class="row">        
           <div class="col-md-12">
 	       	 <div class="row">
-	            <h3 class="title-md hr-left text-theme">{{resource.resourceIdentifier}}<span class="pull-right"><qrcode  version="5" error-correction-level="L" data="http://hdl.handle.net/10273/{{resource.resourceIdentifier}}" download size="62"></qrcode></span></h3>	      
+	            <h3 class="title-md hr-left text-theme">IGSN: {{resource.resourceIdentifier}}<span class="pull-right"><qrcode  version="5" error-correction-level="L" data="http://hdl.handle.net/10273/{{resource.resourceIdentifier}}" download size="62"></qrcode></span></h3>
 	            <div class="panel-primary text-theme content-box col-md-6" >
 	              <div class="panel-heading" style='position: relative; z-index: -1;'>
 	                <h3 class="panel-title">Metadata</h3>
@@ -60,7 +60,7 @@
 	            </div>	            
 	          </div>
 	          <div class="row">
-	        	<button ng-show="resource.inputMethod=='form'" class="btn btn-blue  pull-right" type="button" ng-click="edit()">Edit</button>
+	        	<button ng-show="resource.inputMethod=='form' && resource." class="btn btn-blue  pull-right" type="button" ng-click="edit()">Edit</button>
 	         </div> 
 	          <div class="row mt-20 mb-30">
 			      <div class="col-sm-12">

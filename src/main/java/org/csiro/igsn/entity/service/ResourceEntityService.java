@@ -15,6 +15,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.AlternateIdentifiers;
 import org.csiro.igsn.entity.postgres.Classifications;
 import org.csiro.igsn.entity.postgres.Contributors;
@@ -33,6 +34,7 @@ import org.csiro.igsn.jaxb.oai.bindings.JAXBConverterInterface;
 import org.csiro.igsn.jaxb.oai.bindings.csiro.Resources.Resource.Location;
 import org.csiro.igsn.jaxb.registration.bindings.EventType;
 import org.csiro.igsn.jaxb.registration.bindings.Resources.Resource;
+import org.csiro.igsn.web.controllers.LoginCtrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +44,7 @@ import org.springframework.stereotype.Service;
 public class ResourceEntityService {
 
 	JAXBResourceToEntityConverter jaxbResourceToEntityConverter;
-
+	static final Logger log = Logger.getLogger(ResourceEntityService.class);
 
 	public static final int PAGING_SIZE=10;
 
@@ -234,12 +236,20 @@ public class ResourceEntityService {
 
 
 
-	public void updateResource(Resource resourceXML,Registrant registrant,boolean isWebInsert) throws Exception {
+	public void updateResource(Resource resourceXML, Registrant registrant, boolean isWebInsert) throws Exception {
+		log.info("Registrant:" + registrant.getUsername());
+		log.info("IDENTIFIER:" + resourceXML.getResourceIdentifier().getValue());
 		EntityManager em = JPAEntityManager.createEntityManager();
 		Resources resourcesEntity = this.searchResourceByIdentifier(resourceXML.getResourceIdentifier().getValue());
+
 		if(resourcesEntity==null){
-			throw new Exception("Resource not found, unable to update: Change logElement event to register to add new record.");
+			throw new Exception("Resource " + resourceXML.getResourceIdentifier().getValue() + "not found, unable to update.");
 		}
+
+		if(!((Integer)registrant.getRegistrantid()).equals((Integer)resourcesEntity.getRegistrant().getRegistrantid())){
+			throw new Exception("Only the Registrant who created the IGSN "+ resourceXML.getResourceIdentifier().getValue() +" Record can modify it.");
+		}
+
 		try{
 			resourcesEntity = new Resources();
 			em.getTransaction().begin();

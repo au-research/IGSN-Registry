@@ -5,19 +5,19 @@
         <div class="row">        
           <div class="col-md-12">
 	       	 <div class="row">
-	            <h3 class="title-md hr-left text-theme">Metadata Information</h3>	      
+	            <h3 class="title-md hr-left text-theme">IGSN {{resource.resourceIdentifier}} Metadata Information</h3>
 	            <div class="panel-primary text-theme content-box col-md-6" >
 	              <div class="panel-heading">
 	                <h3 class="panel-title">Primary Info</h3>
 	              </div>
 	              <div class="panel-body">
 	                <form name="mandatoryleft">	              
-	                  <div class="form-group form-group-sm">
+	                  <div class="form-group form-group-sm hidden" >
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceIdentifierPopover">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.prefix}}{{resource.resourceIdentifier}}</label>
+	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.resourceIdentifier}}</label>
 	                      <div class="form-inline">
 		                      <div ng-show="mode=='register'" class="form-group" ng-class="{ 'has-error' : mandatoryleft.prefix.$invalid}">
-			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>	
+			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>
 							  </div>
 							  <div class="form-group form-group-sm">
 			                      <div class="input-group" style="width:270px" ng-class="{ 'has-error' : mandatoryleft.resourceIdentifier.$invalid}">				                      				            
@@ -37,7 +37,7 @@
 	                    <select  class="form-control" ng-model="resource.registeredObjectType"  name="registeredObjectType" ng-options="type as type for type in registeredObjectType" required></select>	 
 	                    <p ng-show="mandatoryleft.registeredObjectType.$invalid" class="small help-block">Select registered object type</p>                  
 	                  </div>
-	                  <div class="form-group form-group-sm">
+	                  <div class="form-group form-group-sm hidden">
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The landing page is the web page containing more detailed (domain-specific) information about the geosample">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Landing Page</label>
 	                      <div class="form-inline">		                      
@@ -51,7 +51,7 @@
 					          </div>
 				          </div>
 				          <p ng-show="mandatoryleft.landingPage.$invalid && !resource.defaultLandingPage" class="small help-block" style="color: #a94442;">Enter a valid landing page url that starts with http:// or https://</p>	                    	                    
-	                  </div>	                  
+	                  </div>
 	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.ispublic.$invalid}">
 	                    <div class="row">
 						  <div class="col-sm-6 col-xs-12">		
@@ -108,7 +108,7 @@
 					    <div class="form-group form-group-sm">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The full name of the sample or data curator.">
 	                      	<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curator</label>
-		                    <input type="text" class="form-control" placeholder="Michael Wingate" ng-model="resource.curationDetailses[0].curator"/>
+		                    <input type="text" class="form-control" placeholder="Fred Bloggs" ng-model="resource.curationDetailses[0].curator"/>
 	                    </div>
 	                    <div class="form-group form-group-sm">
 		                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The date the sample or item was moved to its current location.">
@@ -129,7 +129,7 @@
 	                     <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryright.curatingInstitution.$invalid}">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The institution where the sample or item is stored.">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curating Institution</label>
-		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="GSWA" ng-model="resource.curationDetailses[0].curatingInstitution" required/>
+		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="AUSCOPE" ng-model="resource.curationDetailses[0].curatingInstitution" required/>
 		                    <p ng-show="mandatoryright.curatingInstitution.$invalid" class="small help-block">Enter the curating institution</p>
 	                    </div>
 		                 <div class="form-group form-group-sm">

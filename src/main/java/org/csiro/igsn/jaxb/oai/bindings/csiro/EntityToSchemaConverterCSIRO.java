@@ -147,7 +147,12 @@ public class EntityToSchemaConverterCSIRO implements JAXBConverterInterface{
 			locationXML.getGeometry().setSrid(resource.getLocation().getSrid());
 			locationXML.getGeometry().setVerticalDatum(resource.getLocation().getVerticalDatum());
 			locationXML.getGeometry().setGeometryURI(resource.getLocation().getGeometryUri());
-			locationXML.getGeometry().setValue(resource.getLocation().getGeometry().toText());	
+			if(resource.getLocation().getGeometry() != null) {
+				locationXML.getGeometry().setValue(resource.getLocation().getGeometry().toText());
+			}
+			else {
+				locationXML.getGeometry().setValue("");
+			}
 			resourceXML.setLocation(this.objectFactory.createResourcesResourceLocation(locationXML));
 		}
 				

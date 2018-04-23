@@ -1,5 +1,5 @@
-allControllers.controller('metaCtrl', ['$rootScope','$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData',
-                                                    function ($rootScope,$scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData) {	
+allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData',
+                                                    function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData) {
 	
 	angular.extend($scope, {
 	    defaults: {
@@ -34,8 +34,7 @@ allControllers.controller('metaCtrl', ['$rootScope','$scope','$http','currentAut
 		 		resourceIdentifier: $routeParams.igsn,		 		
 		 		}
         }).success(function(data,status) {
-        	$scope.resource = data; 
-        	
+        	$scope.resource = data;
         	 leafletData.getMap().then(function(mymap) {
         		 if(data.location && data.location.wkt!=null){
      	        	var wkt = new Wkt.Wkt();        	

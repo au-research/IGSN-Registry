@@ -67,7 +67,7 @@ public class JsonToSchemaConverterCSIRO {
 		if(!isNull(resourceJO.get("randomIds")) && resourceJO.get("randomIds").getAsBoolean()){
 			String randomId = "";
 			do{
-				randomId = resourceJO.get("resourceIdentifier").getAsString() + RandomStringUtils.randomAlphanumeric(9).toUpperCase();
+				randomId = resourceJO.get("prefix").getAsString() + RandomStringUtils.randomAlphanumeric(6).toUpperCase();
 			}while((this.resourceEntityService.searchResourceByIdentifier(randomId)!=null));
 			resourceIdentifier.setValue(randomId);
 		}else{

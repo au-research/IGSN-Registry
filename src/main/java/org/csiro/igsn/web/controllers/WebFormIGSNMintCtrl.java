@@ -108,7 +108,6 @@ public class WebFormIGSNMintCtrl {
 	public  ResponseEntity<?> mint(@RequestBody(required = true) String resourcesjson,
 			 HttpServletRequest request,
 			Principal user) {
-		String userEmail = "";
 		boolean sendEmail = false;
 
 		try{
@@ -117,11 +116,10 @@ public class WebFormIGSNMintCtrl {
 			Resources resourcesXML = this.objectFactory.createResources();
 			resourcesXML.getResource().add(this.jsonToSchemaConverterCSIRO.convert(resourceElement,DEFAULT_LANDINGPAGE_BASE_URL));
 
-			if(jsonObject.has("userEmail")){
-				userEmail = jsonObject.get("userEmail").getAsString();
+			if(jsonObject.has("sendEmail")){
 				sendEmail = jsonObject.get("sendEmail").getAsBoolean();
 			}
-			return this.mint(resourcesXML,false, user, userEmail, sendEmail);
+			return this.mint(resourcesXML,false, user, sendEmail);
 		}catch(Exception e){
 			StringWriter writer = new StringWriter();
 			PrintWriter printWriter = new PrintWriter( writer );
@@ -163,10 +161,9 @@ public class WebFormIGSNMintCtrl {
 	 * @param user
 	 * @return
 	 */
-	public ResponseEntity<?> mint(Resources resources, boolean test, Principal user, String userEmail, boolean sendEmail){
+	public ResponseEntity<?> mint(Resources resources, boolean test, Principal user, boolean sendEmail){
 		
 		boolean isXMLValid = true;
-		log.info("USER EMAIL:" + userEmail + " do send?" + sendEmail);
 		Schema schema = null;
 
 		// 2. VALIDATE XML ====================================================
@@ -208,8 +205,8 @@ public class WebFormIGSNMintCtrl {
 			
 			for (Resource r : resources.getResource()) {
 				MintEventLog mintEventLog= new MintEventLog(r.getResourceIdentifier().getValue());
-				
 				if(IGSNUtil.resourceStartsWithAllowedPrefix(registrant.getPrefixes(),r)){
+
 					String igsn = "";
 					try{
 						SimpleDateFormat metadataDateFormat = IGSNDateUtil.getISODateFormatter();
@@ -237,9 +234,10 @@ public class WebFormIGSNMintCtrl {
 							resourceEntityService.updateResource(r,registrant,true);
 						}
 						// String userEmail, boolean sendEmail
+						String eventType = r.getLogDate().getEventType().value();
 						if(sendEmail){
 							MailUtils mailUtil = new MailUtils();
-							mailUtil.sendSuccessEmail(userEmail, "http://hdl.handle.net/"+igsn);
+							mailUtil.sendSuccessEmail(eventType, registrant.getRegistrantemail(), igsn);
 						}
 						mintEventLog.setDatabaseLog(DatabaseErrorCode.UPDATE_SUCCESS, null);
 						mintEventLogs.add(mintEventLog);

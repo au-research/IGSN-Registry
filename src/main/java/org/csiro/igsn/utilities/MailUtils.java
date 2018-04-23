@@ -1,5 +1,7 @@
 package org.csiro.igsn.utilities;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -10,36 +12,66 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service
 public class MailUtils {
-    private MailSender mailSender;
-
-    @Value("#{configProperties['FROM_EMAIL_ADDRESS']}")
-    private String FROM_EMAIL_ADDRESS;
-
-    @Value("#{configProperties['EMAIL_SUBJECT']}")
-    private String EMAIL_SUBJECT;
+    private JavaMailSender mailSender;
+    final Logger log = Logger.getLogger(MailUtils.class);
+    private String fromEmail;
 
     public MailUtils(){
         ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:../applicationContext.xml");
-        this.mailSender = (MailSender) ctx.getBean("MyMailSender");
+        this.mailSender = (JavaMailSender) ctx.getBean("MyMailSender");
+        this.fromEmail = "services@ands.org.au";
     }
 
-    public void sendSuccessEmail(String toEmail, String igsnUrl){
-        this.sendMail("IGSN minted successfully", igsnUrl, toEmail, FROM_EMAIL_ADDRESS);
+    public void sendMail(String subject, String bodyText, String toAddress) {
+        try {
+
+            MimeMessage message = this.mailSender.createMimeMessage();
+            message.setSubject(subject);
+            MimeMessageHelper helper;
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(this.fromEmail);
+            helper.setTo(toAddress);
+            helper.setText(bodyText, true);
+            mailSender.send(message);
+        } catch (MessagingException ex) {
+            log.error(ex.getMessage());
+        }
     }
 
-    private void sendMail(String subject, String content, String toAddress, String fromAddress){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(subject);
-        message.setText(content);
-        message.setTo(toAddress);
-        message.setFrom(fromAddress);
-        this.mailSender.send(message);
+    public void sendSuccessEmail(String eventType, String toEmail, String igsn){
+        String subject = "IGSN " +  StringUtils.capitalize(eventType) + " Successfully " + igsn;
+        this.sendMail(subject, getBodyText(igsn),toEmail);
     }
+
+    private String getBodyText(String igsn){
+        String handleUrl = "http://hdl.handle.net/";
+        String bodyText ="<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n"
+                + "<html>"
+                + "<head>"
+                + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><title>IGSN Event Notification email</title></head><body>"
+                 + "<p>Your IGSN has been successfully minted through the ANDS IGSN service.</p>"
+                 + "<p>You can view your IGSN metadata at the following URL: <a href='" + handleUrl + igsn + "'>" + handleUrl + igsn + "</p>"
+                 + "<p>To request changes to the IGSN metadata please contact <a href='mailto:services@ands.org.au>services@ands.org.au</a></p>."
+                 + "<p>If you have any questions regarding the service, please visit the ANDS <a href='http://www.ands.org.au/online-services'>website</a>"
+                 + " or contact <a href='mailto:services@ands.org.au>services@ands.org.au</a></p>."
+                 + "<b>Australian National Data Service</b>"
+                 + "<p>E: <a href='mailto:services@ands.org.au'>services@ands.org.au</a> | W: <a href='http://ands.org.au'>ands.org.au</a></p>"
+                 + "<p>Physical address: 9 Liversidge Street, Australian National University, Acton, ACT 2601<br/>"
+                 + "Postal address: 101 Liversidge Street, Australian National University, Acton, ACT 2601<br/>"
+                 + "<a href='http://www.ands.org.au/about-us/ands-nectar-rds'>Working in partnership with Nectar and RDS</a></p>"
+                 + "<a href='http://www.ands.org.au/about-us/ands-nectar-rds'><img src='http://www.ands.org.au/__data/assets/image/0008/1001600/ands-nectar-rds-200px.png'/></a>"
+                 + "<p><i>Please consider the environment before printing this e-mail.<i></body></html>";
+        return bodyText;
+    }
+
 
 }

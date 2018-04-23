@@ -76,6 +76,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 		  $scope.resource.logDate.eventType="registered";
 	  }
       $scope.resource.randomIds = true;
+	  $scope.resource.landingPage = "USE DEFAULT LANDING PAGE";
       $scope.resource.defaultLandingPage = true;
       $scope.resource.sendEmail = true;
 	  $scope.resource.locationInputType = "wkt";
@@ -240,7 +241,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
    
   var getAllocatedPrefix = function(){
       $http.get('web/getAllocatedPrefix.do', {}).success(function(response) {
-		 $scope.allocatedPrefixes = response;	  
+		 $scope.allocatedPrefixes = response;
+		 $scope.resource.prefix = $scope.allocatedPrefixes[0].prefix;
 	  }).error(function(data) {
 		  modalService.showModal({}, {    	            	           
 	           headerText: "Retrieve prefix" ,
@@ -249,7 +251,6 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 	  });
   }
   getAllocatedPrefix();
-  
   
   $scope.changePrefix = function(){
 	  $scope.resource.resourceIdentifier=$scope.resource.prefix;
@@ -272,7 +273,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
     		$location.path("/addresource");
     		
     	}else{
-    		$scope.resource = data; 
+    		$scope.resource = data;
+
     		if(data.logDate.eventType != "destroyed" && data.logDate.eventType != "deprecated"){
     			 $scope.mode="update";    			
     			 $scope.resource.logDate.eventType="updated";
@@ -280,7 +282,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
     			$scope.mode="unavailable";
     		}
          	initDataStructure();
-         	         		
+            $scope.resource.randomIds = false;
+            $scope.resource.resourceIdentifier = igsn;
     	}     	 
      	
      }).error(function(response,status) {
@@ -299,12 +302,11 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
      });	  
    }
 
-  $scope.showUserEmailForm = true;
-  $rootScope.$on('setEmail', function() {
-      $scope.resource.userEmail = currentAuthService.getEmail();
-  });
+  // $scope.showUserEmailForm = false;
+  // $rootScope.$on('setEmail', function() {
+  //     $scope.resource.userEmail = currentAuthService.getEmail();
+  // });
 
-	 
   
   if($routeParams.igsn){	  
 	  getResource($routeParams.igsn); 
