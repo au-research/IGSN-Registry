@@ -114,8 +114,12 @@ public class JWTManagement {
         this.allocatorEntiryService = new AllocatorEntityService();
         this.prefixEntityService = new PrefixEntityService ();
         this.registerantEntityService = new RegistrantEntityService(this.prefixEntityService, this.allocatorEntiryService);
+        
         Registrant r = this.registerantEntityService.searchRegistrant(attributes.email);
-        if (r == null) {
+        if(r != null && r.getIsactive() == false){
+            throw new AuthenticationServiceException("Unable to authenticate");
+        }
+        else if (r == null) {
             log.info("USER DOESN'T EXIST ATTEMPTING TO ADD:  " + attributes.email);
             Map<String, Object> userAttributes = new HashMap<String, Object>();
             userAttributes.put("id", attributes.email);

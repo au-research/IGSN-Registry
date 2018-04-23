@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	),
 	@NamedQuery(
 			name="Registrant.searchByUsername",
-		    query="SELECT r FROM Registrant r where r.isactive=true and lower(r.username) = lower(:username)"
+		    query="SELECT r FROM Registrant r where lower(r.username) = lower(:username)"
 	),
 	@NamedQuery(
 			name="Registrant.getAllRegistrant",

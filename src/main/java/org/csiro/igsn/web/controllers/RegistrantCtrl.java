@@ -39,7 +39,21 @@ public class RegistrantCtrl {
 		return new ResponseEntity<List<Registrant>>(this.registrantEntityService.listRegistrant(),HttpStatus.OK);
 		
 	}
-	
+
+	@RequestMapping("getAllRecords.do")
+	public ResponseEntity<Object> getAllRecords(Principal user) {
+		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
+		if(r != null){
+
+			return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<Object>(new String[0],HttpStatus.OK);
+		}
+
+	}
+
+
 	@RequestMapping("removeRegistrants.do")
 	public ResponseEntity<Object> removeRegistrants(
 			@RequestParam(required = true, value ="username") String username,
