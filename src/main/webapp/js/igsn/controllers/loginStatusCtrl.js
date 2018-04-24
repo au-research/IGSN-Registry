@@ -25,5 +25,9 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$rootScope','$http','cur
 
         $rootScope.$on('authenticated', function() {
             $scope.status = currentAuthService.getStatus();
+            $http.get('getUser.do', {})
+                .success(function(response) {
+                    currentAuthService.setIsAllocator(response.allocator);
+                });
         });
     }]);
