@@ -56,5 +56,16 @@ public class Config {
 		}
 	}
 
+	public static String getAAFSecret(){
+		return get("AAF_SECRET");
+	}
+
+	public static String get(String config){
+		if (prop.isEmpty()) {
+			return null;
+		}
+
+		return prop.getProperty(config);
+	}
 
 }

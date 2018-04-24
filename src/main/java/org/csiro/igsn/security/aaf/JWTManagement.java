@@ -15,7 +15,14 @@ import org.csiro.igsn.security.RegistrantAuthenticationService;
 import org.csiro.igsn.security.aaf.AAFAuthentication;
 import org.csiro.igsn.security.aaf.AAFJWT;
 import org.csiro.igsn.security.RegistryUser;
+import org.csiro.igsn.utilities.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,6 +36,7 @@ import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.MacSigner;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
@@ -45,7 +53,6 @@ public class JWTManagement {
     static private String AAF_TEST = "https://rapid.test.aaf.edu.au";
     final Logger log = Logger.getLogger(JWTManagement.class);
 
-    @Value("#{configProperties['AAF_SECRET']}")
     private String AAF_SECRET;
 
     @Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
@@ -58,6 +65,8 @@ public class JWTManagement {
     public AAFAuthentication parseJWT(String tokenString) throws AuthenticationException {
         if (tokenString == null)
             throw new AuthenticationCredentialsNotFoundException("Unable to authenticate. No AAF credentials found.");
+
+        AAF_SECRET = Config.getAAFSecret();
 
         if (AAF_SECRET == null)
             throw new AuthenticationCredentialsNotFoundException("Unable to authenticate. No AAF_SECRET defined.");
@@ -132,8 +141,8 @@ public class JWTManagement {
                 userAttributes.put("name", attributes.displayName);
 
             try {
-                this.registerantEntityService.addRegistrant("AUSCOPE", attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
-                this.registerantEntityService.allocatePrefix("XXAA", attributes.email);
+                this.registerantEntityService.addRegistrant(Config.get("AAF_DEFAULT_ALLOCATOR"), attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
+                this.registerantEntityService.allocatePrefix(Config.get("AAF_DEFAULT_PREFIX"), attributes.email);
 
             } catch (Exception e) {
                 log.error("ERROR:  " + e.getMessage());

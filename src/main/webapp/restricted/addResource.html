@@ -200,13 +200,13 @@
 				                 </div>
 				                  <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : ((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)}">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
-	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID){{latitude.latitude}}{{longitude.longitude}}</label>
+	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
 				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg as epsg for epsg in getEpsg"></select>	
 				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>                   
 				                 </div>
 				                 <div ng-show="resource.locationInputType=='geographic'" class="form-group form-group-sm" >
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
-	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID){{latitude.latitude}}{{longitude.longitude}}</label>
+	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
 				                        <input type="text" class="form-control" readonly  ng-model="resource.location.srid"/>          
 				                 </div>
 			                     <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : location.wkt.$invalid && !location.wkt.$pristine}">

@@ -46,16 +46,14 @@ public class RegistrantCtrl {
 	public ResponseEntity<Object> getAllRecords(Principal user) {
 		ResourceEntityService re = new ResourceEntityService(new ControlledValueEntityService());
 		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
-		if(r != null){
-			try {
-				return new ResponseEntity<Object>(re.getResourceMetadataByRegistrant(r), HttpStatus.OK);
-			}
-			catch(Exception e){
-				return new ResponseEntity<Object>(e,HttpStatus.OK);
-			}
+		if (r == null) {
+			return new ResponseEntity<>(new String[0], HttpStatus.OK);
 		}
-		else{
-			return new ResponseEntity<Object>(new String[0],HttpStatus.OK);
+
+		try {
+			return new ResponseEntity<>(re.getResourceMetadataByRegistrant(r), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 	}
 
