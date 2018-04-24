@@ -1,5 +1,5 @@
-allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
-    function ($scope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
+allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
+    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
 
         $scope.isRedirect = false;
 
@@ -31,6 +31,7 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                     if(data.email){
                         currentAuthService.setEmail(data.email);
                     }
+                    currentAuthService.setAuthenticated(true);
                     if($routeParams.path && $routeParams.igsn){
                         $timeout(function(){
                             $location.path("/" + $routeParams.path + "/" + $routeParams.igsn);
@@ -49,6 +50,7 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                         $templateCache.remove(currentPageTemplate);
                         $route.reload();
                     }
+
 
                 }else{
                     if(data.restricted){

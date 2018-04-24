@@ -1,6 +1,5 @@
-allControllers.controller('LoginStatusCtrl', ['$scope','$http','currentAuthService',
-    function ($scope,$http,currentAuthService) {
-
+allControllers.controller('LoginStatusCtrl', ['$scope','$rootScope','$http','currentAuthService',
+    function ($scope,$rootScope, $http,currentAuthService) {
 
         $scope.status = currentAuthService.getStatus();
 
@@ -23,4 +22,8 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$http','currentAuthServi
                 currentAuthService.setAuthenticated(false);
             });
         }
+
+        $rootScope.$on('authenticated', function() {
+            $scope.status = currentAuthService.getStatus();
+        });
     }]);
