@@ -3,6 +3,15 @@ allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http'
 
         $scope.isRedirect = false;
 
+        $scope.aaf = {};
+        $scope.fetchAAFDetails = function() {
+            $http.get('getAAF.do')
+                .success(function(message) {
+                    $scope.aaf = message;
+                });
+        };
+        $scope.fetchAAFDetails();
+
         if(Object.keys($routeParams).length > 0 && !$routeParams.sessionid && !$routeParams.callbackurl){
             $scope.isRedirect = true;
             $scope.redirectIGSN = $routeParams.igsn;

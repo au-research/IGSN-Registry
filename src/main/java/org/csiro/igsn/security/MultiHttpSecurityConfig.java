@@ -55,9 +55,11 @@ public class MultiHttpSecurityConfig {
     public static class AAFSecurityConfig extends
             WebSecurityConfigurerAdapter {
 
+    	static final String JTWPATH = "/auth/jwt";
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/aaf_uth")
+            http.antMatcher(JTWPATH)
                     .csrf().disable()
                     .authorizeRequests()
                     .anyRequest().hasAnyRole("ADMIN", "REGISTRANT", "ALLOCATOR")
@@ -93,7 +95,7 @@ public class MultiHttpSecurityConfig {
             authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
             authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
             authenticationFilter.setRequiresAuthenticationRequestMatcher(
-                    new AntPathRequestMatcher("/aaf_uth", "POST"));
+                    new AntPathRequestMatcher(JTWPATH, "POST"));
             authenticationFilter.setAuthenticationManager(authenticationManagerBean());
             return authenticationFilter;
         }
