@@ -7,8 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.Prefix;
 import org.csiro.igsn.entity.postgres.Registrant;
+import org.csiro.igsn.entity.service.ControlledValueEntityService;
 import org.csiro.igsn.entity.service.PrefixEntityService;
 import org.csiro.igsn.entity.service.RegistrantEntityService;
+import org.csiro.igsn.entity.service.ResourceEntityService;
 import org.csiro.igsn.exception.ExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,15 +44,19 @@ public class RegistrantCtrl {
 
 	@RequestMapping("getAllRecords.do")
 	public ResponseEntity<Object> getAllRecords(Principal user) {
+		ResourceEntityService re = new ResourceEntityService(new ControlledValueEntityService());
 		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
 		if(r != null){
-
-			return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+			try {
+				return new ResponseEntity<Object>(re.getResourceMetadataByRegistrant(r), HttpStatus.OK);
+			}
+			catch(Exception e){
+				return new ResponseEntity<Object>(e,HttpStatus.OK);
+			}
 		}
 		else{
 			return new ResponseEntity<Object>(new String[0],HttpStatus.OK);
 		}
-
 	}
 
 

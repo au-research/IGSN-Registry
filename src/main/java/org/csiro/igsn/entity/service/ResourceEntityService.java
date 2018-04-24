@@ -313,6 +313,28 @@ public class ResourceEntityService {
 	}
 
 
+	public List<Resources> getResourceMetadataByRegistrant(Registrant registrant) throws Exception {
+		return this.searchResourceByRegistrantId(registrant.registrantid);
+	}
+
+
+	public List<Resources> searchResourceByRegistrantId(int registrantId){
+		checkEmbargo();
+		EntityManager em = JPAEntityManager.createEntityManager();
+		try{
+			List<Resources> result = em.createNamedQuery("Resources.searchByRegistrantId", Resources.class)
+					.setParameter("registrantid", registrantId).getResultList();
+			log.debug(result.toString());
+			return result;
+		}catch(NoResultException e){
+			return null;
+		}catch(Exception e){
+			throw e;
+		}finally{
+			em.close();
+		}
+	}
+
 
 	public Resources searchResourceByIdentifier(String resourceIdentifier){
 		checkEmbargo();

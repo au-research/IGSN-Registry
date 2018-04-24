@@ -114,7 +114,7 @@ public class JWTManagement {
         this.allocatorEntiryService = new AllocatorEntityService();
         this.prefixEntityService = new PrefixEntityService ();
         this.registerantEntityService = new RegistrantEntityService(this.prefixEntityService, this.allocatorEntiryService);
-        
+
         Registrant r = this.registerantEntityService.searchRegistrant(attributes.email);
         if(r != null && r.getIsactive() == false){
             throw new AuthenticationServiceException("Unable to authenticate");

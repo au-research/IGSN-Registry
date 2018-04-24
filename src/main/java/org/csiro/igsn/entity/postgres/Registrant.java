@@ -54,7 +54,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 })
 public class Registrant implements java.io.Serializable {
 
-	private int registrantid;
+	public int registrantid;
 	private String registrantname;
 	private String registrantemail;
 	private Date created;

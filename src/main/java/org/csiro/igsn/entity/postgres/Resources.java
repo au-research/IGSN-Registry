@@ -53,6 +53,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	@NamedQuery(
 			name="Resources.searchpublic",
 		    query="SELECT r FROM Resources r where r.isPublic = true and r.resourceIdentifier = :resourceIdentifier"
+	),@NamedQuery(
+				name="Resources.searchByRegistrantId",
+				query="SELECT r FROM Resources r where r.registrant.registrantid = :registrantid"
 	)
 })		
 public class Resources implements java.io.Serializable {
