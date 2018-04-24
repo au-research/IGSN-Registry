@@ -26,7 +26,7 @@ https://twiki.auscope.org/wiki/Grid/AuscopePortalDevelopmentEnvironmentSetUp2602
 
 include src/main/resources/config.properties with the following information:
 
-````
+```
 ldap.password=xxxxx
 ldap.url=ldap://pool.ldap.example.au:123
 ldap.userdn=CN=sa-xxxxx,OU=ffffffff,OU=Special Accounts,DC=eeeee,DC=jjjjjo,DC=au
