@@ -1,4 +1,4 @@
-app.service('currentAuthService', function() {
+app.service('currentAuthService', function($rootScope) {
 	
 	 var status = {};	
 
@@ -7,6 +7,9 @@ app.service('currentAuthService', function() {
             return status.authenticated;
         },
         setAuthenticated: function (auth) {
+    	    if (auth) {
+    	        $rootScope.$broadcast('authenticated');
+            }
         	status.authenticated = auth;
         },
         setUsername : function(name){

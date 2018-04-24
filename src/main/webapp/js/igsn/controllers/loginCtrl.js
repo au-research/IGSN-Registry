@@ -1,7 +1,16 @@
-allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
-    function ($scope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
+allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
+    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
 
         $scope.isRedirect = false;
+
+        $scope.aaf = {};
+        $scope.fetchAAFDetails = function() {
+            $http.get('getAAF.do')
+                .success(function(message) {
+                    $scope.aaf = message;
+                });
+        };
+        $scope.fetchAAFDetails();
 
         if(Object.keys($routeParams).length > 0 && !$routeParams.sessionid && !$routeParams.callbackurl){
             $scope.isRedirect = true;
@@ -31,6 +40,7 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                     if(data.email){
                         currentAuthService.setEmail(data.email);
                     }
+                    currentAuthService.setAuthenticated(true);
                     if($routeParams.path && $routeParams.igsn){
                         $timeout(function(){
                             $location.path("/" + $routeParams.path + "/" + $routeParams.igsn);
@@ -49,6 +59,7 @@ allControllers.controller('LoginCtrl', ['$scope','$timeout','$http','currentAuth
                         $templateCache.remove(currentPageTemplate);
                         $route.reload();
                     }
+
 
                 }else{
                     if(data.restricted){

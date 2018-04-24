@@ -44,10 +44,11 @@ public class JWTManagement {
     static private String AAF_PRODUCTION = "https://rapid.aaf.edu.au";
     static private String AAF_TEST = "https://rapid.test.aaf.edu.au";
     final Logger log = Logger.getLogger(JWTManagement.class);
-   // @Value("#{configProperties['AAF_SECRET']}")
-    private String AAF_SECRET = "!aV\\suVT`j.{&#tUT?8A7xGWBK@9+1hK";
-    @Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
 
+    @Value("#{configProperties['AAF_SECRET']}")
+    private String AAF_SECRET;
+
+    @Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
     private String AAF_ROOT_SERVICE_URL;
 
     private RegistrantEntityService registerantEntityService;
@@ -57,7 +58,10 @@ public class JWTManagement {
     public AAFAuthentication parseJWT(String tokenString) throws AuthenticationException {
         if (tokenString == null)
             throw new AuthenticationCredentialsNotFoundException("Unable to authenticate. No AAF credentials found.");
-        log.info("AAF_SECRET:" + AAF_SECRET);
+
+        if (AAF_SECRET == null)
+            throw new AuthenticationCredentialsNotFoundException("Unable to authenticate. No AAF_SECRET defined.");
+
         MacSigner key = new MacSigner(AAF_SECRET.getBytes());
         Jwt jwt = JwtHelper.decodeAndVerify(tokenString, key);
         String claims = jwt.getClaims();

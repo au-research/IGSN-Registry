@@ -380,9 +380,7 @@ CREATE TABLE registrant (
     password character varying(50) NOT NULL,
     updated timestamp without time zone,
     allocator integer NOT NULL,
-    isactive boolean,
-    shared_secret character varying,
-    app_id character varying
+    isactive boolean
 );
 
 
@@ -501,51 +499,6 @@ CREATE TABLE resources (
     input_method character varying(15),
     embargo_end timestamp without time zone
 );
-
-CREATE TABLE registrant_referer_urls
-(
-    id SERIAL,
-    registrantid bigint NOT NULL,
-    referer_url character varying(1024) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "RefererUrls_pkey" PRIMARY KEY (id),
-    CONSTRAINT "registrantidFK" FOREIGN KEY (registrantid)
-        REFERENCES version30.registrant (registrantid) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-);
-
-
-CREATE TABLE prefix_sequence_data (
-    prefix varchar(4) NOT NULL,
-    sequence_max_value bigint NOT NULL DEFAULT 999999,
-    sequence_cur_value bigint DEFAULT 1,
-    CONSTRAINT "prefix_sequence_data_PK" PRIMARY KEY (prefix)
-);
-
-
-CREATE OR REPLACE FUNCTION nextPrefixSuffix(aPrefix TEXT)
-RETURNS TEXT AS $$
-DECLARE cur_val bigint;
-BEGIN
-    cur_val := (SELECT sequence_cur_value FROM prefix_sequence_data WHERE prefix = aPrefix);
-
-    IF cur_val IS NULL THEN
-        INSERT INTO prefix_sequence_data (prefix) VALUES (aPrefix);
-        cur_val := (SELECT sequence_cur_value FROM prefix_sequence_data WHERE prefix = aPrefix);
-    END IF;
-
-    IF cur_val IS NOT NULL THEN
-        UPDATE
-            prefix_sequence_data
-        SET
-            sequence_cur_value = sequence_cur_value + 1
-        WHERE
-            prefix = aPrefix;
-    END IF;
-    RETURN lpad(cast (cur_val AS TEXT), 6, '0');
-END;
-$$  LANGUAGE plpgsql;
-
 
 
 --
@@ -1113,9 +1066,3 @@ INSERT INTO cv_resource_type VALUES (4, 'http://vocabulary.odm2.org/specimentype
 INSERT INTO cv_resource_type VALUES (3, 'http://vocabulary.odm2.org/specimentype/coreHalfRound');
 INSERT INTO cv_resource_type VALUES (2, 'http://vocabulary.odm2.org/specimentype/core');
 INSERT INTO cv_resource_type VALUES (1, 'http://vocabulary.odm2.org/specimentype/automated');
--- Completed on 2017-02-24 09:50:46
-
---
--- PostgreSQL database dump complete
---
-
