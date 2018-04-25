@@ -31,7 +31,10 @@ app.config(['$routeProvider',
       }).    
       when('/login/:path/:igsn', {
           templateUrl: 'views/login.html'        
-      }).      
+      }).
+        when('/listResources', {
+        templateUrl: 'restricted/listResource.html'
+    }).
       otherwise({
         redirectTo: '/'
       });

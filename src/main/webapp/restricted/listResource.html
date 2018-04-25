@@ -1,0 +1,38 @@
+
+<div class="section section-lg section-bottom container" ng-controller="listResourceController">
+    <div class="col-md-12">
+        <div class="row">
+            <!-- CONTENT -->
+            <!--===============================================================-->
+            <div class="col-md-12">
+                <div>
+                    <h3 class="title-md hr-left text-theme">Resources</h3>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Identifier</th>
+                            <th>Status</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="igsn in igsns">
+                            <td><a href="#/meta/{{ igsn.resourceIdentifier }}">{{ igsn.resourceTitle }}</a></td>
+                            <td>{{ igsn.resourceIdentifier }}</td>
+                            <td>{{ igsn.logDate.eventType }}</td>
+                            <td>
+                                <a href="#/meta/{{ igsn.resourceIdentifier }}" class="btn btn-primary"><i class="fa fa-search"></i> View</a>
+                                <a href="#/addresource/{{ igsn.resourceIdentifier }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

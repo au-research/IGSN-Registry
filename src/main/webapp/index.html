@@ -61,7 +61,8 @@
   <script src="js/igsn/controllers/addResourceCtrl.js"></script>
   <script src="js/igsn/controllers/registrant.js"></script>
   <script src="js/igsn/controllers/metaCtrl.js"></script>
-  
+  <script src="js/igsn/controllers/listResourceCtrl.js"></script>
+
 
   
 
@@ -115,6 +116,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+              <li ng-show="status.authenticated">
+                  <a href="#/listResources"><i class="fa fa-list"></i> List Resources</a>
+              </li>
            <li ng-show="status.authenticated">
             	<a href="#/addSample"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
             </li> 
