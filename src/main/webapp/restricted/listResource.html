@@ -10,17 +10,19 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Identifier</th>
-                            <th>Status</th>
+                            <th ng-click="setOrderProperty('resourceTitle')">Title</th>
+                            <th ng-click="setOrderProperty('resourceIdentifier')">Identifier</th>
+                            <th ng-click="setOrderProperty('logDate.eventType')">Status</th>
+                            <th ng-click="setOrderProperty('modified')">Updated</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="igsn in igsns">
+                        <tr ng-repeat="igsn in igsns | orderBy:order">
                             <td><a href="#/meta/{{ igsn.resourceIdentifier }}">{{ igsn.resourceTitle }}</a></td>
                             <td>{{ igsn.resourceIdentifier }}</td>
                             <td>{{ igsn.logDate.eventType }}</td>
+                            <td>{{ igsn.modified | date }}</td>
                             <td>
                                 <a href="#/meta/{{ igsn.resourceIdentifier }}" class="btn btn-primary"><i class="fa fa-search"></i> View</a>
                                 <a href="#/addresource/{{ igsn.resourceIdentifier }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
