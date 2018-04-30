@@ -52,15 +52,15 @@ public class MultiHttpSecurityConfig {
 
 
     @Configuration
-    @Order(1)
+    @Order(2)
     public static class AAFSecurityConfig extends
             WebSecurityConfigurerAdapter {
 
-    	static final String JTWPATH = "/auth/jwt";
+    	static final String JWTPATH = "/auth/jwt";
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher(JTWPATH)
+            http.antMatcher(JWTPATH)
                     .csrf().disable()
                     .authorizeRequests()
                     .anyRequest().hasAnyRole("ADMIN", "REGISTRANT", "ALLOCATOR")
@@ -95,7 +95,7 @@ public class MultiHttpSecurityConfig {
             authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
             authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
             authenticationFilter.setRequiresAuthenticationRequestMatcher(
-                    new AntPathRequestMatcher(JTWPATH, "POST"));
+                    new AntPathRequestMatcher(JWTPATH, "POST"));
             authenticationFilter.setAuthenticationManager(authenticationManagerBean());
             return authenticationFilter;
         }
@@ -135,57 +135,65 @@ public class MultiHttpSecurityConfig {
         }
     }
 
-/*
+
 		@Configuration
-		@Order(2)
+		@Order(1)
 		public static class APISecurityConfig extends
 				WebSecurityConfigurerAdapter {
 
 			@Override
 			protected void configure(HttpSecurity http) throws Exception {
-				http
-						.antMatcher("/api/**")
-						.httpBasic()
-						.and()
-						.authorizeRequests()
+
+				http.antMatcher("/api/**").httpBasic()
+						.and().authorizeRequests()
 						.antMatchers("/api/subnamespace/**").authenticated()
 						.antMatchers("/api/metadata/**").authenticated()
 						.antMatchers("/api/igsn/**").authenticated()
-						.and()
-						.csrf().disable();
-
+						.and().csrf().disable();
 
 			}
 
+			@Bean
+			public UserDetailsService builtInUserUserDetailsService() {
+				return new BuiltInUserAuthenticationService();
+			}
 
 			@Autowired
-			public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-				auth.ldapAuthentication()
-						.userDetailsContextMapper(new UserDetailsContextMapperImpl())
-						.userSearchFilter("(&(sAMAccountName={0}))")
-						.groupRoleAttribute("cn").groupSearchBase("ou=Groups").groupSearchFilter("(&(member={0}))")
-						.contextSource(getLdapContextSource());
-
-
+			public void configure(AuthenticationManagerBuilder auth) throws Exception {
+				ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+				auth.userDetailsService(builtInUserUserDetailsService()).passwordEncoder(encoder);
 			}
 
-			private static LdapContextSource getLdapContextSource() throws Exception {
-				LdapContextSource cs = new LdapContextSource();
-				cs.setUrl(Config.getLdapUrl());
-				cs.setBase(Config.getLDAPBase());
-				cs.setUserDn(Config.getUserDN());
-				//cs.setAnonymousReadOnly(true);
-				Hashtable<String, Object> env = new Hashtable<String, Object>();
-				env.put(Context.REFERRAL, "follow");
-				cs.setBaseEnvironmentProperties(env);
-				cs.setPassword(Config.getLdapPassword());
-				cs.afterPropertiesSet();
-				return cs;
-			}
+
+//			@Autowired
+//			public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//
+//				auth.ldapAuthentication()
+//						.userDetailsContextMapper(new UserDetailsContextMapperImpl())
+//						.userSearchFilter("(&(sAMAccountName={0}))")
+//						.groupRoleAttribute("cn").groupSearchBase("ou=Groups").groupSearchFilter("(&(member={0}))")
+//						.contextSource(getLdapContextSource());
+//
+//			}
+
+//			private static LdapContextSource getLdapContextSource() throws Exception {
+//				LdapContextSource cs = new LdapContextSource();
+//				cs.setUrl(Config.getLdapUrl());
+//				cs.setBase(Config.getLDAPBase());
+//				cs.setUserDn(Config.getUserDN());
+//				//cs.setAnonymousReadOnly(true);
+//				Hashtable<String, Object> env = new Hashtable<String, Object>();
+//				env.put(Context.REFERRAL, "follow");
+//				cs.setBaseEnvironmentProperties(env);
+//				cs.setPassword(Config.getLdapPassword());
+//				cs.afterPropertiesSet();
+//				return cs;
+//			}
+
+
+
 
 		}
-*/
 
 	@Configuration
 	@Order(3)

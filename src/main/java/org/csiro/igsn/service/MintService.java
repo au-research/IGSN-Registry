@@ -160,11 +160,13 @@ public class MintService {
 			if (!geterrorstream && responsecode >= 200 && responsecode < 300) {
 				IOUtils.copy(con.getInputStream(), retbody);
 			} else {
-				if (con.getErrorStream() != null)
-					IOUtils.copy(con.getInputStream(), retbody);
+				if (con.getErrorStream() != null) {
+					IOUtils.copy(con.getErrorStream(), retbody);
+				}
 			}
 			return responsecode;
 		} catch (IOException e) {
+			IOUtils.copy(con.getErrorStream(), retbody);
 			throw new Exception(e.getMessage());
 		}
 	}
