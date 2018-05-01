@@ -54,14 +54,16 @@ public class MailUtils {
 
     private String getBodyText(String igsn){
         String handleUrl = "http://hdl.handle.net/";
-        String bodyText ="<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n"
+        String igsnUrl = handleUrl + igsn;
+        String AAFLoginUrl = Config.get("AAF_RAPID_URL");
+        return "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n"
                 + "<html>"
                 + "<head>"
                 + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><title>IGSN Event Notification email</title></head><body>"
                  + "<p>Your IGSN has been successfully minted through the ANDS IGSN service.</p>"
-                 + "<p>You can view your IGSN metadata at the following URL: <a href='" + handleUrl + igsn + "'>" + handleUrl + igsn + "</a></p>"
-                 + "<p>To request changes to the IGSN metadata please contact <a href='mailto:services@ands.org.au'>services@ands.org.au</a>.</p>"
-                 + "<p>If you have any questions regarding the service, please visit the ANDS <a href='http://www.ands.org.au/online-services'>website</a>"
+                 + "<p>If the visibility of the metadata is set to public, it will be viewable at the following URL: <a href='" + igsnUrl + "'>" + igsnUrl + "</a></p>"
+                 + "<p>To make changes to your IGSN you will need to <a href='"+AAFLoginUrl+"'>login</a></p>"
+                 + "<p>If you have any questions regarding the service, please visit the ANDS <a href='http://www.ands.org.au/online-services/igsn-service'>website</a>"
                  + " or contact <a href='mailto:services@ands.org.au'>services@ands.org.au</a>.</p>"
                  + "<p><b>Australian National Data Service</b><br/>"
                  + "E: <a href='mailto:services@ands.org.au'>services@ands.org.au</a> | W: <a href='http://ands.org.au'>ands.org.au</a></p>"
@@ -70,7 +72,6 @@ public class MailUtils {
                  + "<a href='http://www.ands.org.au/about-us/ands-nectar-rds'>Working in partnership with Nectar and RDS</a></p>"
                  + "<a href='http://www.ands.org.au/about-us/ands-nectar-rds'><img src='http://www.ands.org.au/__data/assets/image/0008/1001600/ands-nectar-rds-200px.png'/></a>"
                  + "<p><i>Please consider the environment before printing this e-mail.<i></body></html>";
-        return bodyText;
     }
 
 
