@@ -106,10 +106,11 @@
 	                  <fieldset class="form-group form-group-sm show-fieldset-borders">
 					    <legend><div class="title-sm text-theme hr-left"><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Resource archival information, mainly applicable to physical samples and sample collections. The curating instuition must be specified. This can be present or future curator.">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Details</div></legend>
-					    <div class="form-group form-group-sm">
+					    <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryright.curatorTitle.$invalid}">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The full name of the sample or data curator.">
 	                      	<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curator</label>
-		                    <input type="text" class="form-control" placeholder="Fred Bloggs" ng-model="resource.curationDetailses[0].curator"/>
+		                    <input type="text" name="curatorTitle" class="form-control" placeholder="Fred Bloggs" ng-model="resource.curationDetailses[0].curator" required/>
+							<p ng-show="mandatoryright.curatorTitle.$invalid" class="small help-block">Enter the curator</p>
 	                    </div>
 	                    <div class="form-group form-group-sm">
 		                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The date the sample or item was moved to its current location.">
@@ -127,11 +128,10 @@
 	                      	<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Location</label>
 		                    <input type="text" class="form-control" placeholder="Curation Location" ng-model="resource.curationDetailses[0].curationLocation"/>
 	                    </div>
-	                     <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryright.curatingInstitution.$invalid}">
+	                     <div class="form-group form-group-sm" >
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The institution where the sample or item is stored.">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curating Institution</label>
-		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="e.g. Curtin University" ng-model="resource.curationDetailses[0].curatingInstitution" required/>
-		                    <p ng-show="mandatoryright.curatingInstitution.$invalid" class="small help-block">Enter the curating institution</p>
+		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="e.g. Curtin University" ng-model="resource.curationDetailses[0].curatingInstitution"/>
 	                    </div>
 		                 <div class="form-group form-group-sm">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The URL of the institution where the sample or item is stored.">
@@ -194,9 +194,9 @@
 				                    <input type="text" class="form-control" placeholder="http://auscope-portal-dev.arrc.csiro.au/portal/gmap.html"  ng-model="resource.location.geometryUri"/>
 			                    </div>		
 			                    <hr>	                   
-				                 <div class="form-group form-group-sm">
+				                 <div class="form-group form-group-sm" ng-init="resource.location.srid='https://epsg.io/4326'">
 				                 	<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="wkt"><b>Well Known Text</b></label>
-									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="geographic" ng-click="resource.location.srid='https://epsg.io/4326'" ><b>Geographic (Point) Coordinates (WGS84)</b></label>									
+									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="geographic"  ng-click="resource.location.srid='https://epsg.io/4326'" ><b>Geographic (Point) Coordinates (WGS84)</b></label>
 									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="utm"><b>Projected (Point) Coordinates (MGA94)</b></label>       									
 				                 </div>
 				                  <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : ((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)}">
@@ -228,11 +228,11 @@
 										  <div class="form-group form-group-sm">
 						                      <div class="input-group" style="width:300px" ng-class="{ 'has-error' : (location.latitudelatitude.$invalid)}">
 						                      	<label>Latitude</label>				                      				            
-									            <input name="latitudelatitude" type="number" step="any" min=-90 max=90 type="text" class="form-control" placeholder="Enter a valid latitude in decimal degrees"  ng-model="latitude.latitude"/>						            
+									            <input name="latitudelatitude" type="number" step="any" min=-90 max=90 type="text" class="form-control" placeholder="Enter a valid latitude in decimal degrees"  ng-model="latitudelatitude"/>
 									          </div>
 									          <div class="input-group" style="width:300px" ng-class="{ 'has-error' : (location.longitudelongitude.$invalid)}">
 									          	<label>Longitude</label>				                      				            
-									            <input name="longitudelongitude" type="number" step="any" min=-180 max=180 type="text" class="form-control" placeholder="Enter a valid longitude in decimals degrees"  ng-model="longitude.longitude"/>						            
+									            <input name="longitudelongitude" type="number" step="any" min=-180 max=180 type="text" class="form-control" placeholder="Enter a valid longitude in decimals degrees"  ng-model="longitudelongitude"/>
 									          </div>
 									          <p ng-show="location.longitudelongitude.$invalid || location.latitudelatitude.$invalid" class="small help-block" style="color: #a94442;">Coordinates out of range</p>							       
 								          </div>
@@ -245,7 +245,7 @@
 								            	<input name="latitudeminutes" style="width:100px" type="number" step="1" min=0 max=60 class="form-control" placeholder="Minutes"  ng-model="latitude.minutes"/><span class="mr-8">M</span>
 								            	<input name="latitudeseconds" style="width:100px" type="number" step="1" min=0 max=60 class="form-control" placeholder="Seconds"  ng-model="latitude.seconds"/><span class="mr-8">S</span>
 								            </div>
-								            <p ng-show="location.latitudedegree.$invalid || location.latitudeminutes.$invalid || location.latitudeseconds.$invalid""  class="small help-block" style="color: #a94442;">latitude out of range</p>					            
+								            <p ng-show="location.latitudedegree.$invalid || location.latitudeminutes.$invalid || location.latitudeseconds.$invalid" class="small help-block" style="color: #a94442;">latitude out of range</p>
 								          </div>
 								          <div class="col-md-6">
 								          	<label>Longitude</label>				                      				            

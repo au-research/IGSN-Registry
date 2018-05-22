@@ -11,6 +11,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.getTrueFalse = selectListService.getTrueFalse();
   $scope.getMGAZone = selectListService.getMGAZone();
   $scope.loading=false;
+  $scope.longitudelongitude=null;
+  $scope.latitudelatitude=null;
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
@@ -172,11 +174,13 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 			  $scope.resource.location={}
 		  }
 		  $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
-	  }else if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){
+	  }else if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitudelongitude) && !isUndefinedOrNull($scope.latitudelatitude)){
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
-		  $scope.resource.location.wkt = "POINT(" + $scope.longitude.longitude + " " + $scope.latitude.latitude + ")";
+		  $scope.resource.location.wkt = "POINT(" + $scope.longitudelongitude + " " + $scope.latitudelatitude + ")";
+	  }else{
+	  	$scope.resource.location={};
 	  }
 	  
 	  $http.post('web/mintJson.do', 
