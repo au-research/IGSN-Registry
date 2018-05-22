@@ -27,11 +27,11 @@ public enum MintErrorCode {
 		 switch(number){
 		 	case 101: message="Prefix is unregistered to the user";
 		 		break;
-		 	case 102: message="Error attempting to Mint from registery";
+		 	case 102: message="Error attempting to Mint from registry";
 	 			break;			 	
 		 	case 200: message="Mint Successful";
 				break;	
-			default: message="Error not capture, please send a sample of your file to cg-admin@csiro.au";	
+			default: message="Error not captured, please send a sample of your file to services@ands.org.au";
  				break;
 		 }
 		 

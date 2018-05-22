@@ -129,7 +129,7 @@
                                 </manifestEntries>
                             </archive>
                             <warName>igsn30</warName>
-                            <outputDirectory>/usr/local/Cellar/tomcat/8.5.23/libexec/webapps/</outputDirectory>
+                            <!-- outputDirectory>/usr/local/Cellar/tomcat/8.5.23/libexec/webapps/</outputDirectory -->
                             <goals>
                                 <goal>manifest</goal>
                             </goals>

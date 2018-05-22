@@ -82,7 +82,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 	  $scope.resource.locationInputType = "wkt";
 	  $scope.useDegree = 'degrees';
 	  $scope.resource.registeredObjectType = 'http://pid.geoscience.gov.au/def/voc/igsn-codelists/PhysicalSample';
-		    
+
 	  if( $scope.resource.contributorses.length==0){
 		  $scope.resource.contributorses[0] = {}; 
 	  };
@@ -137,7 +137,16 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.clearLandingPage = function(){
 	  $scope.resource.landingPage="";
   }
-	
+
+
+  $scope.visibilityChange = function(){
+      if($scope.resource.visibility=='hidden'){
+          $scope.resource.isPublic = false;
+	  }else{
+          $scope.resource.isPublic = $scope.resource.visibility;
+	  }
+  }
+
   $scope.mintResource = function(){	  
 	  $scope.loading=true;
 	  if($scope.resource.curationDetailses[0].curationDate){
