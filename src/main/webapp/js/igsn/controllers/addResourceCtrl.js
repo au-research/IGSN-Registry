@@ -79,7 +79,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 	  $scope.resource.landingPage = "USE DEFAULT LANDING PAGE";
       $scope.resource.defaultLandingPage = true;
       $scope.resource.sendEmail = true;
-	  $scope.resource.locationInputType = "wkt";
+	  $scope.resource.locationInputType = "geographic";
 	  $scope.useDegree = 'degrees';
 	  $scope.resource.registeredObjectType = 'http://pid.geoscience.gov.au/def/voc/igsn-codelists/PhysicalSample';
 
