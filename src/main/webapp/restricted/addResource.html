@@ -34,7 +34,7 @@
 	                   <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.registeredObjectType.$invalid}">
 	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRegisteredObjectType">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Registered Object Type</label>
-	                    <select  class="form-control" ng-model="resource.registeredObjectType"  name="registeredObjectType" ng-options="type as type for type in registeredObjectType" required></select>	 
+	                    <select  class="form-control" ng-model="resource.registeredObjectType"  name="registeredObjectType" ng-options="type.key as type.value for type in registeredObjectType" required></select>
 	                    <p ng-show="mandatoryleft.registeredObjectType.$invalid" class="small help-block">Select registered object type</p>                  
 	                  </div>
 	                  <div class="form-group form-group-sm hidden">
@@ -394,7 +394,7 @@
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : contributor.contributorName && !contributor.contributorType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlContributorType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Contributor Type</label>
-		                    <select  class="form-control" ng-model="contributor.contributorType"  ng-options="type as type for type in getContributorType"></select>
+		                    <select  class="form-control" ng-model="contributor.contributorType"  ng-options="type.key as type.value for type in getContributorType"></select>
 		                    <p ng-show="contributor.contributorName && !contributor.contributorType" class="small help-block">Contributor Type cannot be empty including one</p>	                   
 		                 </div>
 		                  <div class="form-group form-group-sm">
@@ -404,7 +404,7 @@
 	                    <div class="form-group form-group-sm"  ng-class="{ 'has-error' : contributor.contributorIdentifier && !contributor.cvIdentifierType.identifierType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Contributor Identifier Type</label>
-		                    <select  class="form-control" ng-model="contributor.cvIdentifierType.identifierType"  ng-options="type as type for type in getIdentifierType"></select>			                       
+		                    <select  class="form-control" ng-model="contributor.cvIdentifierType.identifierType"  ng-options="type.key as type.value for type in getIdentifierType"></select>
 		                    <p ng-show="contributor.contributorIdentifier && !contributor.cvIdentifierType.identifierType" class="small help-block">Identifier type cannot be empty if specifying identifier</p>                
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.contributorses.length ==1" ng-click="removeContributor($index)">Remove Contributor</button>
@@ -426,13 +426,13 @@
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : !relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Related Identifier Type</label>
-		                    <select  class="form-control" ng-model="relatedResource.cvIdentifierType.identifierType"  ng-options="type as type for type in getIdentifierType"></select>	   
+		                    <select  class="form-control" ng-model="relatedResource.cvIdentifierType.identifierType"  ng-options="type.key as type.value for type in getIdentifierType"></select>
 		                    <p ng-show="!relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)" class="small help-block">Related Identifier must not be empty if specifying a relationship or related resource</p>                
 		                 </div>		                 
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : (relatedResource.cvIdentifierType.identifierType || relatedResource.relatedResource) && !relatedResource.relationType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelationType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Relation Type</label>
-		                    <select  class="form-control" ng-model="relatedResource.relationType"  ng-options="type as type for type in getRelationType"></select>	
+		                    <select  class="form-control" ng-model="relatedResource.relationType"  ng-options="type.key as type.value for type in getRelationType"></select>
 		                    <p ng-show="(relatedResource.cvIdentifierType.identifierType || relatedResource.relatedResource) && !relatedResource.relationType" class="small help-block">Relation type must not be empty if specifying a related identifier type or related resource</p>                   
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.relatedResourceses.length ==1" ng-click="removeRelatedResource($index)">Remove Related Resource</button>
