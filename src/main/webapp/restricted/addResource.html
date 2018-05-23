@@ -91,7 +91,7 @@
                     <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">
                         <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlMaterialType">
                       <i class="fa fa-question-circle" aria-hidden="true"></i></span> Material Type</label>
-                        <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type as type for type in getMaterialType" required></select>
+                        <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type.key as type.value for type in getMaterialType" required></select>
                         <p ng-show="mandatoryleft.materialtype.$invalid" class="small help-block">Select a material type</p>
                     </div>
 	                </form>	               
