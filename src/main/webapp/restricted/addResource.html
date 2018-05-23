@@ -85,7 +85,7 @@
 	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.resourcetype.$invalid}">
 	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceType">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Sample or Item Type</label>
-	                    <select  ng-repeat="types in resource.resourceTypeses" class="form-control" ng-model="types.cvResourceType.resourceType"  name="resourcetype" ng-options="type as type for type in getResourceType" required></select>	 
+	                    <select  ng-repeat="types in resource.resourceTypeses" class="form-control" ng-model="types.cvResourceType.resourceType"  name="resourcetype" ng-options="type.key as type.value for type in getResourceType" required></select>
 	                    <p ng-show="mandatoryleft.resourcetype.$invalid" class="small help-block">Select a sample or item type</p>                  
 	                  </div>
                     <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">

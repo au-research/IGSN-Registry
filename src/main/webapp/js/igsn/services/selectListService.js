@@ -2,40 +2,38 @@
 
 app.service('selectListService', ['$q','$http',function($q,$http) {
 
-	this.getResourceType = function(){
-    	  return [
-				"http://vocabulary.odm2.org/specimentype/automated",
-				"http://vocabulary.odm2.org/specimentype/core",
-				"http://vocabulary.odm2.org/specimentype/coreHalfRound",
-				"http://vocabulary.odm2.org/specimentype/corePiece",
-				"http://vocabulary.odm2.org/specimentype/coreQuarterRound",
-				"http://vocabulary.odm2.org/specimentype/coreSection",
-				"http://vocabulary.odm2.org/specimentype/coreSectionHalf",
-				"http://vocabulary.odm2.org/specimentype/coreSub-Piece",
-				"http://vocabulary.odm2.org/specimentype/coreWholeRound",
-				"http://vocabulary.odm2.org/specimentype/cuttings",
-				"http://vocabulary.odm2.org/specimentype/dredge",
-				"http://vocabulary.odm2.org/specimentype/foliageDigestion",
-				"http://vocabulary.odm2.org/specimentype/foliageLeaching",
-				"http://vocabulary.odm2.org/specimentype/forestFloorDigestion",
-				"http://vocabulary.odm2.org/specimentype/grab",
-				"http://vocabulary.odm2.org/specimentype/individualSample",
-				"http://vocabulary.odm2.org/specimentype/litterFallDigestion",
-				"http://vocabulary.odm2.org/specimentype/orientedCore",
-				"http://vocabulary.odm2.org/specimentype/other",
-				"http://vocabulary.odm2.org/specimentype/petriDishDryDeposition",
-				"http://vocabulary.odm2.org/specimentype/precipitationBulk",
-				"http://vocabulary.odm2.org/specimentype/rockPowder",
-				"http://vocabulary.odm2.org/specimentype/standardReferenceSpecimen",
-				"http://vocabulary.odm2.org/specimentype/terrestrialSection",
-				"http://vocabulary.odm2.org/specimentype/thinSection",
-				"http://www.opengis.net/def/nil/OGC/0/inapplicable",
-				"http://www.opengis.net/def/nil/OGC/0/missing",
-				"http://www.opengis.net/def/nil/OGC/0/template",
-				"http://www.opengis.net/def/nil/OGC/0/unknown",
-				"http://www.opengis.net/def/nil/OGC/0/withheld"
-    	          ];
-      };
+    this.getResourceType = function(){
+        return [{key:"http://vocabulary.odm2.org/specimentype/automated",value:"Automated"},
+            {key:"http://vocabulary.odm2.org/specimentype/core",value:"Core"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreHalfRound",value:"Core half round"},
+            {key:"http://vocabulary.odm2.org/specimentype/corePiece",value:"Core piece"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreQuarterRound",value:"Core quarter round"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreSection",value:"Core section"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreSectionHalf",value:"Core section half"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreSub-Piece",value:"Core sub-piece"},
+            {key:"http://vocabulary.odm2.org/specimentype/coreWholeRound",value:"Core whole round"},
+            {key:"http://vocabulary.odm2.org/specimentype/cuttings",value:"Cuttings"},
+            {key:"http://vocabulary.odm2.org/specimentype/dredge",value:"Dredge"},
+            {key:"http://vocabulary.odm2.org/specimentype/foliageDigestion",value:"Foliage digestion"},
+            {key:"http://vocabulary.odm2.org/specimentype/foliageLeaching",value:"Foliage leaching"},
+            {key:"http://vocabulary.odm2.org/specimentype/forestFloorDigestion",value:"Forest floor digestion"},
+            {key:"http://vocabulary.odm2.org/specimentype/grab",value:"Grab"},
+            {key:"http://vocabulary.odm2.org/specimentype/individualSample",value:"Individual sample"},
+            {key:"http://vocabulary.odm2.org/specimentype/litterFallDigestion",value:"Litter fall digestion"},
+            {key:"http://vocabulary.odm2.org/specimentype/orientedCore",value:"Oriented core"},
+            {key:"http://vocabulary.odm2.org/specimentype/other",value:"Other"},
+            {key:"http://vocabulary.odm2.org/specimentype/petriDishDryDeposition",value:"Petri dish (dry deposition)"},
+            {key:"http://vocabulary.odm2.org/specimentype/precipitationBulk",value:"Precipitation bulk"},
+            {key:"http://vocabulary.odm2.org/specimentype/rockPowder",value:"Rock powder"},
+            {key:"http://vocabulary.odm2.org/specimentype/standardReferenceSpecimen",value:"Standard reference specimen"},
+            {key:"http://vocabulary.odm2.org/specimentype/terrestrialSection",value:"Terrestrial section"},
+            {key:"http://vocabulary.odm2.org/specimentype/thinSection",value:"Thin section"},
+            {key:"http://www.opengis.net/def/nil/OGC/0/inapplicable",value:"Inapplicable"},
+            {key:"http://www.opengis.net/def/nil/OGC/0/missing",value:"Missing"},
+            {key:"http://www.opengis.net/def/nil/OGC/0/template",value:"Template"},
+            {key:"http://www.opengis.net/def/nil/OGC/0/unknown",value:"Unknown"},
+            {key:"http://www.opengis.net/def/nil/OGC/0/withheld",value:"Withheld"}];
+    };
       
       this.getMaterialType = function(){
     	  return [

@@ -52,7 +52,7 @@ public class MultiHttpSecurityConfig {
 
 
     @Configuration
-    @Order(2)
+    @Order(1)
     public static class AAFSecurityConfig extends
             WebSecurityConfigurerAdapter {
 
@@ -137,7 +137,7 @@ public class MultiHttpSecurityConfig {
 
 
 		@Configuration
-		@Order(1)
+		@Order(3)
 		public static class APISecurityConfig extends
 				WebSecurityConfigurerAdapter {
 
@@ -196,7 +196,7 @@ public class MultiHttpSecurityConfig {
 		}
 
 	@Configuration
-	@Order(3)
+	@Order(4)
 	public static  class BuiltInSecurityConfig extends
 			WebSecurityConfigurerAdapter {
 		@Override
