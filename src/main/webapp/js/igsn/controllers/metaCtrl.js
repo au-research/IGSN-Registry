@@ -1,5 +1,5 @@
-allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData',
-                                                    function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData) {
+allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
+                                                    function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService) {
 	
 	angular.extend($scope, {
 	    defaults: {
@@ -25,7 +25,9 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 			$location.path("/login/addresource/" + $routeParams.igsn);
 		}
 	}
-	
+
+
+
 	
 	$scope.resource={};
 	if($routeParams.igsn){
@@ -35,6 +37,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 		 		}
         }).success(function(data,status) {
         	$scope.resource = data;
+            $scope.listService = selectListService;
         	 leafletData.getMap().then(function(mymap) {
         		 if(data.location && data.location.wkt!=null){
      	        	var wkt = new Wkt.Wkt();        	

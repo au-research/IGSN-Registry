@@ -41,14 +41,17 @@
 	                  </div>	     	                 	                 
 	                  <div class="form-group form-group-sm">
 	                    <label>Sample or Item Type</label>
-	                    <div class="well well-sm mb-0"> <ul class="list-group mb-0">
-					      <li class="list-group-item form-control" ng-repeat="resourceType in resource.resourceTypeses"><u><i class="fa fa-external-link"></i> <a ng-href="{{resourceType.cvResourceType.resourceType}}">{{resourceType.cvResourceType.resourceType}}</a></u></li> 
-					    </ul></div>	                   
+	                    <div class="well well-sm mb-0">
+
+							<ul class="list-group mb-0">
+
+							<li class="list-group-item form-control" ng-repeat="resourceType in resource.resourceTypeses">		<u><i class="fa fa-external-link"></i> <a ng-href="{{resourceType.cvResourceType.resourceType}}">{{listService.getValue(resourceType.cvResourceType.resourceType,listService.getResourceType())}}</a></u></li>
+					    </ul></div>
 	                  </div>
 	                  <div class="form-group form-group-sm">
 	                    <label>Material Type</label>
 	                    <div class="well well-sm mb-0"> <ul class="list-group mb-0">
-					      <li class="list-group-item form-control" ng-repeat="materialType in resource.materialTypeses"><u><i class="fa fa-external-link"></i> <a ng-href="{{materialType.cvMaterialTypes.materialType}}">{{materialType.cvMaterialTypes.materialType}}</a></u></li> 
+					      <li class="list-group-item form-control" ng-repeat="materialType in resource.materialTypeses"><u><i class="fa fa-external-link"></i> <a ng-href="{{materialType.cvMaterialTypes.materialType}}">{{listService.getValue(materialType.cvMaterialTypes.materialType,listService.getMaterialType())}}</a></u></li>
 					    </ul></div>	                   
 	                  </div>	                          
 	                </form>	               
@@ -147,12 +150,12 @@
 						            </ul>	
 						            <div class="form-group form-group-sm mt-16">
 					                    <h3 class="title-xs text-theme hr-before mb-10">Contributor Type</h3>	                   
-					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="contributor.contributorType">{{contributor.contributorType}}</a></u></label></div>
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{contributor.contributorType}}>{{listService.getValue(contributor.contributorType,listService.getContributorType())}}</a></u></label></div>
 					                  </div>	     	                 	                 
 					               
 					                  <div ng-show="contributor.cvIdentifierType.identifierType" class="form-group form-group-sm">
 					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
-					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href="contributor.cvIdentifierType.identifierType">{{contributor.cvIdentifierType.identifierType}}</a></u></label></div>
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{contributor.cvIdentifierType.identifierType}}>{{listService.getValue(contributor.cvIdentifierType.identifierType,listService.getIdentifierType())}}</a></u></label></div>
 					                  </div>													            								    	                 				                    
 								  </fieldset> 			                                
 				            </div>					                       
@@ -166,12 +169,12 @@
 								    <form>					              					                  
 					                  <div class="form-group form-group-sm">
 					                    <h3 class="title-xs text-theme hr-before mb-10">Relation Type</h3>	                   
-					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.relationType}}>{{relatedResource.relationType}}</a></u></label></div>
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.relationType}}>{{listService.getValue(relatedResource.relationType,listService.getRelationType())}}</a></u></label></div>
 					                  </div>	     	                 	                 
 					               
 					                  <div class="form-group form-group-sm">
 					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
-					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.cvIdentifierType.identifierType}}>{{relatedResource.cvIdentifierType.identifierType}}</a></u></label></div>
+					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.cvIdentifierType.identifierType}}>{{listService.getValue(relatedResource.cvIdentifierType.identifierType,listService.getIdentifierType())}}</a></u></label></div>
 					                  </div>	          	                
 					                </form>										    													            								    	                 				                   
 								  </fieldset> 			                                

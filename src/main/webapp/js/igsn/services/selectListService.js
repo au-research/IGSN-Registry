@@ -64,14 +64,35 @@ app.service('selectListService', ['$q','$http',function($q,$http) {
       
       this.getEpsg = function(){
     	  return [
-				"https://epsg.io/3112",
-				"https://epsg.io/4283",
-				"https://epsg.io/4326",
-				"https://epsg.io/4939",
-				"https://epsg.io/5711",
-				"https://epsg.io/5712",
-				"https://epsg.io/8311"
-    	          ];
+              {
+                  key: "https://epsg.io/3112,",
+                  value: "EPSG:3112 - Projected coordinate system"
+              },
+              {
+                  key: "https://epsg.io/4283",
+                  value: "EPSG:4283 - Geodetic coordinate system"
+              },
+              {
+                  key: "https://epsg.io/4326",
+                  value: "EPSG:4326 - Geodetic coordinate system"
+              },
+              {
+                  key: "https://epsg.io/4939",
+                  value: "EPSG:4939 - Geodetic 3D coordinate system"
+              },
+              {
+                  key: "https://epsg.io/5711",
+                  value: "EPSG:5711 - Vertical coordinate system"
+              },
+              {
+                  key: "https://epsg.io/5712",
+                  value: "EPSG:5712 - Vertical coordinate system"
+              },
+              {
+                  key: "https://epsg.io/8311",
+                  value: "EPSG:8311"
+              }
+          ];
       };
       
       this.getIdentifierType = function(){
@@ -165,5 +186,16 @@ app.service('selectListService', ['$q','$http',function($q,$http) {
 				"56"
   	          ];
       }
+
+    this.getValue = function(the_key, kvArray) {
+        var ret = the_key;
+        angular.forEach(kvArray,function(item){
+            if (item.key == the_key){
+                ret = item.value;
+            }
+        });
+        return ret;
+    }
       
 }]);
+

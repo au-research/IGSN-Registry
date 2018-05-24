@@ -186,7 +186,7 @@
 				                 <div class="form-group form-group-sm">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="A vertical datum specifies the origin for elevations assocated with a sample or item. Specify the European Petroleum Survey Group (EPSG) vertical coordinate reference system code. For example, 5711 refers is the EPSG code for the Australian Height Datum (AHD).">
 	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Vertical Datum</label>
-				                    <select  class="form-control" ng-model="resource.location.verticalDatum"  ng-options="epsg as epsg for epsg in getEpsg"></select>	                   
+				                    <select  class="form-control" ng-model="resource.location.verticalDatum"  ng-options="epsg.key as epsg.value for epsg in getEpsg"></select>
 				                 </div>
 				                 <div class="form-group form-group-sm">
 								     <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Website to display or download sample locations.">
@@ -202,7 +202,7 @@
 				                  <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : ((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)}">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
 	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
-				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg as epsg for epsg in getEpsg"></select>	
+				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg.key as epsg.value for epsg in getEpsg"></select>
 				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>                   
 				                 </div>
 				                 <div ng-show="resource.locationInputType=='geographic'" class="form-group form-group-sm" >
