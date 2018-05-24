@@ -1,5 +1,7 @@
 package org.csiro.igsn.web.controllers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +16,14 @@ import org.csiro.igsn.security.LdapUser;
 import org.csiro.igsn.security.RegistryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -47,4 +52,12 @@ public class LoginCtrl {
 		return new ResponseEntity<>(details, HttpStatus.OK);
 	}
 
+	@RequestMapping("auscope_login")
+	public ResponseEntity<Object> redirectToExternalUrl() throws URISyntaxException {
+
+		URI aaf_login = new URI(AAF_RAPID_URL);
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setLocation(aaf_login);
+		return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+	}
 }
