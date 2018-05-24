@@ -263,7 +263,7 @@
 				                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> MGA94 coordinates</label>
 				                      <p><small>Coordinates in MGA94 will be automatically converted to <a target="_BLANK" href='https://epsg.io/4326'>Geographic Coordinates</a></small></p>
 				                      <div class="form-inline" ng-class="{ 'has-error' : (resource.location.easting && !resource.location.zone)}">	
-				                      	  <label>UTM Zone:</label>	
+				                      	  <label>Map Grid of Australia UTM Zone:</label>
 				                       	  <select  class="form-control" ng-model="resource.location.zone"  ng-options="zone as zone for zone in getMGAZone"></select>
 				                      </div>
 				                      <div class="form-inline">		                      
