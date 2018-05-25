@@ -203,7 +203,7 @@
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
 	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
 				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg.key as epsg.value for epsg in getEpsg"></select>
-				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>                   
+				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>
 				                 </div>
 				                 <div ng-show="resource.locationInputType=='geographic'" class="form-group form-group-sm" >
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">

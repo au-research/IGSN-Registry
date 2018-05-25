@@ -13,6 +13,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.loading=false;
   $scope.longitudelongitude=null;
   $scope.latitudelatitude=null;
+  $scope.wkt = null;
+
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
@@ -45,8 +47,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   var initDataStructure = function(){
 	  if($scope.resource==null){
 		  $scope.resource={};
-	  };    
-	  if( $scope.resource.contributorses==null){
+	  };
+
+      if( $scope.resource.contributorses==null){
 		  $scope.resource.contributorses=[];
 		
 	  };
@@ -81,9 +84,10 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 	  $scope.resource.landingPage = "USE DEFAULT LANDING PAGE";
       $scope.resource.defaultLandingPage = true;
       $scope.resource.sendEmail = true;
-	  $scope.resource.locationInputType = "geographic";
+
 	  $scope.useDegree = 'degrees';
 	  $scope.resource.registeredObjectType = 'http://pid.geoscience.gov.au/def/voc/igsn-codelists/PhysicalSample';
+      $scope.resource.locationInputType = "geographic";
 
 	  if( $scope.resource.contributorses.length==0){
 		  $scope.resource.contributorses[0] = {}; 
@@ -143,7 +147,11 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 
   $scope.visibilityChange = function(){
       if($scope.resource.visibility=='hidden'){
+		  $scope.resource.embargoEnd = null;
           $scope.resource.isPublic = false;
+	  }else if($scope.resource.visibility==true){
+          $scope.resource.embargoEnd = null;
+          $scope.resource.isPublic = $scope.resource.visibility;
 	  }else{
           $scope.resource.isPublic = $scope.resource.visibility;
 	  }
@@ -179,7 +187,11 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 			  $scope.resource.location={}
 		  }
 		  $scope.resource.location.wkt = "POINT(" + $scope.longitudelongitude + " " + $scope.latitudelatitude + ")";
-	  }else{
+	  }else if($scope.resource.locationInputType = "wkt"){
+          if(!$scope.resource.location){
+              $scope.resource.location={}
+          }
+      }else{
 	  	$scope.resource.location={};
 	  }
 	  
@@ -297,6 +309,12 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
          	initDataStructure();
             $scope.resource.randomIds = false;
             $scope.resource.resourceIdentifier = igsn;
+            if($scope.resource.isPublic == false && isUndefinedOrNull($scope.resource.embargoEnd)){
+                $scope.resource.visibility = "hidden";
+            }else{
+                $scope.resource.visibility = $scope.resource.isPublic
+            }
+            $scope.resource.locationInputType = "wkt";
     	}     	 
      	
      }).error(function(response,status) {
