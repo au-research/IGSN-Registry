@@ -115,10 +115,16 @@ public class JsonToSchemaConverterCSIRO {
 		Resource.CurationDetails.Curation curationXML = new Resource.CurationDetails.Curation();
 
 		JsonArray curationDetailses = resourceJO.get("curationDetailses").getAsJsonArray();
+
+		if(curationDetailses.size()==0){
+			throw new TransformException("No curator name provided");
+		}
 		for(JsonElement curationDetail : curationDetailses) {
 			JsonObject curationDetailObject = curationDetail.getAsJsonObject();
 			if(!isNull(curationDetailObject.get("curator"))){
 				curationXML.setCurator(curationDetailObject.get("curator").getAsString());
+			}else{
+				throw new TransformException("No curator name provided");
 			}
 			if(!isNull(curationDetailObject.get("curationDate"))){
 				curationXML.setCurationDate(curationDetailObject.get("curationDate").getAsString().substring(0, 10));

@@ -236,10 +236,15 @@
 										<xs:element name="curation" maxOccurs="unbounded">
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="curator" type="xs:token" minOccurs="0">
+													<xs:element name="curator" minOccurs="1">
 														<xs:annotation>
 															<xs:documentation>The full name of a resource curator.</xs:documentation>
 														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:token">
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
 													</xs:element>
 													<xs:element name="curationDate" type="cs:W3CDTFdate" minOccurs="0">
 														<xs:annotation>

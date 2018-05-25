@@ -129,7 +129,7 @@ public class WebFormIGSNMintCtrl {
 			String stackTrace = writer.toString();
 			log.error(stackTrace);
 			e.printStackTrace();
-			return new ResponseEntity<Object>(new ExceptionWrapper("Fail to mint resource",e.getMessage()==null?"There are error in the form. Correct them before submitting":e.getMessage()),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ExceptionWrapper("Fail to mint resource",e.getMessage()==null?" There are errors in the form. Correct them before submitting":e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 		
 		
