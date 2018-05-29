@@ -22,7 +22,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   var parseOptionToHtmlList = function(arrayList){
 	  var result = "<ul class='small' style='padding-left:10px'>";
 	  for(var index in arrayList){
-		  result += "<li><a target='_blank' href='"+arrayList[index]+"'>" + arrayList[index] + "</a></li>"
+		  result += "<li><a target='_blank' href='"+arrayList[index].key+"'>" + arrayList[index].value + "</a></li>"
 	  }
 	  return result + "</ul>";
   }
