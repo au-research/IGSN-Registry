@@ -197,7 +197,7 @@
 				                 <div class="form-group form-group-sm" ng-init="resource.location.srid='https://epsg.io/4326'">
 				                 	<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="wkt"><b>Well Known Text</b></label>
 									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="geographic"  ng-click="resource.location.srid='https://epsg.io/4326'" ><b>Geographic (Point) Coordinates (WGS84)</b></label>
-									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="utm"><b>Projected (Point) Coordinates (MGA94)</b></label>       									
+									<!-- <label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="utm"><b>Projected (Point) Coordinates (MGA94)</b></label> -->
 				                 </div>
 				                  <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : ((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)}">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">

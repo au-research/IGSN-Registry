@@ -13,7 +13,6 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.loading=false;
   $scope.longitudelongitude=null;
   $scope.latitudelatitude=null;
-  $scope.wkt = null;
 
 
   if($routeParams.sessionid && $routeParams.callbackurl){
@@ -187,7 +186,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
 			  $scope.resource.location={}
 		  }
 		  $scope.resource.location.wkt = "POINT(" + $scope.longitudelongitude + " " + $scope.latitudelatitude + ")";
-	  }else if($scope.resource.locationInputType = "wkt"){
+	  }else if($scope.resource.locationInputType == "wkt" && !isUndefinedOrNull($scope.location.wkt.$viewValue) && $scope.location.wkt.$viewValue != ''){
           if(!$scope.resource.location){
               $scope.resource.location={}
           }
