@@ -58,7 +58,7 @@
 						  	 <div class="input-group width-100">
 						  	    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The visibility of a geosample or entity metadata. Use 'true' for public and 'false' for private geosamples or entities">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Metadata Visibility</label>
-			                    <select  class="form-control" name="visibility"   ng-change='visibilityChange()' ng-model="resource.visibility" ng-options="o.v as o.n for o in [{ n: 'Publicly visible', v: true }, { n: 'Not visible', v: 'hidden' }, { n: 'Under embargo', v: false }]" required></select>
+			                    <select  class="form-control" name="visibility"   ng-change='visibilityChange()' ng-model="resource.visibility" ng-options="o.v as o.n for o in [{ n: 'Publicly visible', v: true }, { n: 'Private', v: 'hidden' }, { n: 'Under embargo', v: false }]" required></select>
 							    <p ng-show="mandatoryleft.visibility.$invalid" class="small help-block">Select public accesses</p>
 						      </div>				   					      							      				   
 						  </div>
