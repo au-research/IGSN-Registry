@@ -96,7 +96,7 @@
                         <div class="pull-right">
                             <div class="dropdown dropdown-login pull-left">
                                 <a href="logout"><button class="btn-menu-top" ng-show="status.authenticated"><i class="fa fa-user"></i> Log out ,<span ng-bind="status.name"></span> </button></a>
-                                <a href="/#/login"><button class="btn-menu-top" ng-show="!status.authenticated"><i class="fa fa-user"></i> Log in </button></a>
+                                <a href="/igsn/#/login"><button class="btn-menu-top" ng-show="!status.authenticated"><i class="fa fa-user"></i> Log in </button></a>
                             </div>
                         </div>
                     </div>
@@ -119,13 +119,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="status.authenticated">
-                        <a href="/#/listResources"><i class="fa fa-list"></i> List Resources</a>
+                        <a href="/igsn/#/listResources"><i class="fa fa-list"></i> List Resources</a>
                     </li>
                     <li ng-show="status.authenticated">
-                        <a href="/#/addSample"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
+                        <a href="/igsn/#/addresource"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
                     </li>
                     <li ng-show="status.isAllocator">
-                        <a href="/#/registrant"><i class="fa fa-user-plus"></i> Registrant</a>
+                        <a href="/igsn/#/registrant"><i class="fa fa-user-plus"></i> Registrant</a>
                     </li>
 
                 </ul>
