@@ -38,6 +38,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.ldap.authentication.SpringSecurityAuthenticationSource;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -93,14 +94,12 @@ public class MultiHttpSecurityConfig {
             AAFAuthenticationFilter authenticationFilter
                     = new AAFAuthenticationFilter();
             authenticationFilter.setAuthenticationSuccessHandler(new CustomSuccessHandler());
-            authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
+            authenticationFilter.setAuthenticationFailureHandler(new CustomFailureHandler());
             authenticationFilter.setRequiresAuthenticationRequestMatcher(
                     new AntPathRequestMatcher(JWTPATH, "POST"));
             authenticationFilter.setAuthenticationManager(authenticationManagerBean());
             return authenticationFilter;
         }
-
-
 
         private class CustomSuccessHandler implements AuthenticationSuccessHandler{
             private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -116,25 +115,21 @@ public class MultiHttpSecurityConfig {
                 session.setAttribute("name", authUser.getUsername());
                 session.setAttribute("authorities", authentication.getAuthorities());
                 redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "/#/addresource");
-                // set our response to OK status
-                //httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-                //httpServletResponse.setContentType("text/html; charset=UTF-8");
-                //Gson gson = new Gson();
-                //httpServletResponse.getWriter().write(gson.toJson(authUser));
             }
         }
 
-        private void loginFailureHandler(
-                HttpServletRequest request,
-                HttpServletResponse response,
-                AuthenticationException e) throws IOException {
+		private class CustomFailureHandler implements AuthenticationFailureHandler {
 
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(response.getWriter(), "Unauthorised!");
-        }
+			@Override
+			public void onAuthenticationFailure(HttpServletRequest request,
+												HttpServletResponse response, AuthenticationException ae)
+					throws IOException, ServletException {
+				response.setStatus(HttpStatus.UNAUTHORIZED.value());
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.writeValue(response.getWriter(), "Unauthorised!");
+			}
+		}
     }
-
 
 		@Configuration
 		@Order(3)
