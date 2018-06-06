@@ -1,13 +1,16 @@
 package org.csiro.igsn.web.controllers;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.Prefix;
 import org.csiro.igsn.entity.postgres.Registrant;
+import org.csiro.igsn.entity.service.ControlledValueEntityService;
 import org.csiro.igsn.entity.service.PrefixEntityService;
 import org.csiro.igsn.entity.service.RegistrantEntityService;
+import org.csiro.igsn.entity.service.ResourceEntityService;
 import org.csiro.igsn.exception.ExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +41,23 @@ public class RegistrantCtrl {
 		return new ResponseEntity<List<Registrant>>(this.registrantEntityService.listRegistrant(),HttpStatus.OK);
 		
 	}
-	
+
+	@RequestMapping("getAllRecords.do")
+	public ResponseEntity<Object> getAllRecords(Principal user) {
+		ResourceEntityService re = new ResourceEntityService(new ControlledValueEntityService());
+		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
+		if (r == null) {
+			return new ResponseEntity<>(new String[0], HttpStatus.OK);
+		}
+
+		try {
+			return new ResponseEntity<>(re.getResourceMetadataByRegistrant(r), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.OK);
+		}
+	}
+
+
 	@RequestMapping("removeRegistrants.do")
 	public ResponseEntity<Object> removeRegistrants(
 			@RequestParam(required = true, value ="username") String username,
@@ -62,8 +81,14 @@ public class RegistrantCtrl {
 	}
 	
 	@RequestMapping("getAllocatedPrefix.do")
-	public ResponseEntity<Object> getAllocatedPrefix(Principal user) {		
-		return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+	public ResponseEntity<Object> getAllocatedPrefix(Principal user) {
+		Registrant r = this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName());
+		if(r != null){
+			return new ResponseEntity<Object>(this.registrantEntityService.searchActiveRegistrantAndPrefix(user.getName()).getPrefixes(),HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<Object>(new String[0],HttpStatus.OK);
+		}
 		
 	}
 	

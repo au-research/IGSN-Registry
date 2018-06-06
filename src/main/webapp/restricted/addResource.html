@@ -5,26 +5,26 @@
         <div class="row">        
           <div class="col-md-12">
 	       	 <div class="row">
-	            <h3 class="title-md hr-left text-theme">Metadata Information</h3>	      
+	            <h3 class="title-md hr-left text-theme">IGSN {{resource.resourceIdentifier}} Metadata Information</h3>
 	            <div class="panel-primary text-theme content-box col-md-6" >
 	              <div class="panel-heading">
 	                <h3 class="panel-title">Primary Info</h3>
 	              </div>
 	              <div class="panel-body">
 	                <form name="mandatoryleft">	              
-	                  <div class="form-group form-group-sm">
+	                  <div class="form-group form-group-sm hidden" >
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceIdentifierPopover">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.prefix}}{{resource.resourceIdentifier}}</label>
+	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Geosample: {{resource.resourceIdentifier}}</label>
 	                      <div class="form-inline">
 		                      <div ng-show="mode=='register'" class="form-group" ng-class="{ 'has-error' : mandatoryleft.prefix.$invalid}">
-			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>	
+			                     <select  class="form-control" ng-model="resource.prefix" ng-change="changePrefix()" name="prefix" ng-options="allocatedPrefix.prefix as allocatedPrefix.prefix for allocatedPrefix in allocatedPrefixes" required></select>
 							  </div>
 							  <div class="form-group form-group-sm">
 			                      <div class="input-group" style="width:270px" ng-class="{ 'has-error' : mandatoryleft.resourceIdentifier.$invalid}">				                      				            
 						            <input id="form-resource-identifier" ng-disabled="mode!='register' || resource.randomIds" type="text" class="form-control" placeholder="Tick Auto-gen to randomly generate ids"  capitalize name="resourceIdentifier" ng-model="resource.resourceIdentifier" pattern="^{{resource.prefix}}.*"/>						            
 						          </div>
 						          <div class="checkbox" ng-hide="mode !='register'">
-							        <label><input type="checkbox"  ng-model="resource.randomIds" ng-change="changePrefix()"> <small><b>Use default</b></small></label>
+							        <label><input type="checkbox" ng-model="resource.randomIds" ng-change="changePrefix()"> <small><b>Use default</b></small></label>
 							      </div>
 					          </div>
 				          </div>
@@ -34,10 +34,10 @@
 	                   <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.registeredObjectType.$invalid}">
 	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRegisteredObjectType">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Registered Object Type</label>
-	                    <select  class="form-control" ng-model="resource.registeredObjectType"  name="registeredObjectType" ng-options="type as type for type in registeredObjectType" required></select>	 
+	                    <select  class="form-control" ng-model="resource.registeredObjectType"  name="registeredObjectType" ng-options="type.key as type.value for type in registeredObjectType" required></select>
 	                    <p ng-show="mandatoryleft.registeredObjectType.$invalid" class="small help-block">Select registered object type</p>                  
 	                  </div>
-	                  <div class="form-group form-group-sm">
+	                  <div class="form-group form-group-sm hidden">
 	                      <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The landing page is the web page containing more detailed (domain-specific) information about the geosample">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Landing Page</label>
 	                      <div class="form-inline">		                      
@@ -51,18 +51,19 @@
 					          </div>
 				          </div>
 				          <p ng-show="mandatoryleft.landingPage.$invalid && !resource.defaultLandingPage" class="small help-block" style="color: #a94442;">Enter a valid landing page url that starts with http:// or https://</p>	                    	                    
-	                  </div>	                  
-	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.ispublic.$invalid}">
+	                  </div>
+	                  <div class="form-group form-group-sm" ng-init="resource.visibility=null" ng-class="{ 'has-error' : mandatoryleft.visibility.$invalid}">
 	                    <div class="row">
 						  <div class="col-sm-6 col-xs-12">		
 						  	 <div class="input-group width-100">
 						  	    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The visibility of a geosample or entity metadata. Use 'true' for public and 'false' for private geosamples or entities">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> isPublic</label>
-			                    <select  class="form-control" name="ispublic"  ng-model="resource.isPublic" ng-options="o.v as o.n for o in [{ n: 'True', v: true }, { n: 'False', v: false }]" required></select>
-							    <p ng-show="mandatoryleft.ispublic.$invalid" class="small help-block">Select public access</p>
+	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Metadata Visibility</label>
+			                    <select  class="form-control" name="visibility"   ng-change='visibilityChange()' ng-model="resource.visibility" ng-options="o.v as o.n for o in [{ n: 'Publicly visible', v: true }, { n: 'Private', v: 'hidden' }, { n: 'Under embargo', v: false }]" required></select>
+							    <p ng-show="mandatoryleft.visibility.$invalid" class="small help-block">Select public accesses</p>
 						      </div>				   					      							      				   
 						  </div>
-						  <div class="col-sm-6 col-xs-12" ng-show="resource.isPublic == false">									  	  				   				      
+
+						  <div class="col-sm-6 col-xs-12" ng-show="resource.visibility == false">
 						      <div class="input-group width-100">
 							  	  <label>Embargo end date</label>			                  	  
 			                  	  <div class="input-group">						     
@@ -84,16 +85,15 @@
 	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.resourcetype.$invalid}">
 	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlResourceType">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Sample or Item Type</label>
-	                    <select  ng-repeat="types in resource.resourceTypeses" class="form-control" ng-model="types.cvResourceType.resourceType"  name="resourcetype" ng-options="type as type for type in getResourceType" required></select>	 
+	                    <select  ng-repeat="types in resource.resourceTypeses" class="form-control" ng-model="types.cvResourceType.resourceType"  name="resourcetype" ng-options="type.key as type.value for type in getResourceType" required></select>
 	                    <p ng-show="mandatoryleft.resourcetype.$invalid" class="small help-block">Select a sample or item type</p>                  
 	                  </div>
-	                  <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">
-	                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlMaterialType">
-	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Material Type</label>
-	                    <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type as type for type in getMaterialType" required></select>	
-	                     <p ng-show="mandatoryleft.materialtype.$invalid" class="small help-block">Select a material type</p>                   
-	                  </div>
-	                                   
+                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryleft.materialtype.$invalid}">
+                        <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlMaterialType">
+                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Material Type</label>
+                        <select ng-repeat="types in resource.materialTypeses" class="form-control" ng-model="types.cvMaterialTypes.materialType" name=materialtype ng-options="type.key as type.value for type in getMaterialType" required></select>
+                        <p ng-show="mandatoryleft.materialtype.$invalid" class="small help-block">Select a material type</p>
+                    </div>
 	                </form>	               
 	              </div>
 	            </div>
@@ -106,10 +106,11 @@
 	                  <fieldset class="form-group form-group-sm show-fieldset-borders">
 					    <legend><div class="title-sm text-theme hr-left"><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Resource archival information, mainly applicable to physical samples and sample collections. The curating instuition must be specified. This can be present or future curator.">
 	                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Details</div></legend>
-					    <div class="form-group form-group-sm">
+					    <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryright.curatorTitle.$invalid}">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The full name of the sample or data curator.">
 	                      	<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curator</label>
-		                    <input type="text" class="form-control" placeholder="Michael Wingate" ng-model="resource.curationDetailses[0].curator"/>
+		                    <input type="text" name="curatorTitle" class="form-control" placeholder="Fred Bloggs" ng-model="resource.curationDetailses[0].curator" required/>
+							<p ng-show="mandatoryright.curatorTitle.$invalid" class="small help-block">Enter the curator</p>
 	                    </div>
 	                    <div class="form-group form-group-sm">
 		                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The date the sample or item was moved to its current location.">
@@ -127,17 +128,16 @@
 	                      	<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Location</label>
 		                    <input type="text" class="form-control" placeholder="Curation Location" ng-model="resource.curationDetailses[0].curationLocation"/>
 	                    </div>
-	                     <div class="form-group form-group-sm" ng-class="{ 'has-error' : mandatoryright.curatingInstitution.$invalid}">
+	                     <div class="form-group form-group-sm" >
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The institution where the sample or item is stored.">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curating Institution</label>
-		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="GSWA" ng-model="resource.curationDetailses[0].curatingInstitution" required/>
-		                    <p ng-show="mandatoryright.curatingInstitution.$invalid" class="small help-block">Enter the curating institution</p>
+		                    <input type="text" class="form-control" name="curatingInstitution" placeholder="e.g. Curtin University" ng-model="resource.curationDetailses[0].curatingInstitution"/>
 	                    </div>
 		                 <div class="form-group form-group-sm">
 						    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="The URL of the institution where the sample or item is stored.">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Curation Institution URL</label>
 		                    <input type="text" class="form-control" placeholder="http://www.dmp.wa.gov.au" ng-model="resource.curationDetailses[0].institutionUri"/>		                    
-	                    </div>		                 
+	                    </div>
 					  </fieldset>			                       
 	                </form>	
 	                              
@@ -146,22 +146,6 @@
 	          </div>
           </div>         
         </div>
-        <div class="row">
-        	<p ng-show="callback" class="pull-right small help-block">You will be re-routed when you successfully mint the resource</p>
-        </div>
-        <div class="row">        	
-        	<div class="pull-right" ng-show="mode=='update' || mode=='register'">          		
-        		<label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="deprecated">Deprecate</label>
-				<label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="destroyed" >Destroy</label>
-				<label ng-show="mode=='update'" class="radio-inline mr-8"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="updated">Update</label>
-		        <button class="btn btn-blue  pull-right" type="button" ng-click="mintResource()">{{mode=='update'? "Update Resource" : "Register"}}</button>		       
-			</div>
-			<div class="pull-right" ng-show="mode=='unavailable'"> 
-				<label class="mr-12">Resource is {{resource.logDate.eventType}}</label>         		
-		        <button class="btn btn-blue  pull-right" type="button" ng-click="resource.logDate.eventType='updated';mode='update'">Reactivate</button>		       
-			</div>        
-        </div> 
-       
         <div class="row mt-20 mb-30">
 	      <div class="col-sm-12">
 	        <!-- Nav tabs -->
@@ -202,7 +186,7 @@
 				                 <div class="form-group form-group-sm">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="A vertical datum specifies the origin for elevations assocated with a sample or item. Specify the European Petroleum Survey Group (EPSG) vertical coordinate reference system code. For example, 5711 refers is the EPSG code for the Australian Height Datum (AHD).">
 	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Vertical Datum</label>
-				                    <select  class="form-control" ng-model="resource.location.verticalDatum"  ng-options="epsg as epsg for epsg in getEpsg"></select>	                   
+				                    <select  class="form-control" ng-model="resource.location.verticalDatum"  ng-options="epsg.key as epsg.value for epsg in getEpsg"></select>
 				                 </div>
 				                 <div class="form-group form-group-sm">
 								     <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Website to display or download sample locations.">
@@ -210,20 +194,20 @@
 				                    <input type="text" class="form-control" placeholder="http://auscope-portal-dev.arrc.csiro.au/portal/gmap.html"  ng-model="resource.location.geometryUri"/>
 			                    </div>		
 			                    <hr>	                   
-				                 <div class="form-group form-group-sm">
+				                 <div class="form-group form-group-sm" ng-init="resource.location.srid='https://epsg.io/4326'">
 				                 	<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="wkt"><b>Well Known Text</b></label>
-									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="geographic" ng-click="resource.location.srid='https://epsg.io/4326'" ><b>Geographic (Point) Coordinates (WGS84)</b></label>									
-									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="utm"><b>Projected (Point) Coordinates (MGA94)</b></label>       									
+									<label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="geographic"  ng-click="resource.location.srid='https://epsg.io/4326'" ><b>Geographic (Point) Coordinates (WGS84)</b></label>
+									<!-- <label class="radio-inline mr-8"><input type="radio" name="optlocation-inputtype" ng-model="resource.locationInputType" value="utm"><b>Projected (Point) Coordinates (MGA94)</b></label> -->
 				                 </div>
 				                  <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : ((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)}">
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
-	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID){{latitude.latitude}}{{longitude.longitude}}</label>
-				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg as epsg for epsg in getEpsg"></select>	
-				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>                   
+	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
+				                    <select  class="form-control" ng-model="resource.location.srid"  ng-options="epsg.key as epsg.value for epsg in getEpsg"></select>
+				                     <p ng-show="((resource.location.wkt.length > 0 || latitude.latitude|| latitude.degree) && resource.location.srid==null)" class="small help-block">Select Spatial Reference System Identifier(SRID) for location</p>
 				                 </div>
 				                 <div ng-show="resource.locationInputType=='geographic'" class="form-group form-group-sm" >
 				                    <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlSRID">
-	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID){{latitude.latitude}}{{longitude.longitude}}</label>
+	                      				<i class="fa fa-question-circle" aria-hidden="true"></i></span> Spatial Reference System Identifier (SRID)</label>
 				                        <input type="text" class="form-control" readonly  ng-model="resource.location.srid"/>          
 				                 </div>
 			                     <div ng-show="resource.locationInputType=='wkt'" class="form-group form-group-sm" ng-class="{ 'has-error' : location.wkt.$invalid && !location.wkt.$pristine}">
@@ -244,11 +228,11 @@
 										  <div class="form-group form-group-sm">
 						                      <div class="input-group" style="width:300px" ng-class="{ 'has-error' : (location.latitudelatitude.$invalid)}">
 						                      	<label>Latitude</label>				                      				            
-									            <input name="latitudelatitude" type="number" step="any" min=-90 max=90 type="text" class="form-control" placeholder="Enter a valid latitude in decimal degrees"  ng-model="latitude.latitude"/>						            
+									            <input name="latitudelatitude" type="number" step="any" min=-90 max=90 type="text" class="form-control" placeholder="Enter a valid latitude in decimal degrees"  ng-model="latitudelatitude"/>
 									          </div>
 									          <div class="input-group" style="width:300px" ng-class="{ 'has-error' : (location.longitudelongitude.$invalid)}">
 									          	<label>Longitude</label>				                      				            
-									            <input name="longitudelongitude" type="number" step="any" min=-180 max=180 type="text" class="form-control" placeholder="Enter a valid longitude in decimals degrees"  ng-model="longitude.longitude"/>						            
+									            <input name="longitudelongitude" type="number" step="any" min=-180 max=180 type="text" class="form-control" placeholder="Enter a valid longitude in decimals degrees"  ng-model="longitudelongitude"/>
 									          </div>
 									          <p ng-show="location.longitudelongitude.$invalid || location.latitudelatitude.$invalid" class="small help-block" style="color: #a94442;">Coordinates out of range</p>							       
 								          </div>
@@ -261,7 +245,7 @@
 								            	<input name="latitudeminutes" style="width:100px" type="number" step="1" min=0 max=60 class="form-control" placeholder="Minutes"  ng-model="latitude.minutes"/><span class="mr-8">M</span>
 								            	<input name="latitudeseconds" style="width:100px" type="number" step="1" min=0 max=60 class="form-control" placeholder="Seconds"  ng-model="latitude.seconds"/><span class="mr-8">S</span>
 								            </div>
-								            <p ng-show="location.latitudedegree.$invalid || location.latitudeminutes.$invalid || location.latitudeseconds.$invalid""  class="small help-block" style="color: #a94442;">latitude out of range</p>					            
+								            <p ng-show="location.latitudedegree.$invalid || location.latitudeminutes.$invalid || location.latitudeseconds.$invalid" class="small help-block" style="color: #a94442;">latitude out of range</p>
 								          </div>
 								          <div class="col-md-6">
 								          	<label>Longitude</label>				                      				            
@@ -279,7 +263,7 @@
 				                      <i class="fa fa-question-circle" aria-hidden="true"></i></span> MGA94 coordinates</label>
 				                      <p><small>Coordinates in MGA94 will be automatically converted to <a target="_BLANK" href='https://epsg.io/4326'>Geographic Coordinates</a></small></p>
 				                      <div class="form-inline" ng-class="{ 'has-error' : (resource.location.easting && !resource.location.zone)}">	
-				                      	  <label>UTM Zone:</label>	
+				                      	  <label>Map Grid of Australia UTM Zone:</label>
 				                       	  <select  class="form-control" ng-model="resource.location.zone"  ng-options="zone as zone for zone in getMGAZone"></select>
 				                      </div>
 				                      <div class="form-inline">		                      
@@ -396,7 +380,7 @@
 	          </div>	
 	          
 	          
-	         
+
 	          <div class="tab-pane fade in tab-shop-item" id="addresource-contributors">
 	          	 <div class="row">	
 	          	 	<div class="col-md-12">          
@@ -404,13 +388,13 @@
 					    <legend><div class="title-sm text-theme hr-left">Contributors</div></legend>
 					    <div class="form-group form-group-sm" ng-class="{ 'has-error' : (contributor.contributorType!=null || contributor.contributorIdentifier.length > 0 || contributor.cvIdentifierType.identifierType!=null) && !contributor.contributorName  }">
 						    <label>Contributor Name</label>
-		                    <input type="text" class="form-control" placeholder="Contributor Name" ng-model="contributor.contributorName">		                    
+		                    <input type="text" class="form-control" placeholder="Fred Bloggs" ng-model="contributor.contributorName">
 		                    <p ng-show="(contributor.contributorType!=null || contributor.contributorIdentifier.length > 0 || contributor.cvIdentifierType.identifierType!=null) && !contributor.contributorName" class="small help-block">Name cannot be empty if including contributor</p> 
 	                    </div>	                   
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : contributor.contributorName && !contributor.contributorType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlContributorType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Contributor Type</label>
-		                    <select  class="form-control" ng-model="contributor.contributorType"  ng-options="type as type for type in getContributorType"></select>
+		                    <select  class="form-control" ng-model="contributor.contributorType"  ng-options="type.key as type.value for type in getContributorType"></select>
 		                    <p ng-show="contributor.contributorName && !contributor.contributorType" class="small help-block">Contributor Type cannot be empty including one</p>	                   
 		                 </div>
 		                  <div class="form-group form-group-sm">
@@ -420,11 +404,11 @@
 	                    <div class="form-group form-group-sm"  ng-class="{ 'has-error' : contributor.contributorIdentifier && !contributor.cvIdentifierType.identifierType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Contributor Identifier Type</label>
-		                    <select  class="form-control" ng-model="contributor.cvIdentifierType.identifierType"  ng-options="type as type for type in getIdentifierType"></select>			                       
+		                    <select  class="form-control" ng-model="contributor.cvIdentifierType.identifierType"  ng-options="type.key as type.value for type in getIdentifierType"></select>
 		                    <p ng-show="contributor.contributorIdentifier && !contributor.cvIdentifierType.identifierType" class="small help-block">Identifier type cannot be empty if specifying identifier</p>                
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.contributorses.length ==1" ng-click="removeContributor($index)">Remove Contributor</button>
-					     <button class="btn btn-blue btn-sm" type="button" ng-click="addContributor()">Add More Contributor</button>
+					     <button class="btn btn-orange btn-sm" type="button" ng-click="addContributor()">Add More Contributor</button>
 					    </fieldset>  
 					    
 					  </div>				                       
@@ -442,17 +426,17 @@
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : !relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Related Identifier Type</label>
-		                    <select  class="form-control" ng-model="relatedResource.cvIdentifierType.identifierType"  ng-options="type as type for type in getIdentifierType"></select>	   
+		                    <select  class="form-control" ng-model="relatedResource.cvIdentifierType.identifierType"  ng-options="type.key as type.value for type in getIdentifierType"></select>
 		                    <p ng-show="!relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)" class="small help-block">Related Identifier must not be empty if specifying a relationship or related resource</p>                
 		                 </div>		                 
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : (relatedResource.cvIdentifierType.identifierType || relatedResource.relatedResource) && !relatedResource.relationType}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelationType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Relation Type</label>
-		                    <select  class="form-control" ng-model="relatedResource.relationType"  ng-options="type as type for type in getRelationType"></select>	
+		                    <select  class="form-control" ng-model="relatedResource.relationType"  ng-options="type.key as type.value for type in getRelationType"></select>
 		                    <p ng-show="(relatedResource.cvIdentifierType.identifierType || relatedResource.relatedResource) && !relatedResource.relationType" class="small help-block">Relation type must not be empty if specifying a related identifier type or related resource</p>                   
 		                 </div>	
 		                 <button class="btn btn-red btn-sm" type="button" ng-hide="resource.relatedResourceses.length ==1" ng-click="removeRelatedResource($index)">Remove Related Resource</button>
-					     <button class="btn btn-blue btn-sm" type="button" ng-click="addRelatedResource()">Add More Related Resource</button>
+					     <button class="btn btn-orange btn-sm" type="button" ng-click="addRelatedResource()">Add More Related Resource</button>
 					  </fieldset> 
 					 </div>	                       
 			      </div>
@@ -460,7 +444,44 @@
 	        </div>
 	      </div>
 	    </div>
-      </div>
+	  <div class="row">
+		  <div class="panel-primary text-theme content-box col-md-6" ng-show="showUserEmailForm">
+			  <div class="panel-heading">
+				  <h3 class="panel-title">User Info</h3>
+			  </div>
+			  <div class="panel-body">
+				  <form name="userInfo">
+					  <fieldset class="form-group form-group-sm show-fieldset-borders">
+						  <div class="form-group form-group-sm" ng-class="{ 'has-error' : userInfo.userEmail.$invalid}">
+							  <label><span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover="Please provide an email address to link your IGSN to.
+ Note that your email will not be part of the IGSN metadata and will not be visible to others.
+ Upon registering the IGSN you will be sent a confirmation email with a link to the IGSN metadata description.">
+							<i class="fa fa-question-circle" aria-hidden="true"></i></span> Your Email Address</label>
+							  <input type="text" class="form-control" name="userEmail" placeholder="userEmail" ng-model="resource.userEmail" required/>
+							  <p ng-show="userInfo.userEmail.$invalid" class="small help-block">Enter Your email address</p>
+						  </div>
+                          <div class="checkbox">
+                              <label><input type="checkbox" name="sendEmail" placeholder="sendEmail" ng-model="resource.sendEmail"> <small><b>Email metadata link</b></small></label>
+                          </div>
+					  </fieldset>
+				  </form>
+
+			  </div>
+		  </div>
+		  <div class="pull-right" ng-show="mode=='update' || mode=='register'">
+			  <label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="deprecated">Deprecate</label>
+			  <label ng-show="mode=='update'" class="radio-inline"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="destroyed" >Destroy</label>
+			  <label ng-show="mode=='update'" class="radio-inline mr-8"><input type="radio" name="optradio" ng-model="resource.logDate.eventType" value="updated">Update</label>
+			  <button class="btn btn-orange  pull-right" type="button" ng-click="mintResource()">{{mode=='update'? "Update Resource" : "Register"}}</button>
+		  </div>
+		  <div class="pull-right" ng-show="mode=='unavailable'">
+			  <label class="mr-12">Resource is {{resource.logDate.eventType}}</label>
+			  <button class="btn btn-orange  pull-right" type="button" ng-click="resource.logDate.eventType='updated';mode='update'">Reactivate</button>
+		  </div>
+	  </div>
+
+
+	  </div>
     </div>
   
    

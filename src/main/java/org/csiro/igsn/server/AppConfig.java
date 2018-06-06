@@ -2,12 +2,12 @@ package org.csiro.igsn.server;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 
 @ImportResource(value = {"/WEB-INF/applicationContext.xml"})
 @Configuration
-public class AppConfig {
-	
+public class AppConfig extends WebSecurityConfigurerAdapter {
 //	 /**
 //	  * Useless unless remove  <mvc:annotation-driven /> 
 //      * @return MarshallingHttpMessageConverter object which is responsible for

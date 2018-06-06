@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IGSN 30</title>
+  <title>ANDS IGSN Service</title>
 
   <link href="js/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -61,7 +61,8 @@
   <script src="js/igsn/controllers/addResourceCtrl.js"></script>
   <script src="js/igsn/controllers/registrant.js"></script>
   <script src="js/igsn/controllers/metaCtrl.js"></script>
-  
+  <script src="js/igsn/controllers/listResourceCtrl.js"></script>
+
 
   
 
@@ -87,13 +88,16 @@
         <div class="container">
           <div class="row">
             <div class="col-sm-5 hidden-xs">
-              <a class="title-menu-top display-inline-block" href="mailto:cg-admin@csiro.au">cg-admin@csiro.au</a>
+
             </div>
             <div class="col-sm-7 col-xs-12">
 			  <div class="pull-right">
-                <div class="dropdown dropdown-login pull-left">
+                  <div class="pull-left">
+                  <a href="https://documentation.ands.org.au/display/DOC/IGSN+Service"><button class="btn-menu-top">Documentation </button></a>
+                  </div>
+                  <div class="dropdown dropdown-login pull-left">
                   <a href="logout"><button class="btn-menu-top" ng-show="status.authenticated"><i class="fa fa-user"></i> Log out ,<span ng-bind="status.name"></span> </button></a>
-                  <a href="#/login"><button class="btn-menu-top" ng-show="!status.authenticated"><i class="fa fa-user"></i> Log in </button></a>                  
+                  <a href="#/login"><button class="btn-menu-top" ng-show="!status.authenticated"><i class="fa fa-user"></i> Log in </button></a>
                 </div>
 			  </div>                           
             </div>
@@ -108,15 +112,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#/">
+          <a class="navbar-brand" href="#/addresource">
             <img class="brand-img-2" src="img/logo.png" alt="logo">
             <img class="brand-img-1" src="img/logo.png" alt="logo">
           </a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+              <li ng-show="status.authenticated">
+                  <a href="#/listResources"><i class="fa fa-list"></i> List Resources</a>
+              </li>
            <li ng-show="status.authenticated">
-            	<a href="#/addSample"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
+            	<a href="#/addresource"><i class="fa fa-pencil-square-o"></i> Add Resource</a>
             </li> 
             <li ng-show="status.isAllocator">
             	<a href="#/registrant"><i class="fa fa-user-plus"></i> Registrant</a>
@@ -130,19 +137,32 @@
 
    <!-- CONTENT STARTS HERE -->
    <div ng-view></div>
-   
 
+      <footer class="row fa-inverse menu-top-inverse">
+          <div class="padding-vertical-32 mb mt">
+              <div class="row element-normal-bottom">
+                  <div class="col-md-1"></div>
+                  <div class="col-md-7">
+                      <p>This International Geo Sample Number (IGSN) service is managed and operated by the Australian National Data Service (ANDS).
+                          ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program.
+                          <a href="http://www.ands.org.au/about-us">Read more about ANDS...</a></p>
+                      <p>The software underpinning the service is a customised version of the IGSN software developed by
+                          <a href="https://www.csiro.au/">Commonwealth Scientific and Industrial Research Organisation (CSIRO).</a></p>
+                      <p>If you would like further information or have any questions please contact <a href="mailto:services@ands.org.au">services@ands.org.au</a></p>
+                      <p><a href="privacy_policy.html">ANDS IGSN Service Privacy Policy</a></p>
+                  </div>
+                  <div class="col-md-2">
+                      <a href="https://education.gov.au/national-collaborative-research-infrastructure-strategy-ncris" target="_blank" class="gov_logo"><img style="height:75px;" src="https://researchdata.ands.org.au/assets/core/images/NCRIS_PROVIDER_rev.png" alt="National Collaborative Research Infrastructure Strategy (NCRIS)"></a>
+                  </div>
+                  <div class="col-md-2">
+                      <a href="http://www.ands.org.au/" class="footer_logo"><img src="https://researchdata.ands.org.au/assets/core/images/footer_logo_rev.png" alt="" style="height:75px;"></a>
+                  </div>
+              </div>
+          </div>
+      </footer>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
 
 
 

@@ -1,5 +1,5 @@
-allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthService','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce',
-                                                    function ($scope,$http,currentAuthService,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce) {
+allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','currentAuthService','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce',
+                                                    function ($scope,$rootScope, $http,currentAuthService,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce) {
 	
   $scope.getResourceType = selectListService.getResourceType();
   $scope.getMaterialType = selectListService.getMaterialType();
@@ -11,7 +11,10 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   $scope.getTrueFalse = selectListService.getTrueFalse();
   $scope.getMGAZone = selectListService.getMGAZone();
   $scope.loading=false;
-  
+  $scope.longitudelongitude=null;
+  $scope.latitudelatitude=null;
+
+
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
   }
@@ -19,7 +22,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   var parseOptionToHtmlList = function(arrayList){
 	  var result = "<ul class='small' style='padding-left:10px'>";
 	  for(var index in arrayList){
-		  result += "<li><a target='_blank' href='"+arrayList[index]+"'>" + arrayList[index] + "</a></li>"
+		  result += "<li><a target='_blank' href='"+arrayList[index].key+"'>" + arrayList[index].value + "</a></li>"
 	  }
 	  return result + "</ul>";
   }
@@ -35,7 +38,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   $scope.htmlRelationType = $sce.trustAsHtml("<p>The relationship between the resource being registered and other entity (e.g., event, document, parent sample, etc.)</p>" + parseOptionToHtmlList($scope.getRelationType));
   $scope.htmlRelatedIdentifierType = $sce.trustAsHtml("<p>Identifier type</p>" + parseOptionToHtmlList($scope.getIdentifierType));
   $scope.htmlContributorType = $sce.trustAsHtml("<p>Contributor type</p>" + parseOptionToHtmlList($scope.getContributorType));
-  $scope.htmlWellknowntext = $sce.trustAsHtml("<p>Well Known Text (WKT) is a text markup language for representing vector geometry objects on a map, This may refer to a geographic location. In Well Known Text, the format is POINT(Long Lat), e.g. POINT (115.8834, -31.9944)</p>");
+  $scope.htmlWellknowntext = $sce.trustAsHtml("<p>Well Known Text (WKT) is a text markup language for representing vector geometry objects on a map, This may refer to a geographic location. In Well Known Text, the format is POINT(Long Lat), e.g. POINT (115.8834 -31.9944)</p>");
   $scope.htmlSRID = $sce.trustAsHtml("<p>This refers to the Spatial Referencing system IDentifier (SRID). For example, '4326' is the EPSG code for the WGS84 geographic coordinate system.</p>" + parseOptionToHtmlList($scope.getEpsg))
   $scope.htmlGeographicCoordinates = $sce.trustAsHtml("<p>A geographic coordinate system that enables every location on Earth to be specified by the use of <a target='_BLANK' href='https://en.wikipedia.org/wiki/Latitude'>latitude</a> and <a target='_BLANK' href='https://en.wikipedia.org/wiki/Longitude'>longtitude</a></p>");
   $scope.htmlUTMCoordinates = $sce.trustAsHtml("<p><a target='_BLANK' href='http://www.dtpli.vic.gov.au/property-and-land-titles/geodesy/geocentric-datum-of-australia-1994-gda94'>GDA94</a> is the official geodetic datum adopted nationally across Australia on 1 January 2000. It replaced the Australian Geodetic Datum 1966 (AGD66) used in Victoria. Universal Transverse Mercator (UTM) projection coordinates (easting, northing and zone)</p>");
@@ -43,8 +46,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   var initDataStructure = function(){
 	  if($scope.resource==null){
 		  $scope.resource={};
-	  };    
-	  if( $scope.resource.contributorses==null){
+	  };
+
+      if( $scope.resource.contributorses==null){
 		  $scope.resource.contributorses=[];
 		
 	  };
@@ -74,12 +78,16 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  if($scope.resource.logDate==null){
 		  $scope.resource.logDate={};
 		  $scope.resource.logDate.eventType="registered";
-	  }	  
-	  
-	  $scope.resource.locationInputType = "wkt";
+	  }
+      $scope.resource.randomIds = true;
+	  $scope.resource.landingPage = "USE DEFAULT LANDING PAGE";
+      $scope.resource.defaultLandingPage = true;
+      $scope.resource.sendEmail = true;
+
 	  $scope.useDegree = 'degrees';
 	  $scope.resource.registeredObjectType = 'http://pid.geoscience.gov.au/def/voc/igsn-codelists/PhysicalSample';
-		    
+      $scope.resource.locationInputType = "geographic";
+
 	  if( $scope.resource.contributorses.length==0){
 		  $scope.resource.contributorses[0] = {}; 
 	  };
@@ -134,7 +142,20 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
   $scope.clearLandingPage = function(){
 	  $scope.resource.landingPage="";
   }
-	
+
+
+  $scope.visibilityChange = function(){
+      if($scope.resource.visibility=='hidden'){
+		  $scope.resource.embargoEnd = null;
+          $scope.resource.isPublic = false;
+	  }else if($scope.resource.visibility==true){
+          $scope.resource.embargoEnd = null;
+          $scope.resource.isPublic = $scope.resource.visibility;
+	  }else{
+          $scope.resource.isPublic = $scope.resource.visibility;
+	  }
+  }
+
   $scope.mintResource = function(){	  
 	  $scope.loading=true;
 	  if($scope.resource.curationDetailses[0].curationDate){
@@ -153,18 +174,24 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  
 	 
 	  
-	  if($scope.resource.locationInputType=="geographic" && $scope.useDegree && !isUndefinedOrNull($scope.longitude.degree) && !isUndefinedOrNull($scope.latitude.degree)){
+	  if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "minutes" && !isUndefinedOrNull($scope.longitude.degree) && !isUndefinedOrNull($scope.latitude.degree)){
 		  var lng = (($scope.longitude.seconds?$scope.longitude.seconds/60:0) + ($scope.longitude.minutes?$scope.longitude.minutes:0))/60 + $scope.longitude.degree;
 		  var lat = (($scope.latitude.seconds?$scope.latitude.seconds/60:0) + ($scope.latitude.minutes?$scope.latitude.minutes:0))/60 + $scope.latitude.degree;
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
-		  $scope.resource.location.wkt = $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
-	  }else if($scope.resource.locationInputType=="geographic" && !$scope.useDegree && !isUndefinedOrNull($scope.longitude.longitude) && !isUndefinedOrNull($scope.latitude.latitude)){	
+		  $scope.resource.location.wkt = "POINT(" + lng + " " + lat + ")";
+	  }else if($scope.resource.locationInputType=="geographic" && $scope.useDegree == "degrees" && !isUndefinedOrNull($scope.longitudelongitude) && !isUndefinedOrNull($scope.latitudelatitude)){
 		  if(!$scope.resource.location){
 			  $scope.resource.location={}
 		  }
-		  $scope.resource.location.wkt = "POINT(" + $scope.longitude.longitude + " " + $scope.latitude.latitude + ")";
+		  $scope.resource.location.wkt = "POINT(" + $scope.longitudelongitude + " " + $scope.latitudelatitude + ")";
+	  }else if($scope.resource.locationInputType == "wkt" && !isUndefinedOrNull($scope.location.wkt.$viewValue) && $scope.location.wkt.$viewValue != ''){
+          if(!$scope.resource.location){
+              $scope.resource.location={}
+          }
+      }else{
+	  	$scope.resource.location={};
 	  }
 	  
 	  $http.post('web/mintJson.do', 
@@ -234,11 +261,12 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  }
 	  
   }
-  
+
    
   var getAllocatedPrefix = function(){
       $http.get('web/getAllocatedPrefix.do', {}).success(function(response) {
-		 $scope.allocatedPrefixes = response;	  
+		 $scope.allocatedPrefixes = response;
+		 $scope.resource.prefix = $scope.allocatedPrefixes[0].prefix;
 	  }).error(function(data) {
 		  modalService.showModal({}, {    	            	           
 	           headerText: "Retrieve prefix" ,
@@ -247,7 +275,6 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
 	  });
   }
   getAllocatedPrefix();
-  
   
   $scope.changePrefix = function(){
 	  $scope.resource.resourceIdentifier=$scope.resource.prefix;
@@ -270,7 +297,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
     		$location.path("/addresource");
     		
     	}else{
-    		$scope.resource = data; 
+    		$scope.resource = data;
+
     		if(data.logDate.eventType != "destroyed" && data.logDate.eventType != "deprecated"){
     			 $scope.mode="update";    			
     			 $scope.resource.logDate.eventType="updated";
@@ -278,7 +306,14 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
     			$scope.mode="unavailable";
     		}
          	initDataStructure();
-         	         		
+            $scope.resource.randomIds = false;
+            $scope.resource.resourceIdentifier = igsn;
+            if($scope.resource.isPublic == false && isUndefinedOrNull($scope.resource.embargoEnd)){
+                $scope.resource.visibility = "hidden";
+            }else{
+                $scope.resource.visibility = $scope.resource.isPublic
+            }
+            $scope.resource.locationInputType = "wkt";
     	}     	 
      	
      }).error(function(response,status) {
@@ -296,7 +331,12 @@ allControllers.controller('addResourceCtrl', ['$scope','$http','currentAuthServi
     	
      });	  
    }
-	 
+
+  // $scope.showUserEmailForm = false;
+  // $rootScope.$on('setEmail', function() {
+  //     $scope.resource.userEmail = currentAuthService.getEmail();
+  // });
+
   
   if($routeParams.igsn){	  
 	  getResource($routeParams.igsn); 
