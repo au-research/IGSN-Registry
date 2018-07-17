@@ -66,6 +66,7 @@ public class Registrant implements java.io.Serializable {
 	private Set<Prefix> prefixes = new HashSet<Prefix>(0);
 	private String shared_secret;
 	private String app_id;
+	private Boolean tc_accepted;
 	private Set<RefererUrls> referer_urls = new HashSet<RefererUrls>(0);
 
 
@@ -74,17 +75,18 @@ public class Registrant implements java.io.Serializable {
 
 	public Registrant(String registrantname,
 			String registrantemail, String username, String password,
-			Allocator allocator) {		
+			Allocator allocator, Boolean tc_accepted) {
 		this.registrantname = registrantname;
 		this.registrantemail = registrantemail;
 		this.username = username;
 		this.password = password;
 		this.allocator = allocator;
+		this.tc_accepted = tc_accepted;
 	}
 
 	public Registrant(String registrantname,
 			String registrantemail, Date created, String username,
-			String password, Date updated, Allocator allocator, Boolean isactive,
+			String password, Date updated, Allocator allocator, Boolean isactive, Boolean tc_accepted,
 			Set<Prefix> prefixes) {		
 		this.registrantname = registrantname;
 		this.registrantemail = registrantemail;
@@ -95,12 +97,13 @@ public class Registrant implements java.io.Serializable {
 		this.allocator = allocator;
 		this.isactive = isactive;
 		this.prefixes = prefixes;
+		this.tc_accepted = tc_accepted;
 	}
 
 	public Registrant(String registrantname,
 					  String registrantemail, Date created, String username,
 					  String password, Date updated, Allocator allocator, Boolean isactive,
-					  Set<Prefix> prefixes, String appId, String sharedSecret, Set<RefererUrls> urls) {
+					  Set<Prefix> prefixes, String appId, String sharedSecret, Boolean tc_accepted, Set<RefererUrls> urls) {
 		this.registrantname = registrantname;
 		this.registrantemail = registrantemail;
 		this.created = created;
@@ -113,6 +116,7 @@ public class Registrant implements java.io.Serializable {
 		this.shared_secret = sharedSecret;
 		this.app_id = appId;
 		this.referer_urls = urls;
+		this.tc_accepted = tc_accepted;
 	}
 
 	@Id
@@ -189,9 +193,17 @@ public class Registrant implements java.io.Serializable {
 	public String getAppId() {
 		return this.app_id;
 	}
-
 	public void setAppId(String appId) {
 		this.app_id= appId;
+	}
+
+
+	@Column(name = "tc_accepted")
+	public Boolean getTcAccepted() {
+		return this.tc_accepted;
+	}
+	public void setTcAccepted(Boolean tc_accepted) {
+		this.tc_accepted = tc_accepted;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

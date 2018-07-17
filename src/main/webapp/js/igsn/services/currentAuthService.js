@@ -36,14 +36,20 @@ app.service('currentAuthService', function($rootScope) {
         getPermissions : function(){
         	return status.permissions;
         },
-        getStatus : function(){
-        	return status;
-        },
         setIsAllocator : function(isAllocator){
         	status.isAllocator=isAllocator;
         },
         getIsAllocator : function(){
         	return status.isAllocator;
+        },
+        getTcAccepted : function(){
+            return status.tc_accepted;
+        },
+        setTcAccepted : function(tcAccepted){
+            status.tc_accepted = tcAccepted;
+        },
+        getStatus : function(){
+            return status;
         }
     };	    
     

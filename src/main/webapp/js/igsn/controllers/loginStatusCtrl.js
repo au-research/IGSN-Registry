@@ -14,6 +14,8 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$rootScope','$http','cur
                     if(response.email){
                         currentAuthService.setEmail(response.email);
                     }
+                    currentAuthService.setTcAccepted(response.tcAccepted);
+
                     currentAuthService.setAuthenticated(true);
                 }else{
                     currentAuthService.setAuthenticated(false);
@@ -28,6 +30,7 @@ allControllers.controller('LoginStatusCtrl', ['$scope','$rootScope','$http','cur
             $http.get('getUser.do', {})
                 .success(function(response) {
                     currentAuthService.setIsAllocator(response.allocator);
+                    currentAuthService.setTcAccepted(response.tcAccepted);
                 });
         });
     }]);

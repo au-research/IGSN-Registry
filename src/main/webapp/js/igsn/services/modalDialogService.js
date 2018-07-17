@@ -1,4 +1,4 @@
-app.service('modalService', ['$uibModal','$sce','$location',function ($uibModal,$sce,$location) {
+app.service('modalService', ['$uibModal','$sce','$location','$http','currentAuthService', function ($uibModal,$sce,$location,$http,currentAuthService) {
 
       var modalDefaults = {
           backdrop: true,
@@ -34,6 +34,7 @@ app.service('modalService', ['$uibModal','$sce','$location',function ($uibModal,
           if (!tempModalDefaults.controller) {
               tempModalDefaults.controller = function ($scope, $uibModalInstance) {
                   $scope.modalOptions = tempModalOptions;
+
                   $scope.modalOptions.ok = function (result) {
                 	  $uibModalInstance.close("OK");
                   };
@@ -57,6 +58,21 @@ app.service('modalService', ['$uibModal','$sce','$location',function ($uibModal,
                     	  $location.path($scope.modalOptions.addAnother);                    	                	 
                     	  window.location.href = $location.absUrl();
                 	  }
+                  }
+
+                  if($scope.modalOptions.cancelTC){
+                      $scope.modalOptions.cancelTCFnc = function(){
+                         // Terms and Conditions not accepted - we need to log them out;
+                          window.location.href = "http://" + $location.host() + ":" + $location.port() + "/logout";
+                      }
+                  }
+
+                  if($scope.modalOptions.acceptTC){
+                      $scope.modalOptions.acceptTCFnc = function(){
+                          // Terms and Conditions accepted we need to update the db
+                          $http.get('web/setTC.do', {params:{username:$scope.modalOptions.acceptTC}});
+                          $uibModalInstance.close();
+                      }
                   }
                   
               }

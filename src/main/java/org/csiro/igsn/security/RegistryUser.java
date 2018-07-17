@@ -26,6 +26,7 @@ public class RegistryUser implements UserDetails {
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
+    private boolean tcAccepted;
 
 
 
@@ -41,6 +42,7 @@ public class RegistryUser implements UserDetails {
             this.name = r.getRegistrantname();
             this.email = r.getRegistrantemail();
             this.addRole("ROLE_REGISTRANT");
+            this.tcAccepted = r.getTcAccepted();
             if(allocatorService.searchAllocator(this.username)!=null){
                 this.setAllocator(true);
                 this.addRole("ROLE_ALLOCATOR");
@@ -71,6 +73,7 @@ public class RegistryUser implements UserDetails {
             this.email = r.getRegistrantemail();
             this.password = r.getPassword();
             this.addRole("ROLE_REGISTRANT");
+            this.tcAccepted = r.getTcAccepted();
             if(allocatorService.searchAllocator(this.username)!=null){
                 this.setAllocator(true);
                 this.addRole("ROLE_ALLOCATOR");
@@ -102,6 +105,7 @@ public class RegistryUser implements UserDetails {
         this.accountNonExpired = false;
         this.accountNonLocked = false;
         this.credentialsNonExpired = false;
+        this.tcAccepted = false;
 
     }
 
@@ -123,6 +127,11 @@ public class RegistryUser implements UserDetails {
         return this.username;
     }
 
+    public Boolean getTcAccepted(){
+        return this.tcAccepted;
+    }
+
+
     public String getEmail(){
         return this.email;
     }
@@ -138,6 +147,10 @@ public class RegistryUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setTC(Boolean tc_accepted) {
+        this.tcAccepted = tc_accepted;
     }
 
     public ArrayList<String> getRoles(){

@@ -251,6 +251,24 @@ public class RegistrantEntityService {
 
 	}
 
+	public boolean setTCAccepted(String username,boolean tc_accepted) throws Exception {
+		EntityManager em = JPAEntityManager.createEntityManager();
+		try{
+			em.getTransaction().begin();
+			Registrant registrantEntity = searchRegistrantAndPrefix(username);
+			registrantEntity.setTcAccepted(tc_accepted);
+			em.merge(registrantEntity);
+			em.flush();
+			em.getTransaction().commit();
+			return true;
+		}catch(Exception e){
+			em.getTransaction().rollback();
+			throw e;
+		}finally{
+			em.close();
+		}
+
+	}
 	public boolean addRegistrant(Principal user,String email,String name,String username) throws Exception {
         EntityManager em = JPAEntityManager.createEntityManager();
         try {

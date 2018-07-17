@@ -12,6 +12,7 @@ import org.csiro.igsn.entity.service.PrefixEntityService;
 import org.csiro.igsn.entity.service.RegistrantEntityService;
 import org.csiro.igsn.entity.service.ResourceEntityService;
 import org.csiro.igsn.exception.ExceptionWrapper;
+import org.csiro.igsn.security.RegistryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -159,6 +160,17 @@ public class RegistrantCtrl {
 		}
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
-	
-	
+
+	@RequestMapping("setTC.do")
+	public ResponseEntity<Object>  user(
+		@RequestParam(required = true, value ="username") String username,
+		Principal user){
+			try {
+				this.registrantEntityService.setTCAccepted(username, true);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<Object>(new ExceptionWrapper("Failed to set tc_accepted",e.getMessage()),HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<Object>(HttpStatus.OK);
+	}
 }
