@@ -63,7 +63,7 @@ app.service('modalService', ['$uibModal','$sce','$location','$http','currentAuth
                   if($scope.modalOptions.cancelTC){
                       $scope.modalOptions.cancelTCFnc = function(){
                          // Terms and Conditions not accepted - we need to log them out;
-                          window.location.href = "/logout";
+                          window.location.href = "/igsn/logout";
                       }
                   }
 

@@ -342,32 +342,32 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 
 
    $http.get('getUser.do', {}).success(function(response) {
-      if(response.username){
+       var showModal = !currentAuthService.getTcAccepted();
+       var userName = currentAuthService.getUsername();
+       var showTCModal = function(){
+           if(showModal && !isUndefinedOrNull(userName)) {
+               modalService.show({
+                   templateUrl: 'widget/acceptTC.html',
+                   backdrop: 'static',
+                   keyboard: false
+               }, {
+                   acceptTC: ""+userName,
+                   cancelTC:"/",
+               });
+           }
+       }
+
+       if(response.username){
           currentAuthService.setTcAccepted(response.tcAccepted);
           currentAuthService.setUsername(response.username);
+
+          showTCModal();
       }
     });
 
-  	var showModal = !currentAuthService.getTcAccepted();
- 	var userName = currentAuthService.getUsername();
- 	console.log(userName);
-    var showTCModal = function(){
-   		if(showModal && !isUndefinedOrNull(userName)) {
-            modalService.show({
-				templateUrl: 'widget/acceptTC.html',
-                backdrop: 'static',
-                keyboard: false
-			}, {
-            	acceptTC: ""+userName,
-                cancelTC:"/",
-			});
-        }
-    }
-
-    showTCModal();
 
   if($routeParams.igsn){
 	  getResource($routeParams.igsn); 
   }
-  
+
 }]);
