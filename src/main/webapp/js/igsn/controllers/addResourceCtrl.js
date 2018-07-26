@@ -344,8 +344,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
    $http.get('getUser.do', {}).success(function(response) {
        var showModal = !currentAuthService.getTcAccepted();
        var userName = currentAuthService.getUsername();
+       var allocator = currentAuthService.getIsAllocator();
        var showTCModal = function(){
-           if(showModal && !isUndefinedOrNull(userName)) {
+           if(showModal && !isUndefinedOrNull(userName) && !allocator) {
                modalService.show({
                    templateUrl: 'widget/acceptTC.html',
                    backdrop: 'static',
