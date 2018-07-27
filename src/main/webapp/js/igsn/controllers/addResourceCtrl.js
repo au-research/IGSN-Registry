@@ -342,8 +342,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 
 
    $http.get('getUser.do', {}).success(function(response) {
-       var showModal = !currentAuthService.getTcAccepted();
-       var userName = currentAuthService.getUsername();
+       var showModal = !response.tcAccepted;
+       var userName = response.username;
        var allocator = currentAuthService.getIsAllocator();
        var showTCModal = function(){
            if(showModal && !isUndefinedOrNull(userName) && !allocator) {
@@ -357,11 +357,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
                });
            }
        }
-
        if(response.username){
           currentAuthService.setTcAccepted(response.tcAccepted);
           currentAuthService.setUsername(response.username);
-
           showTCModal();
       }
     });
