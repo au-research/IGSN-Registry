@@ -150,6 +150,17 @@
                         <artifactId>jetty-maven-plugin</artifactId>
                         <version>9.4.8.v20171121</version>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <url>http://localhost:8080/manager/text</url>
+                            <server>localTomcat</server>
+                            <path>/igsn</path>
+                            <update>true</update>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
