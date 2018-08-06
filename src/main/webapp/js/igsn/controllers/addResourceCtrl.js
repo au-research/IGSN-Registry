@@ -1,5 +1,5 @@
-allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','currentAuthService','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce',
-                                                    function ($scope,$rootScope, $http,currentAuthService,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce) {
+allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce','currentAuthService',
+                                                    function ($scope,$rootScope, $http,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce,currentAuthService) {
 	
   $scope.getResourceType = selectListService.getResourceType();
   $scope.getMaterialType = selectListService.getMaterialType();
@@ -13,6 +13,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.loading=false;
   $scope.longitudelongitude=null;
   $scope.latitudelatitude=null;
+
 
 
   if($routeParams.sessionid && $routeParams.callbackurl){
@@ -42,11 +43,13 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
   $scope.htmlSRID = $sce.trustAsHtml("<p>This refers to the Spatial Referencing system IDentifier (SRID). For example, '4326' is the EPSG code for the WGS84 geographic coordinate system.</p>" + parseOptionToHtmlList($scope.getEpsg))
   $scope.htmlGeographicCoordinates = $sce.trustAsHtml("<p>A geographic coordinate system that enables every location on Earth to be specified by the use of <a target='_BLANK' href='https://en.wikipedia.org/wiki/Latitude'>latitude</a> and <a target='_BLANK' href='https://en.wikipedia.org/wiki/Longitude'>longtitude</a></p>");
   $scope.htmlUTMCoordinates = $sce.trustAsHtml("<p><a target='_BLANK' href='http://www.dtpli.vic.gov.au/property-and-land-titles/geodesy/geocentric-datum-of-australia-1994-gda94'>GDA94</a> is the official geodetic datum adopted nationally across Australia on 1 January 2000. It replaced the Australian Geodetic Datum 1966 (AGD66) used in Victoria. Universal Transverse Mercator (UTM) projection coordinates (easting, northing and zone)</p>");
-  
+
   var initDataStructure = function(){
+
 	  if($scope.resource==null){
 		  $scope.resource={};
 	  };
+
 
       if( $scope.resource.contributorses==null){
 		  $scope.resource.contributorses=[];
@@ -332,14 +335,38 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','cur
      });	  
    }
 
-  // $scope.showUserEmailForm = false;
-  // $rootScope.$on('setEmail', function() {
-  //     $scope.resource.userEmail = currentAuthService.getEmail();
-  // });
+   //$scope.showUserEmailForm = true;
+   //$rootScope.$on('setEmail', function() {
+       //$scope.resource.userEmail = currentAuthService.getEmail();
+   //});
 
-  
-  if($routeParams.igsn){	  
+
+   $http.get('getUser.do', {}).success(function(response) {
+       var showModal = !response.tcAccepted;
+       var userName = response.username;
+       var allocator = currentAuthService.getIsAllocator();
+       var showTCModal = function(){
+           if(showModal && !isUndefinedOrNull(userName) && !allocator) {
+               modalService.show({
+                   templateUrl: 'widget/acceptTC.html',
+                   backdrop: 'static',
+                   keyboard: false
+               }, {
+                   acceptTC: ""+userName,
+                   cancelTC:"/",
+               });
+           }
+       }
+       if(response.username){
+          currentAuthService.setTcAccepted(response.tcAccepted);
+          currentAuthService.setUsername(response.username);
+          showTCModal();
+      }
+    });
+
+
+  if($routeParams.igsn){
 	  getResource($routeParams.igsn); 
   }
-  
+
 }]);

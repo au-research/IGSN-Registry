@@ -62,7 +62,7 @@ public class BuiltInUserDAO {
 
     public RegistryUser getRegistrant(String username){
         RegistryUser userInfo = null;
-        String UserSql = "SELECT registrantid, username, password, 'ROLE_REGISTRANT' AS role "+
+        String UserSql = "SELECT registrantid, username, password,tc_accepted, 'ROLE_REGISTRANT' AS role "+
                 "FROM version30.registrant "+
                 "WHERE isactive = TRUE and username =?";
         try {
@@ -76,6 +76,7 @@ public class BuiltInUserDAO {
                             user.setName(rs.getString("username"));
                             user.setPassword(rs.getString("password"));
                             user.addRole(rs.getString("role"));
+                            user.setTC(rs.getBoolean("tc_accepted"));
                             return user;
                         }
                     });

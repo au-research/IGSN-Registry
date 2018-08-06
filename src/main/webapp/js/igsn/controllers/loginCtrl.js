@@ -34,6 +34,7 @@ allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http'
                 if(data.username){
                     currentAuthService.setUsername(data.username);
                     currentAuthService.setIsAllocator(data.allocator);
+                    currentAuthService.setTcAccepted(data.tcAccepted);
                     if(data.name){
                         currentAuthService.setName(data.name);
                     }

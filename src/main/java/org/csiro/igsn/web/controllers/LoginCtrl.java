@@ -60,4 +60,5 @@ public class LoginCtrl {
 		httpHeaders.setLocation(aaf_login);
 		return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
 	}
+
 }

@@ -1,0 +1,17 @@
+<div class="modal-dialog" style="overflow-y: initial;">
+     <div class="modal-body" style="max-height: calc(100vh - 400px); overflow-y: auto;">
+         <h3 class="modal-title">Please note:</h3>
+         {{$scope.resource}}
+   <ul>
+       <li> This service should only be used to mint IGSNs for samples that are associated with an Australian research activity.</li>
+       <li> As the owner of an IGSN you are expected to ensure that the contact information and other IGSN metadata elements are kept up to date.</li>
+       <li> The metadata of publicly visible IGSNs is made available to third parties to publish in their services (eg Australia Geosample Portal).</li>
+       <li> By clicking ‘Continue’, you are confirming that you have read and agree to our <a href="privacy_policy.html" target="_blank">Privacy Policy</a>.</li>
+   </ul>
+     </div>
+
+     <div class="modal-footer">
+            <button class="btn btn-warning" type="button" data-ng-click="modalOptions.cancelTCFnc();">Cancel</button>
+            <button class="btn btn-primary" type="button" data-ng-click="modalOptions.acceptTCFnc();">Continue</button>
+     </div>
+</div>
