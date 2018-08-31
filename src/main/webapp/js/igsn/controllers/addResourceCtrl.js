@@ -15,6 +15,24 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
   $scope.latitudelatitude=null;
 
 
+	$('.orcid_widget').each(function () {
+		var elem = $(this);
+		var widget = elem.orcid_widget({
+			lookup: false,
+			before_html: '',
+			tooltip: true,
+            wrap_html: '',
+			search_text: '<i class="fa fa-search"></i> Orcid Search',
+			custom_select_handler: function (data, obj, settings) {
+				$('.select_orcid_search_result').on('click', function () {
+					var theName = $(this).context.text + " (" + $(this).attr('orcid-id') + ")";
+					obj.val(theName);
+					obj.trigger('change');
+					obj.p.children('.' + settings.search_div_class).toggle();
+				});
+			}
+		});
+	});
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
@@ -370,3 +388,4 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
   }
 
 }]);
+
