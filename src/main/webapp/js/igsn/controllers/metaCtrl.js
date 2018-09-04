@@ -1,6 +1,6 @@
 allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
                                                     function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService) {
-	
+
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
@@ -17,7 +17,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	        zoom: 4
 	    }
 	});
-	
+
 	$scope.edit = function(){
 		if(currentAuthService.getAuthenticated()){
 			$location.path("/addresource/" + $routeParams.igsn);
@@ -26,9 +26,6 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 		}
 	}
 
-
-
-	
 	$scope.resource={};
 	if($routeParams.igsn){
 		$http.get('public/getResource.do', {
@@ -37,6 +34,20 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 		 		}
         }).success(function(data,status) {
         	$scope.resource = data;
+        	var curator = $scope.resource.curationDetailses[0].curator;
+            var regExp = /\(([^)]+)\)/;
+            var orcid = regExp.exec(curator);
+            if(orcid) {
+                $scope.resource.curationDetailses[0].orcid = orcid[1];
+				//$.ajax({
+				//	url:'http://devl.ands.org.au/liz/registry/api/v2.0/orcid.jsonp/lookup/'+orcid[1],
+               //     dataType: 'jsonp',
+				//	success: function(data) {
+               //         console.log(data.person)
+				//	}
+			//	});
+
+            }
             $scope.listService = selectListService;
         	 leafletData.getMap().then(function(mymap) {
         		 if(data.location && data.location.wkt!=null){
@@ -70,8 +81,6 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	    	
 	    });	  
 	}
-	
-	
-	
-   
+
 }]);
+
