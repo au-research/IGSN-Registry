@@ -21,7 +21,9 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 			lookup: false,
 			before_html: '',
 			tooltip: true,
+            pre_open_search: true,
             wrap_html: '',
+            search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
 			search_text: '<i class="fa fa-search"></i> Orcid Search',
 			custom_select_handler: function (data, obj, settings) {
 				$('.select_orcid_search_result').on('click', function () {
@@ -33,6 +35,13 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 			}
 		});
 	});
+
+	$('.orcid_search_input').each(function() {
+		$(this).val(currentAuthService.getName());
+        $(this.nextElementSibling).trigger('click');
+
+        //console.log($(this.nextElementSibling.nextElementSibling).context);
+    });
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
@@ -175,6 +184,10 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 	  }else{
           $scope.resource.isPublic = $scope.resource.visibility;
 	  }
+  }
+
+  $scope.primeCurator = function(){
+  	console.log("we want to prefill orcid ")
   }
 
   $scope.mintResource = function(){	  
