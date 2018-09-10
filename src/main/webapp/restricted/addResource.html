@@ -416,12 +416,12 @@
 	          <div class="tab-pane fade in tab-shop-item" id="addresource-related-resource">
 	          	 <div class="row">	
 	          	 	<div class="col-md-12">          
-		          	  <fieldset class="form-group form-group-sm show-fieldset-borders" ng-repeat="relatedResource in resource.relatedResourceses">
+		          	  <fieldset class="form-group form-group-sm show-fieldset-borders" ng-repeat="relatedResource in resource.relatedResourceses track by $index">
 					    <legend><div class="title-sm text-theme hr-left">Related Resource</div></legend>
 					    <div class="form-group form-group-sm" >
 						    <label>Related resource</label>
-		                    <input type="text" class="form-control" placeholder="Related resource, e.g. URL for sample collection or data repository" ng-model="relatedResource.relatedResource">
-	                    </div>	                   
+		                    <input type="text" class="form-control" grantwidget placeholder="Related resource, e.g. URL for sample collection or data repository" ng-model="relatedResource.relatedResource">
+						</div>
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : !relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">
 	                      		<i class="fa fa-question-circle" aria-hidden="true"></i></span> Related Identifier Type</label>

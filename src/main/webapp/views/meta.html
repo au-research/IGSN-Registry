@@ -183,7 +183,8 @@
 					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
 					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.cvIdentifierType.identifierType}}>{{listService.getValue(relatedResource.cvIdentifierType.identifierType,listService.getIdentifierType())}}</a></u></label></div>
 					                  </div>	          	                
-					                </form>										    													            								    	                 				                   
+					                </form>
+									 <div ng-if="relatedResource.cvIdentifierType.identifierType" grantid={{relatedResource.relatedResource}} showgrant ng-model="relatedResource.cvIdentifierType.identifierType"/>
 								  </fieldset> 			                                
 				            </div>			                       
 					      </div>

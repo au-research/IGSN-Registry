@@ -39,14 +39,6 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
             var orcid = regExp.exec(curator);
             if(orcid) {
                 $scope.resource.curationDetailses[0].orcid = orcid[1];
-				//$.ajax({
-				//	url:'http://devl.ands.org.au/liz/registry/api/v2.0/orcid.jsonp/lookup/'+orcid[1],
-               //     dataType: 'jsonp',
-				//	success: function(data) {
-               //         console.log(data.person)
-				//	}
-			//	});
-
             }
             $scope.listService = selectListService;
         	 leafletData.getMap().then(function(mymap) {
