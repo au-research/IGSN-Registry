@@ -39,8 +39,6 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 	$('.orcid_search_input').each(function() {
 		$(this).val(currentAuthService.getName());
         $(this.nextElementSibling).trigger('click');
-
-        //console.log($(this.nextElementSibling.nextElementSibling).context);
     });
 
   if($routeParams.sessionid && $routeParams.callbackurl){
