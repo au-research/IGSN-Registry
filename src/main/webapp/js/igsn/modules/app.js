@@ -105,7 +105,7 @@ app.directive('showgrant', function() {
             var resStr = "";
             if (grantid[6]) {
                 $.ajax({
-                    url: 'http://researchdata.ands.org.au/registry/services/api/getGrants/?id=' + grantid[6],
+                    url: 'https://researchdata.ands.org.au/registry/services/api/getGrants/?id=' + grantid[6],
                     dataType: 'jsonp',
                     success: function (data) {
                         if(data.message.numFound == 1) {
@@ -258,7 +258,7 @@ app.directive('showorcid', function () {
         link: function(scope, element, attrs, ngModelCtrl){
             var orcid = attrs.orcid;
               $.ajax({
-                url:'http://devl.ands.org.au/liz/registry/api/v2.0/orcid.jsonp/lookup/'+orcid,
+                url:'https://test.ands.org.au/api/v2.0/orcid.jsonp/lookup/'+orcid,
                 dataType: 'jsonp',
                 success: function(data) {
                         obj = data.person;
