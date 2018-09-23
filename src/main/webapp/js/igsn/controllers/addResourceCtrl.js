@@ -23,6 +23,8 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 			tooltip: true,
             pre_open_search: true,
             wrap_html: '',
+			auto_search: true,
+			auto_search_query: currentAuthService.getName(),
             search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
 			search_text: '<i class="fa fa-search"></i> Orcid Search',
 			custom_select_handler: function (data, obj, settings) {
@@ -35,11 +37,6 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 			}
 		});
 	});
-
-	$('.orcid_search_input').each(function() {
-		$(this).val(currentAuthService.getName());
-        $(this.nextElementSibling).trigger('click');
-    });
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
