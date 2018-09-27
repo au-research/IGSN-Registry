@@ -15,28 +15,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
   $scope.latitudelatitude=null;
 
 
-	$('.orcid_widget').each(function () {
-		var elem = $(this);
-		var widget = elem.orcid_widget({
-			lookup: false,
-			before_html: '',
-			tooltip: true,
-            pre_open_search: true,
-            wrap_html: '',
-			auto_search: true,
-			auto_search_query: currentAuthService.getName(),
-            search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
-			search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
-			custom_select_handler: function (data, obj, settings) {
-				$('.select_orcid_search_result').on('click', function () {
-					var theName = $(this).context.text + " (" + $(this).attr('orcid-id') + ")";
-					obj.val(theName);
-					obj.trigger('change');
-					obj.p.children('.' + settings.search_div_class).toggle();
-				});
-			}
-		});
-	});
+
 
   if($routeParams.sessionid && $routeParams.callbackurl){
 	  $scope.callback = true;
@@ -369,6 +348,28 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 
 
    $http.get('getUser.do', {}).success(function(response) {
+       $('.orcid_widget').each(function () {
+           var elem = $(this);
+           var widget = elem.orcid_widget({
+               lookup: false,
+               before_html: '',
+               tooltip: true,
+               pre_open_search: true,
+               wrap_html: '',
+               auto_search: true,
+               auto_search_query: currentAuthService.getName(),
+               search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
+               search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
+               custom_select_handler: function (data, obj, settings) {
+                   $('.select_orcid_search_result').on('click', function () {
+                       var theName = $(this).context.text + " (" + $(this).attr('orcid-id') + ")";
+                       obj.val(theName);
+                       obj.trigger('change');
+                       obj.p.children('.' + settings.search_div_class).toggle();
+                   });
+               }
+           });
+       });
        var showModal = !response.tcAccepted;
        var userName = response.username;
        var allocator = currentAuthService.getIsAllocator();
