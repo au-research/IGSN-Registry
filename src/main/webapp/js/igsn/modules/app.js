@@ -77,7 +77,7 @@ app.directive('grantwidget', function() {
                         modelCtrl.$setViewValue($(this).attr('grant-id'));
                         obj.val($(this).attr('grant-id'));
                         modelCtrl.$render();
-                      for(var res in scope.resource.relatedResourceses){
+                        for(var res in scope.resource.relatedResourceses){
                           var resnum = res;
                           if(scope.resource.relatedResourceses[resnum].relatedResource == $(this).attr('grant-id')){
                               scope.resource.relatedResourceses[resnum].relationType="http://pid.geoscience.gov.au/def/voc/igsn-codelists/collectedAsPartOf";
@@ -96,6 +96,48 @@ app.directive('grantwidget', function() {
         }
     };
 });
+
+
+app.directive('contributorwidget', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, modelCtrl) {
+        var elem = element;
+        var widget = elem.orcid_widget({
+        lookup: false,
+        before_html: '',
+        tooltip: true,
+        pre_open_search: true,
+        search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
+        wrap_html: '',
+        search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
+        custom_select_handler: function (data, obj, settings) {
+            $('.select_orcid_search_result').on('click', function () {
+                var theName = $(this).context.text;
+                obj.val(theName);
+                obj.trigger('change');
+                modelCtrl.$setViewValue($(this).context.text);
+                obj.val($(this).context.text);
+                modelCtrl.$render();
+               for(var res in scope.resource.contributorses){
+                   var resnum = res;
+                   if(scope.resource.contributorses[resnum].contributorName == $(this).context.text){
+                       scope.resource.contributorses[resnum].contributorIdentifier =$(this).attr('orcid-id');
+                       scope.resource.contributorses[resnum].cvIdentifierType = {identifierType:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/ORCID"};
+                       obj.trigger('change');
+                    }
+               }
+                modelCtrl.$setViewValue($(this).context.text);
+                modelCtrl.$render();
+                obj.p.children('.' + settings.search_div_class).toggle();
+            });
+        }
+
+        });
+        }
+    };
+});
+
 app.directive('showgrant', function() {
     return {
         require: 'ngModel',

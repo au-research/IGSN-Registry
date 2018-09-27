@@ -387,7 +387,7 @@
 					    <legend><div class="title-sm text-theme hr-left">Contributors</div></legend>
 					    <div class="form-group form-group-sm" ng-class="{ 'has-error' : (contributor.contributorType!=null || contributor.contributorIdentifier.length > 0 || contributor.cvIdentifierType.identifierType!=null) && !contributor.contributorName  }">
 						    <label>Contributor Name</label>
-		                    <input type="text" class="form-control" placeholder="Fred Bloggs" ng-model="contributor.contributorName">
+		                    <input type="text" class="form-control" contributorwidget placeholder="Fred Bloggs" ng-model="contributor.contributorName">
 		                    <p ng-show="(contributor.contributorType!=null || contributor.contributorIdentifier.length > 0 || contributor.cvIdentifierType.identifierType!=null) && !contributor.contributorName" class="small help-block">Name cannot be empty if including contributor</p> 
 	                    </div>	                   
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : contributor.contributorName && !contributor.contributorType}">
