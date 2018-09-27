@@ -421,6 +421,9 @@
 					    <div class="form-group form-group-sm" >
 						    <label>Related resource</label>
 		                    <input type="text" class="form-control" grantwidget placeholder="Related resource, e.g. URL for sample collection or data repository" ng-model="relatedResource.relatedResource">
+							<span class="hasEvent colored" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlGrantHelp">
+							<i class="fa fa-question-circle" aria-hidden="true"></i></span>
+
 						</div>
 	                    <div class="form-group form-group-sm" ng-class="{ 'has-error' : !relatedResource.cvIdentifierType.identifierType && (relatedResource.relationType || relatedResource.relatedResource)}">
 		                    <label><span class="hasEvent colored" popover-class="popover-width-600" popover-trigger="'outsideClick'" popover-placement="right" uib-popover-html="htmlRelatedIdentifierType">

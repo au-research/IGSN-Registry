@@ -26,7 +26,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
 			auto_search: true,
 			auto_search_query: currentAuthService.getName(),
             search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
-			search_text: '<i class="fa fa-search"></i> Orcid Search',
+			search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
 			custom_select_handler: function (data, obj, settings) {
 				$('.select_orcid_search_result').on('click', function () {
 					var theName = $(this).context.text + " (" + $(this).attr('orcid-id') + ")";
@@ -65,6 +65,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
   $scope.htmlSRID = $sce.trustAsHtml("<p>This refers to the Spatial Referencing system IDentifier (SRID). For example, '4326' is the EPSG code for the WGS84 geographic coordinate system.</p>" + parseOptionToHtmlList($scope.getEpsg))
   $scope.htmlGeographicCoordinates = $sce.trustAsHtml("<p>A geographic coordinate system that enables every location on Earth to be specified by the use of <a target='_BLANK' href='https://en.wikipedia.org/wiki/Latitude'>latitude</a> and <a target='_BLANK' href='https://en.wikipedia.org/wiki/Longitude'>longtitude</a></p>");
   $scope.htmlUTMCoordinates = $sce.trustAsHtml("<p><a target='_BLANK' href='http://www.dtpli.vic.gov.au/property-and-land-titles/geodesy/geocentric-datum-of-australia-1994-gda94'>GDA94</a> is the official geodetic datum adopted nationally across Australia on 1 January 2000. It replaced the Australian Geodetic Datum 1966 (AGD66) used in Victoria. Universal Transverse Mercator (UTM) projection coordinates (easting, northing and zone)</p>");
+  $scope.htmlGrantHelp = $sce.trustAsHtml("The Grant Search widget searches across all grant information contributed to Research Data Australia by Australia’s principal research funders. For more information please visit <a target='_blank' href='https://researchdata.ands.org.au/grants'>https://researchdata.ands.org.au/grants</a>.")
 
   var initDataStructure = function(){
 

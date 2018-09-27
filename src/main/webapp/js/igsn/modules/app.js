@@ -71,7 +71,7 @@ app.directive('grantwidget', function() {
                 before_html: '',
                 tooltip: true,
                 wrap_html: '',
-                search_text: '<i class="fa fa-search"></i> Grant Search',
+                search_text: '<i class="fa fa-search"></i>Grant Search',
                 custom_select_handler: function (data, obj, settings) {
                     $('.select_grant_search_result').on('click', function () {
                         modelCtrl.$setViewValue($(this).attr('grant-id'));
