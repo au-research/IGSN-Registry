@@ -80,7 +80,7 @@ app.directive('grantwidget', function() {
                       for(var res in scope.resource.relatedResourceses){
                           var resnum = res;
                           if(scope.resource.relatedResourceses[resnum].relatedResource == $(this).attr('grant-id')){
-                              scope.resource.relatedResourceses[resnum].relationType="http://pid.geoscience.gov.au/def/voc/igsn-codelists/Participates";
+                              scope.resource.relatedResourceses[resnum].relationType="http://pid.geoscience.gov.au/def/voc/igsn-codelists/collectedAsPartOf";
                               scope.resource.relatedResourceses[resnum].cvIdentifierType = {identifierType:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/PURL"};
                               obj.trigger('change');
                            }

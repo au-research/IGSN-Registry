@@ -154,7 +154,9 @@ app.service('selectListService', ['$q','$http',function($q,$http) {
               {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/IsMemberOf", value:"Is member of"},
               {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/IsSamplingFeatureOf", value:"Is sampling feature of"},
               {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/IsSourceOf", value:"Is source of"},
-              {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/Participates", value:"Participates"}
+              {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/Participates", value:"Participates"},
+              {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/hasAssociationWith", value:"Has association with"},
+              {key:"http://pid.geoscience.gov.au/def/voc/igsn-codelists/collectedAsPartOf", value:"Collected as part of"}
         	          ];
       }
       
