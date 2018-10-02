@@ -100,7 +100,12 @@ fieldset.show-fieldset-borders{
 .hasEvent{
 	cursor: pointer; 
 }
-
+.contrib_orcid_search_div{
+  padding-top:5px;
+}
+.orcid_search{
+  margin-top:5px;
+}
 /* Animation */
 
 @-webkit-keyframes spinner {

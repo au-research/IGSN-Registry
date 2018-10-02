@@ -108,11 +108,12 @@ app.directive('contributorwidget', function() {
         before_html: '',
         tooltip: true,
         pre_open_search: true,
+        search_div_class:'contrib_orcid_search_div',
         search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
         wrap_html: '',
         search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
         custom_select_handler: function (data, obj, settings) {
-            $('.select_orcid_search_result').on('click', function () {
+            $('.contrib_orcid_search_div .select_orcid_search_result').on('click', function () {
                 var theName = $(this).context.text;
                 obj.val(theName);
                 obj.trigger('change');

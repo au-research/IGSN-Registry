@@ -361,7 +361,7 @@ allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$ro
                search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
                search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
                custom_select_handler: function (data, obj, settings) {
-                   $('.select_orcid_search_result').on('click', function () {
+                   $('.orcid_search_div .select_orcid_search_result').on('click', function () {
                        var theName = $(this).context.text + " (" + $(this).attr('orcid-id') + ")";
                        obj.val(theName);
                        obj.trigger('change');
