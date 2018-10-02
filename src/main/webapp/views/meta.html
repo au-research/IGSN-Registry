@@ -129,13 +129,20 @@
 					            <div>							
 								  <h3 class="title-md text-theme">Curator: {{curationDetail.curator}}</h3>
 						            <ul class="list-unstyled list-md text-theme">
-						              <li><i class="fa fa-user fa-box"></i>Curator: <b>{{curationDetail.curator}}</b></li>
+						              <li><i class="fa fa-user fa-box"></i>Curator: <b> {{curationDetail.curator}}</b>
+
+										  <div ng-if="curationDetail.orcid"  ng-model="curationDetail.orcid" showOrcid orcid="{{curationDetail.orcid}}">
+											  {{curationDetail.orcid}}{{scope.person}}
+										  </div>
+
+										  </li>
 						              <li><i class="fa fa-calendar fa-box"></i>Curation Date: <b>{{curationDetail.curationDate}}</b></li>	              
 						              <li><i class="fa fa-map-marker fa-box"></i>Curation Location: <b>{{curationDetail.curationLocation}}</b></li>
 						              <li><i class="fa fa-building-o fa-box"></i>Curating Institution: <b>{{curationDetail.curatingInstitution}}</b></li>
 						              <li><i class="fa fa-external-link fa-box"></i>Institution URI: <b>{{curationDetail.institutionUri}}</b></li>
 						            </ul>								 
-								</div>				                                
+								</div>
+
 				            </div>					                       
 					      </div>
 			          </div>
@@ -176,7 +183,8 @@
 					                    <h3 class="title-xs text-theme hr-before mb-10">Identifier Type</h3>	                   
 					                    <div class="form-control well"><label><i class="fa fa-external-link"></i> <u><a ng-href={{relatedResource.cvIdentifierType.identifierType}}>{{listService.getValue(relatedResource.cvIdentifierType.identifierType,listService.getIdentifierType())}}</a></u></label></div>
 					                  </div>	          	                
-					                </form>										    													            								    	                 				                   
+					                </form>
+									 <div ng-if="relatedResource.cvIdentifierType.identifierType" grantid={{relatedResource.relatedResource}} showgrant ng-model="relatedResource.cvIdentifierType.identifierType"/>
 								  </fieldset> 			                                
 				            </div>			                       
 					      </div>

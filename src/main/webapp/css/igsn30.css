@@ -93,10 +93,19 @@ fieldset.show-fieldset-borders{
   box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
 }
 
+.grant_search{
+  margin-top:10px;
+  font-size: 12px;
+}
 .hasEvent{
 	cursor: pointer; 
 }
-
+.contrib_orcid_search_div{
+  padding-top:5px;
+}
+.orcid_search{
+  margin-top:5px;
+}
 /* Animation */
 
 @-webkit-keyframes spinner {
