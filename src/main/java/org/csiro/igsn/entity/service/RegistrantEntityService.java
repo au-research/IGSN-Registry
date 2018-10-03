@@ -315,7 +315,7 @@ public class RegistrantEntityService {
             registrant.setRegistrantname(name);
             registrant.setUpdated(new Date());
             registrant.setUsername(username);
-			registrant.setTcAccepted(false);
+            registrant.setTcAccepted(false);
             em.merge(registrant);
             em.flush();
             em.getTransaction().commit();
