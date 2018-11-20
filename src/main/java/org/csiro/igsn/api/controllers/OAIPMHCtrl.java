@@ -82,9 +82,9 @@ public class OAIPMHCtrl {
 					return;
 				}
 				Long size = resourceEntityService.getResourcesSizeByDate(NullUtilities.parseDateYYYYMMDDAllowNull(from), NullUtilities.parseDateYYYYMMDDAllowNull(until));
-				List<Resources> resources= resourceEntityService.searchSampleByDate(NullUtilities.parseDateYYYYMMDDAllowNull(from), NullUtilities.parseDateYYYYMMDDAllowNull(until), 0);				
+				List<Resources> resources= resourceEntityService.searchSampleByDate(NullUtilities.parseDateYYYYMMDDAllowNull(from), NullUtilities.parseDateYYYYMMDDAllowNull(until), 0);
 				marshalToWrtier(oaiService.getListRecords(resources, metadataPrefix,from,until,size,null),
-						response.getWriter(),OAIPMHtype.class,oaiService.getSuitableConverter(metadataPrefix).getXMLRootClass());				
+						response.getWriter(),OAIPMHtype.class,oaiService.getSuitableConverter(metadataPrefix).getXMLRootClass());
 			}else{
 				TokenResumption token = this.tokenResumptionService.get(resumptionToken);
 				if(token==null){
