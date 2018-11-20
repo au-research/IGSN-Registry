@@ -59,21 +59,21 @@ public class EntityToSchemaConverterDC implements JAXBConverterInterface{
 				oaiDcType.getTitleOrCreatorOrSubject().add(dcObjectfactory.createCreator(creator));
 			}
 		}
-		
+
 		for(CurationDetails curationDetails:resources.getCurationDetailses()){
 			ElementType publisher = new ElementType();
 			publisher.setValue(curationDetails.getCurator());
 			oaiDcType.getTitleOrCreatorOrSubject().add(dcObjectfactory.createPublisher(publisher));
 		}
-		
-		
+
+
 		for(Classifications classifications:resources.getClassificationses()){
 			ElementType subject = new ElementType();
 			subject.setValue(classifications.getClassification());
 			oaiDcType.getTitleOrCreatorOrSubject().add(dcObjectfactory.createSubject(subject));
 		}
-		
-		
+
+
 		if(resources.getComments()!=null){
 			ElementType description = new ElementType();
 			description.setValue(resources.getComments());
@@ -98,7 +98,7 @@ public class EntityToSchemaConverterDC implements JAXBConverterInterface{
 			oaiDcType.getTitleOrCreatorOrSubject().add(dcObjectfactory.createDate(date));
 		}
 		
-		if(resources.getLocation()!=null){
+		if(resources.getLocation()!=null && resources.getLocation().getGeometry() != null){
 			ElementType coverage = new ElementType();
 			coverage.setValue("Coordinates(lon/Lat):" + resources.getLocation().getGeometry().toText());
 			oaiDcType.getTitleOrCreatorOrSubject().add(dcObjectfactory.createCoverage(coverage));
