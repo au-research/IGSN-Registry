@@ -491,7 +491,12 @@ public class OAIService {
 			if(isDeleted(resource.getLogDate().getEventType())){
 				headerType.setStatus(StatusType.DELETED);
 			}else{
-				recordType.setMetadata(getMetaData(converter,resource));
+				try {
+					MetadataType metadata = getMetaData(converter, resource);
+					recordType.setMetadata(metadata);
+				} catch (Exception e) {
+					// TODO handle failed converting metadata for this record
+				}
 			}
 			recordType.setHeader(headerType);	
 			listRecordsType.getRecord().add(recordType);	
