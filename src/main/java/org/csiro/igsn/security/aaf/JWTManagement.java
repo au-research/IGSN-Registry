@@ -58,7 +58,7 @@ public class JWTManagement {
     @Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
     private String AAF_ROOT_SERVICE_URL;
 
-    private RegistrantEntityService registerantEntityService;
+    private RegistrantEntityService registrantEntityService;
     private AllocatorEntityService allocatorEntiryService;
     private PrefixEntityService prefixEntityService;
 
@@ -126,9 +126,9 @@ public class JWTManagement {
         BuiltInUserAuthenticationService uds = new BuiltInUserAuthenticationService();
         this.allocatorEntiryService = new AllocatorEntityService();
         this.prefixEntityService = new PrefixEntityService ();
-        this.registerantEntityService = new RegistrantEntityService(this.prefixEntityService, this.allocatorEntiryService);
+        this.registrantEntityService = new RegistrantEntityService(this.prefixEntityService, this.allocatorEntiryService);
 
-        Registrant r = this.registerantEntityService.searchRegistrant(attributes.email);
+        Registrant r = this.registrantEntityService.searchRegistrant(attributes.email);
         if(r != null && r.getIsactive() == false){
             throw new AuthenticationServiceException("Unable to authenticate");
         }
@@ -141,16 +141,19 @@ public class JWTManagement {
                 userAttributes.put("name", attributes.displayName);
 
             try {
-                this.registerantEntityService.addRegistrant(Config.get("AAF_DEFAULT_ALLOCATOR"), attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
-                this.registerantEntityService.allocatePrefix(Config.get("AAF_DEFAULT_PREFIX"), attributes.email);
+                this.registrantEntityService.addRegistrant(Config.get("AAF_DEFAULT_ALLOCATOR"), attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
+                this.registrantEntityService.allocatePrefix(Config.get("AAF_DEFAULT_PREFIX"), attributes.email);
 
             } catch (Exception e) {
                 log.error("ERROR:  " + e.getMessage());
                 e.printStackTrace();
             }
         }
-        UserDetails builtInUser = uds.loadUserByUsername(attributes.email);
-        return builtInUser;
-    }
+        r = this.registrantEntityService.searchRegistrant(attributes.email);
 
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_REGISTRANT");
+        UserDetails userDetails = new User(r.getUsername(),
+                r.getPassword(), Arrays.asList(authority));
+        return userDetails;
+    }
 }
