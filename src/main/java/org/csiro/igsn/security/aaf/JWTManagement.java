@@ -77,7 +77,7 @@ public class JWTManagement {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            log.info("claims:" + claims);
+            log.debug("JWT Claims:" + claims);
            // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             AAFJWT token = mapper.readValue(claims, AAFJWT.class);
@@ -113,7 +113,6 @@ public class JWTManagement {
             */
 
             UserDetails user = registerAAFUser(token.attributes);
-            log.info("User password:  " + user.getPassword());
 
             return new AAFAuthentication(user, token.attributes, token, true);
         } catch (IOException e) {
@@ -127,33 +126,36 @@ public class JWTManagement {
         this.allocatorEntiryService = new AllocatorEntityService();
         this.prefixEntityService = new PrefixEntityService ();
         this.registrantEntityService = new RegistrantEntityService(this.prefixEntityService, this.allocatorEntiryService);
-
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_REGISTRANT");
         Registrant r = this.registrantEntityService.searchRegistrant(attributes.email);
-        if(r != null && r.getIsactive() == false){
-            throw new AuthenticationServiceException("Unable to authenticate");
+        UserDetails userDetails = null;
+        if(r != null){
+            if(r.getIsactive()) {
+                log.info("logging in as AAF User: " + attributes.email);
+                userDetails = new User(r.getUsername(), r.getPassword(), Arrays.asList(authority));
+            }
+            else{
+                throw new AuthenticationServiceException("Unable to authenticate");
+            }
         }
-        else if (r == null) {
+        else{
             log.info("USER DOESN'T EXIST ATTEMPTING TO ADD:  " + attributes.email);
-            Map<String, Object> userAttributes = new HashMap<String, Object>();
-            userAttributes.put("id", attributes.email);
-            userAttributes.put("email", attributes.email);
-            if(attributes.displayName != null && !attributes.displayName.equals(""))
-                userAttributes.put("name", attributes.displayName);
-
+            String passwordStr = "AAF Authenticated";
             try {
-                this.registrantEntityService.addRegistrant(Config.get("AAF_DEFAULT_ALLOCATOR"), attributes.email, attributes.displayName, attributes.email, "AAF Authenticated");
+                this.registrantEntityService.addRegistrant(Config.get("AAF_DEFAULT_ALLOCATOR"),
+                        attributes.email,
+                        attributes.displayName,
+                        attributes.email,
+                        passwordStr);
                 this.registrantEntityService.allocatePrefix(Config.get("AAF_DEFAULT_PREFIX"), attributes.email);
-
+                userDetails = new User(attributes.email, passwordStr, Arrays.asList(authority));
             } catch (Exception e) {
                 log.error("ERROR:  " + e.getMessage());
                 e.printStackTrace();
             }
-        }
-        r = this.registrantEntityService.searchRegistrant(attributes.email);
 
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_REGISTRANT");
-        UserDetails userDetails = new User(r.getUsername(),
-                r.getPassword(), Arrays.asList(authority));
+        }
+
         return userDetails;
     }
 }
