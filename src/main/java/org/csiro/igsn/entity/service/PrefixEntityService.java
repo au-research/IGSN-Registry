@@ -21,6 +21,7 @@ import javax.persistence.NoResultException;
 
 import javax.persistence.PersistenceException;
 
+import org.apache.log4j.Logger;
 import org.csiro.igsn.entity.postgres.Allocator;
 import org.csiro.igsn.entity.postgres.Prefix;
 import org.csiro.igsn.entity.postgres.Registrant;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PrefixEntityService {
-	
+	final Logger log = Logger.getLogger(PrefixEntityService.class);
 	public List<Prefix> listAllPrefix(){
 		EntityManager em = JPAEntityManager.createEntityManager();
 		List<Prefix> result = em.createNamedQuery("Prefix.listAll",Prefix.class)	 
@@ -49,11 +50,9 @@ public class PrefixEntityService {
 		try{	
 			
 			em.getTransaction().begin();
-			Registrant registrant = em.createNamedQuery("Registrant.searchActiveByUsernameJoinPrefix",Registrant.class)
-					.setParameter("username", user.getName())
-					.getSingleResult();	
-			
-			Allocator allocator = registrant.getAllocator();
+			AllocatorEntityService allocatorEntityService = new AllocatorEntityService();
+			Allocator allocator  = allocatorEntityService.searchAllocator(user.getName());
+			log.debug("Allocator Name: " + allocator.getUsername());
 			if(!IGSNUtil.stringStartsWithAllowedPrefix(allocator.getPrefixes(), prefix)){
 				throw new Exception("Prefix not supported by allocator");
 			}				
@@ -69,7 +68,7 @@ public class PrefixEntityService {
 			return true;
 		}catch(PersistenceException pe){
 			em.getTransaction().rollback();			
-			throw new PersistenceException("Duplicate prefix");
+			throw pe;
 		}catch(Exception e){
 			em.getTransaction().rollback();
 			throw e;

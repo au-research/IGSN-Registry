@@ -15,7 +15,6 @@ public class ShaPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(CharSequence rawPassword) {
-        log.info(rawPassword);
         final StringBuilder sb = new StringBuilder(rawPassword.length());
         sb.append(rawPassword);
         return encryptPassword(sb.toString());
@@ -23,8 +22,6 @@ public class ShaPasswordEncoder implements PasswordEncoder {
 
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        log.info(rawPassword);
-        log.info(encodedPassword);
         final StringBuilder sb = new StringBuilder(rawPassword.length());
         sb.append(rawPassword);
         return encode(rawPassword).equals(encodedPassword);
