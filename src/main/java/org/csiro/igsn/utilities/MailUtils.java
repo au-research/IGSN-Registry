@@ -27,13 +27,11 @@ public class MailUtils {
     final Logger log = Logger.getLogger(MailUtils.class);
     private String fromEmail;
     private String AAFLoginUrl;
-    private String baseUrl;
 
     public MailUtils(){
         ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:../applicationContext.xml");
         this.mailSender = (JavaMailSender) ctx.getBean("MyMailSender");
         this.fromEmail = Config.get("FROM_EMAIL_ADDRESS");
-        this.baseUrl = Config.get("BASEURL_VALUE");
         this.AAFLoginUrl = Config.get("AAF_RAPID_URL");
     }
 
