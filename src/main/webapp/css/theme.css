@@ -43,6 +43,43 @@ body.body-nav-fixed-menu-top {
   }
 }
 
+/**
+  * Footer responsive layout
+ */
+
+@media (min-width: 992px) {
+  .edu-logo-footer img {
+    width: 70%;
+    margin-top: -40px;
+  }
+
+  .ardc-logo-footer img {
+    width: 70%;
+    text-align: center;
+  }
+
+  .ardc-logo-navbar img {
+    width: 70%;
+    margin: 40px 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 992px) {
+    .edu-logo-footer img{
+      width: 30%;
+    }
+    .ardc-logo-footer img {
+      width: 30%;
+      text-align: center;
+    }
+    .ardc-logo-navbar img {
+      width: 40%;
+      margin: 40px 0;
+      text-align: center;
+    }
+}
+
 /* ROW - COLUMN SETTINGS
    ================================================== */
 .row-heading {
@@ -2020,7 +2057,7 @@ a .fa-round:hover {
   width: auto;
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 70px;
   display: block;
 }
 #nav .navbar-brand,
@@ -2048,7 +2085,9 @@ a .fa-round:hover {
     height: 92px;
   }
   #nav .navbar-brand > img {
-    height: 100%;
+    height: 70px;
+    margin: 10px;
+    text-align: center;
     float: left;
   }
 }
@@ -2815,4 +2854,3 @@ a .fa-round:hover {
   background-color: #b94a48;
 }
 
- 
