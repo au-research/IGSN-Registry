@@ -85,9 +85,10 @@ public class MailUtils {
         String handleUrl = "http://hdl.handle.net/";
         String igsnUrl = handleUrl + igsn;
         return "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n"
-                + "<html>"
-                + "<head>"
-                + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><title>IGSN Event Notification email</title></head><body>"
+                 + "<html>"
+                 + "<head>"
+                 + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>IGSN Event Notification email</title></meta>"
+                 + "</head><body>"
                  + "<p>Your IGSN has been successfully minted through the ARDC IGSN service.</p>"
                  + "<p>If the visibility of the metadata is set to public, it will be viewable at the following URL: <a href='" + igsnUrl + "'>" + igsnUrl + "</a></p>"
                  + "<p>To make changes to your IGSN you will need to <a href='"+this.AAFLoginUrl+"'>login</a></p>"
@@ -98,14 +99,14 @@ public class MailUtils {
                  + "<p>Physical address: 9 Liversidge Street, Australian National University, Acton, ACT 2601<br/>"
                  + "Postal address: 101 Liversidge Street, Australian National University, Acton, ACT 2601<br/>"
                  + "<a href='https://ardc.edu.au'>ardc.edu.au</a></p>"
-                 + "<a href='https://ardc.edu.au/about/'><img src='cid:ardc_logo.png' alt='ardc logo'/></a><br/><br/>"
-                 + "<a href='https://www.ncris-network.org.au/'><img src='cid:ncris_logo.jpg' alt='ncris logo'/></a>"
+                 + "<p><a href='https://ardc.edu.au/about/'><img src='cid:ardc_logo.png' alt='ardc logo'/></a><br/><br/>"
+                 + "<a href='https://www.ncris-network.org.au/'><img src='cid:ncris_logo.jpg' alt='ncris logo'/></a></p>"
                  + "<p><a href='https://twitter.com/ARDC_AU'><img src='cid:twitter.gif' alt='twitter logo'/></a>&nbsp;&nbsp;&nbsp;"
                  + "<a href='https://www.youtube.com/c/ARDC_AU'><img src='cid:youtube.gif' alt='youtube logo'/></a></p>"
                  + "<p><i>ARDC acknowledges the Traditional Owners of the lands<br/>"
                  + "that we live and work on across Australia and pays its respect<br/>"
-                 + "to Elders past and present.<i></p>"
-                 + "<p><i>Please consider the environment before printing this e-mail.<i></p></body></html>";
+                 + "to Elders past and present.</i></p>"
+                 + "<p><i>Please consider the environment before printing this e-mail.</i></p></body></html>";
     }
 
 
