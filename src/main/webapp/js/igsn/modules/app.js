@@ -111,7 +111,7 @@ app.directive('contributorwidget', function() {
         search_div_class:'contrib_orcid_search_div',
         search_loading_text:'<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> <br />Loading...',
         wrap_html: '',
-        search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.ands.org.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
+        search_text: '<i class="fa fa-search"></i>ORCID Search <img class="identifier_logo" src="https://researchdata.edu.au/assets/core/images/icons/orcid_icon.png" alt="ORCID Link"> ',
         custom_select_handler: function (data, obj, settings) {
             $('.contrib_orcid_search_div .select_orcid_search_result').on('click', function () {
                 var theName = $(this).context.text;
@@ -148,7 +148,7 @@ app.directive('showgrant', function() {
             var resStr = "";
             if (grantid[6]) {
                 $.ajax({
-                    url: 'https://researchdata.ands.org.au/registry/services/api/getGrants/?id=' + grantid[6],
+                    url: 'https://researchdata.edu.au/registry/services/api/getGrants/?id=' + grantid[6],
                     dataType: 'jsonp',
                     success: function (data) {
                         if(data.message.numFound == 1) {
@@ -301,7 +301,7 @@ app.directive('showorcid', function () {
         link: function(scope, element, attrs, ngModelCtrl){
             var orcid = attrs.orcid;
               $.ajax({
-                url:'https://test.ands.org.au/api/v2.0/orcid.jsonp/lookup/'+orcid,
+                url:'https://researchdata.edu.au/api/v2.0/orcid.jsonp/lookup/'+orcid,
                 dataType: 'jsonp',
                 success: function(data) {
                         obj = data.person;
