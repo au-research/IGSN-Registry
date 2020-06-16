@@ -323,7 +323,7 @@ public class Resources {
 	String xmlns_xsi = "http://www.w3.org/2001/XMLSchema-instance";  
     
     @XmlAttribute(name="xsi:schemaLocation")
-	String xmlns_schemaLocation = "https://igsn.csiro.au/schemas/3.0 https://test.ands.org.au/igsn/schemas/3.0/igsn-csiro-v3.0.xsd";
+	String xmlns_schemaLocation = "https://igsn.csiro.au/schemas/3.0 https://identifiers.ardc.edu.au/igsn/schemas/3.0/igsn-csiro-v3.0.xsd";
 
 
     @XmlElement(required = true)
