@@ -3,7 +3,10 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 
 
 
-	$location.path("-portal/view/" + $routeParams.igsn);
+	//redirect the view of this igsn record to the new igsn-portal view page.
+	//Note only production igsns will redirect successfully
+	$location.path("-portal/view/10273/" + $routeParams.igsn);
+
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
