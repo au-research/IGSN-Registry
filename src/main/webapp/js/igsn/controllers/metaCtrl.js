@@ -5,7 +5,9 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 
 	//redirect the view of this igsn record to the new igsn-portal view page.
 	//Note only production igsns will redirect successfully
-	$location.path("-portal/view/10273/" + $routeParams.igsn);
+	//$location.path("-portal/view/10273/" + $routeParams.igsn);
+	alert($location.path("-portal/view/10273/" + $routeParams.igsn));
+	this.router.navigate($location.path("-portal/view/10273/" + $routeParams.igsn));
 
 	angular.extend($scope, {
 	    defaults: {
