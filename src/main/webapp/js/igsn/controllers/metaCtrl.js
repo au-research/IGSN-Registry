@@ -1,6 +1,9 @@
 allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
                                                     function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService) {
 
+
+
+	$location.path("-portal/view/" + $routeParams.igsn);
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
