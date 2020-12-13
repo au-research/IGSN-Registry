@@ -7,8 +7,9 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	// Note only production igsns will redirect successfully
 	// $location.path("-portal/view/10273/" + $routeParams.igsn);
 	// alert($location.path("-portal/view/10273/" + $routeParams.igsn));
-	console.log($location);
-	this.router.navigate("https://test.identifiers.ardc.edu.au/igsn-portal/view/10273/" + $routeParams.igsn);
+	console.log($location.host);
+
+	window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
 
 	angular.extend($scope, {
 	    defaults: {
