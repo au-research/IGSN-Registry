@@ -45,6 +45,9 @@ public class LoginCtrl {
 	@Value("#{configProperties['AAF_RAPID_URL']}")
 	private String AAF_RAPID_URL;
 
+	@Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
+	private String AAF_ROOT_SERVICE_URL;
+
 	@RequestMapping("getAAF.do")
 	public ResponseEntity<Map<String, String>> aaf() {
 		Map<String, String> details = new HashMap<>();
