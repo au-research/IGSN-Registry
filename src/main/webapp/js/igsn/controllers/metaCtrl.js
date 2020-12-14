@@ -1,4 +1,4 @@
-allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
+allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService','$window'
                      function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService, $window) {
 
 
