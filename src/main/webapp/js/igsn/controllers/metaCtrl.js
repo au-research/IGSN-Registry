@@ -15,7 +15,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	alert (newUrl);
 
 	//window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
-	$window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn);
+	$window.location.href =  + "-portal/view/10273/" + $routeParams.igsn;
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
@@ -35,9 +35,11 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 
 	$scope.edit = function(){
 		if(currentAuthService.getAuthenticated()){
-			$location.path("/addresource/" + $routeParams.igsn);
+			$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
+			//$location.path("/addresource/" + $routeParams.igsn);
 		}else{
-			$location.path("/login/addresource/" + $routeParams.igsn);
+			$window.location.href =  + "-editor";
+			//$location.path("/login/addresource/" + $routeParams.igsn);
 		}
 	}
 
@@ -78,7 +80,8 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
              });        	        	
 	    }).error(function(response,status) {
 	    	if(status == 401){
-	    		$location.path("/login/meta/" + $routeParams.igsn);
+				$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
+	    		//$location.path("/login/meta/" + $routeParams.igsn);
 	    	}else{
 	    		modalService.showModal({}, {    	            	           
 		    		 headerText: response.header ,
