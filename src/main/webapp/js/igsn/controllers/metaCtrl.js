@@ -1,5 +1,5 @@
 allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
-                                                    function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService) {
+                     function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService, $window) {
 
 
 
@@ -7,9 +7,12 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	// Note only production igsns will redirect successfully
 	// $location.path("-portal/view/10273/" + $routeParams.igsn);
 	// alert($location.path("-portal/view/10273/" + $routeParams.igsn));
-	console.log($http);
-	console.log($location);
+
+	console.log($location.host());
+	console.log($location.protocol())
 	console.log($routeParams)
+	var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-";
+	alert (newUrl);
 
 	//window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
 	$window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn);
