@@ -7,10 +7,12 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	// Note only production igsns will redirect successfully
 	// $location.path("-portal/view/10273/" + $routeParams.igsn);
 	// alert($location.path("-portal/view/10273/" + $routeParams.igsn));
-	console.log($location.host);
+	console.log($http);
+	console.log($location);
+	console.log($routeParams)
 
-	window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
-
+	//window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
+	$window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn);
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
