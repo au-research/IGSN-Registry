@@ -5,17 +5,9 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 
 	// redirect the view of this igsn record to the new igsn-portal view page.
 	// Note only production igsns will redirect successfully
-	// $location.path("-portal/view/10273/" + $routeParams.igsn);
-	// alert($location.path("-portal/view/10273/" + $routeParams.igsn));
 
-	console.log($location.host());
-	console.log($location.protocol())
-	console.log($routeParams)
 	var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-";
-	alert (newUrl);
 
-	//window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
-	$window.location.href =  newUrl + "portal/view/10273/" + $routeParams.igsn;
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
@@ -36,12 +28,14 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	$scope.edit = function(){
 		if(currentAuthService.getAuthenticated()){
 			$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
-			//$location.path("/addresource/" + $routeParams.igsn);
+			$location.path("/addresource/" + $routeParams.igsn);
 		}else{
 			$window.location.href =  + "-editor";
-			//$location.path("/login/addresource/" + $routeParams.igsn);
+			$location.path("/login/addresource/" + $routeParams.igsn);
 		}
 	}
+
+	$window.location.href =  newUrl + "portal/view/10273/" + $routeParams.igsn;
 
 	$scope.resource={};
 	if($routeParams.igsn){
@@ -81,7 +75,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	    }).error(function(response,status) {
 	    	if(status == 401){
 				$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
-	    		//$location.path("/login/meta/" + $routeParams.igsn);
+	    		$location.path("/login/meta/" + $routeParams.igsn);
 	    	}else{
 	    		modalService.showModal({}, {    	            	           
 		    		 headerText: response.header ,
