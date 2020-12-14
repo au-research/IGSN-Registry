@@ -1,8 +1,8 @@
-allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
-    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
+allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams', '$window',
+    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams,$window) {
 
         $scope.isRedirect = false;
-
+        $window.location.href = $location.protocol() + "://" +$location.host() +"/igsn-registry";
         $scope.aaf = {};
         $scope.fetchAAFDetails = function() {
             $http.get('getAAF.do')

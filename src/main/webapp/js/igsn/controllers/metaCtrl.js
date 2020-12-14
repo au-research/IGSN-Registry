@@ -28,10 +28,10 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	$scope.edit = function(){
 		if(currentAuthService.getAuthenticated()){
 			$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
-			$location.path("/addresource/" + $routeParams.igsn);
+			//$location.path("/addresource/" + $routeParams.igsn);
 		}else{
 			$window.location.href =  + "-editor";
-			$location.path("/login/addresource/" + $routeParams.igsn);
+			//$location.path("/login/addresource/" + $routeParams.igsn);
 		}
 	}
 
