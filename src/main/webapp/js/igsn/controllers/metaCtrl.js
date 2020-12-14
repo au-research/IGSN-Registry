@@ -15,7 +15,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 	alert (newUrl);
 
 	//window.location.href("https://test.identifiers.ardc.edu.au/igsn-portal/view" + $routeParams.igsn)
-	$window.location.href =  + "-portal/view/10273/" + $routeParams.igsn;
+	$window.location.href =  newUrl + "portal/view/10273/" + $routeParams.igsn;
 	angular.extend($scope, {
 	    defaults: {
 	        //tileLayer: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
