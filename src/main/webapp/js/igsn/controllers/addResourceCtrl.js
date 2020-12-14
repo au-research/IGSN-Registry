@@ -1,6 +1,8 @@
-allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce','currentAuthService',
-                                                    function ($scope,$rootScope, $http,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce,currentAuthService) {
-	
+allControllers.controller('addResourceCtrl', ['$scope','$rootScope','$http','$route','$templateCache','$location','modalService','selectListService','$routeParams','$filter','$sce','currentAuthService','$window',
+                                                    function ($scope,$rootScope, $http,$route,$templateCache,$location,modalService,selectListService,$routeParams,$filter,$sce,currentAuthService,$window) {
+
+  var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-editor/";
+  $window.location.href = newUrl;
   $scope.getResourceType = selectListService.getResourceType();
   $scope.getMaterialType = selectListService.getMaterialType();
   $scope.getEpsg = selectListService.getEpsg();

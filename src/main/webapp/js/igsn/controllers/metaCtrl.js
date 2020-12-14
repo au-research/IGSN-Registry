@@ -1,5 +1,12 @@
-allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService',
-                                                    function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService) {
+allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$templateCache','$location','modalService','$routeParams','leafletData', 'selectListService','$window',
+                     function ($scope,$http,currentAuthService,$templateCache,$location,modalService,$routeParams,leafletData, selectListService, $window) {
+
+
+
+	// redirect the view of this igsn record to the new igsn-portal view page.
+	// Note only production igsns will redirect successfully
+
+	var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-";
 
 	angular.extend($scope, {
 	    defaults: {
@@ -20,11 +27,15 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
 
 	$scope.edit = function(){
 		if(currentAuthService.getAuthenticated()){
-			$location.path("/addresource/" + $routeParams.igsn);
+			$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
+			//$location.path("/addresource/" + $routeParams.igsn);
 		}else{
-			$location.path("/login/addresource/" + $routeParams.igsn);
+			$window.location.href =  + "-editor";
+			//$location.path("/login/addresource/" + $routeParams.igsn);
 		}
 	}
+
+	$window.location.href =  newUrl + "portal/view/10273/" + $routeParams.igsn;
 
 	$scope.resource={};
 	if($routeParams.igsn){
@@ -63,6 +74,7 @@ allControllers.controller('metaCtrl', ['$scope','$http','currentAuthService','$t
              });        	        	
 	    }).error(function(response,status) {
 	    	if(status == 401){
+				$window.location.href =  + "-editor/#/edit/ardc-igsn-desc-1.0/10273/" + $routeParams.igsn;
 	    		$location.path("/login/meta/" + $routeParams.igsn);
 	    	}else{
 	    		modalService.showModal({}, {    	            	           

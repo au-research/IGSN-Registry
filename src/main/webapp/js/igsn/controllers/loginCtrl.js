@@ -1,8 +1,9 @@
-allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams',
-    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams) {
+allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http','currentAuthService','$route','$templateCache','$location','modalService','$routeParams', '$window',
+    function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams,$window) {
 
         $scope.isRedirect = false;
-
+        var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-editor/"
+        $window.location.href = newUrl;
         $scope.aaf = {};
         $scope.fetchAAFDetails = function() {
             $http.get('getAAF.do')

@@ -45,6 +45,9 @@ public class LoginCtrl {
 	@Value("#{configProperties['AAF_RAPID_URL']}")
 	private String AAF_RAPID_URL;
 
+	@Value("#{configProperties['AAF_ROOT_SERVICE_URL']}")
+	private String AAF_ROOT_SERVICE_URL;
+
 	@RequestMapping("getAAF.do")
 	public ResponseEntity<Map<String, String>> aaf() {
 		Map<String, String> details = new HashMap<>();
@@ -55,7 +58,7 @@ public class LoginCtrl {
 	@RequestMapping("auscope_login")
 	public ResponseEntity<Object> redirectToExternalUrl() throws URISyntaxException {
 
-		URI aaf_login = new URI(AAF_RAPID_URL);
+		URI aaf_login = new URI(AAF_ROOT_SERVICE_URL + "/igsn-editor");
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(aaf_login);
 		return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
