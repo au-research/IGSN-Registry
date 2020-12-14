@@ -2,7 +2,8 @@ allControllers.controller('LoginCtrl', ['$scope','$rootScope','$timeout','$http'
     function ($scope,$rootScope,$timeout,$http,currentAuthService,$route,$templateCache,$location,modalService,$routeParams,$window) {
 
         $scope.isRedirect = false;
-        $window.location.href = $location.protocol() + "://" +$location.host() +"/igsn-registry";
+        var newUrl = $location.protocol() + "://" +$location.host() +"/igsn-editor/"
+        $window.location.href = newUrl;
         $scope.aaf = {};
         $scope.fetchAAFDetails = function() {
             $http.get('getAAF.do')
