@@ -55,7 +55,7 @@ public class LoginCtrl {
 	@RequestMapping("auscope_login")
 	public ResponseEntity<Object> redirectToExternalUrl() throws URISyntaxException {
 
-		URI aaf_login = new URI(AAF_RAPID_URL);
+		URI aaf_login = new URI(AAF_ROOT_SERVICE_URL + "/igsn-editor");
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(aaf_login);
 		return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
